@@ -1,0 +1,544 @@
+<html>
+<head>
+<title>CloseInspection.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #000080; font-weight: bold;}
+.s1 { color: #000000;}
+.s2 { color: #0000ff;}
+.s3 { color: #008000; font-weight: bold;}
+.s4 { color: #808080; font-style: italic;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+CloseInspection.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span>com.safefoodmitra.safefoodmitra.Activities;
+
+<span class="s0">import </span>androidx.appcompat.app.AppCompatActivity;
+<span class="s0">import </span>androidx.databinding.DataBindingUtil;
+
+<span class="s0">import </span>android.app.Activity;
+<span class="s0">import </span>android.app.AlertDialog;
+<span class="s0">import </span>android.app.DatePickerDialog;
+<span class="s0">import </span>android.content.Context;
+<span class="s0">import </span>android.content.DialogInterface;
+<span class="s0">import </span>android.content.Intent;
+<span class="s0">import </span>android.database.Cursor;
+<span class="s0">import </span>android.graphics.Bitmap;
+<span class="s0">import </span>android.graphics.BitmapFactory;
+<span class="s0">import </span>android.net.Uri;
+<span class="s0">import </span>android.os.Bundle;
+<span class="s0">import </span>android.os.Environment;
+<span class="s0">import </span>android.os.StrictMode;
+<span class="s0">import </span>android.provider.MediaStore;
+<span class="s0">import </span>android.util.Log;
+<span class="s0">import </span>android.view.View;
+<span class="s0">import </span>android.widget.AdapterView;
+<span class="s0">import </span>android.widget.ArrayAdapter;
+<span class="s0">import </span>android.widget.DatePicker;
+<span class="s0">import </span>android.widget.Spinner;
+<span class="s0">import </span>android.widget.TextView;
+
+<span class="s0">import </span>com.google.gson.Gson;
+<span class="s0">import </span>com.r0adkll.slidr.Slidr;
+<span class="s0">import </span>com.r0adkll.slidr.model.SlidrInterface;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Apis.Apis;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.CameraAll.EditImageActivity;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Helper.Utlity;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.SentsModals;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.Validation_custome;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.R;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.databinding.ActivityCloseInspectionBinding;
+
+<span class="s0">import </span>java.io.BufferedInputStream;
+<span class="s0">import </span>java.io.ByteArrayOutputStream;
+<span class="s0">import </span>java.io.File;
+<span class="s0">import </span>java.io.FileInputStream;
+<span class="s0">import </span>java.io.FileNotFoundException;
+<span class="s0">import </span>java.io.FileOutputStream;
+<span class="s0">import </span>java.io.IOException;
+<span class="s0">import </span>java.io.InputStream;
+<span class="s0">import </span>java.net.URL;
+<span class="s0">import </span>java.net.URLConnection;
+<span class="s0">import </span>java.text.SimpleDateFormat;
+<span class="s0">import </span>java.util.ArrayList;
+<span class="s0">import </span>java.util.Calendar;
+<span class="s0">import </span>java.util.Date;
+<span class="s0">import </span>java.util.Locale;
+<span class="s0">import </span>java.util.concurrent.TimeUnit;
+
+<span class="s0">import </span>id.zelory.compressor.Compressor;
+<span class="s0">import </span>io.reactivex.functions.Consumer;
+<span class="s0">import </span>io.reactivex.schedulers.Schedulers;
+<span class="s0">import </span>okhttp3.MediaType;
+<span class="s0">import </span>okhttp3.MultipartBody;
+<span class="s0">import </span>okhttp3.OkHttpClient;
+<span class="s0">import </span>okhttp3.Request;
+<span class="s0">import </span>okhttp3.RequestBody;
+
+<span class="s0">import static </span>com.safefoodmitra.safefoodmitra.Activities.InspectionActivity.valuesall;
+
+<span class="s0">public class </span>CloseInspection <span class="s0">extends </span>AppCompatActivity <span class="s0">implements </span>View.OnClickListener {
+    ActivityCloseInspectionBinding closeInspectionBinding;
+    ArrayList&lt;Validation_custome&gt; fileds;
+    String commentvalue,cost;
+    File CapGalImg=<span class="s0">null</span>,CapGalCompImg=<span class="s0">null</span>;
+    SentsModals sentsModals;
+    String id,inprocessdate,valupos;
+    <span class="s0">int </span>inprocessid;
+    <span class="s0">static final int </span>REQUEST_IMAGE_CAPTURE = <span class="s2">1</span>;
+    <span class="s0">static final int </span>REQUEST_IMAGE_CAPTURE2 = <span class="s2">2</span>;
+    <span class="s0">private </span>String mCurrentPhotoPath,spinnervalue=<span class="s3">&quot;&quot;</span>;
+    Bitmap mImageBitmap;
+    Spinner selectprocess;
+    ArrayList&lt;String&gt; selectprocesslist;
+    @Override
+    <span class="s0">protected void </span>onCreate(Bundle savedInstanceState) {
+        <span class="s0">super</span>.onCreate(savedInstanceState);
+        closeInspectionBinding= DataBindingUtil.setContentView(<span class="s0">this</span>,R.layout.activity_close_inspection);
+        selectprocess = closeInspectionBinding.selectprocess;
+        sentsModals=<span class="s0">new </span>SentsModals();
+        <span class="s0">if </span>(getIntent()!=<span class="s0">null</span>){
+            sentsModals= Utlity.gson.fromJson(<span class="s0">this</span>.getIntent().getStringExtra(<span class="s3">&quot;details&quot;</span>), SentsModals.<span class="s0">class</span>);
+            spinnervalue=getIntent().getStringExtra(<span class="s3">&quot;spinnervalue&quot;</span>);
+            id=sentsModals.getId();
+            <span class="s4">//Utlity.show_toast(CloseInspection.this, id +&quot;&amp;&amp;&quot;+ spinnervalue);</span>
+        }
+        click();
+        selectprocesslist = <span class="s0">new </span>ArrayList&lt;&gt;();
+        selectprocesslist.add(<span class="s3">&quot;Close&quot;</span>);
+        selectprocesslist.add(<span class="s3">&quot;In Process&quot;</span>);
+        ArrayAdapter&lt;String&gt; adapter =
+                <span class="s0">new </span>ArrayAdapter&lt;String&gt;(<span class="s0">this</span>,  R.layout.spinneritem, selectprocesslist);
+        adapter.setDropDownViewResource( R.layout.spinneritem);
+        selectprocess.setAdapter(adapter);
+        selectprocess.setOnItemSelectedListener(<span class="s0">new </span>AdapterView.OnItemSelectedListener() {
+            @Override
+            <span class="s0">public void </span>onItemSelected(AdapterView&lt;?&gt; parent, View view, <span class="s0">int </span>position, <span class="s0">long </span>id) {
+                valupos = selectprocess.getSelectedItem().toString();
+                <span class="s0">if </span>(valupos.equals(<span class="s3">&quot;Close&quot;</span>)){
+                    inprocessid=<span class="s2">0</span>;
+                }<span class="s0">else if </span>(valupos.equals(<span class="s3">&quot;In Process&quot;</span>)){
+                    inprocessid=<span class="s2">4</span>;
+                }
+              <span class="s4">// Utlity.show_toast(CloseInspection.this, String.valueOf(inprocessid));</span>
+               <span class="s0">if </span>(inprocessid == <span class="s2">4</span>){
+                   closeInspectionBinding.linearshowdata.setVisibility(View.VISIBLE);
+                  <span class="s4">// closeInspectionBinding.linearcost.setVisibility(View.VISIBLE);</span>
+               }<span class="s0">else </span>{
+                   closeInspectionBinding.linearshowdata.setVisibility(View.GONE);
+                   <span class="s4">//closeInspectionBinding.linearcost.setVisibility(View.GONE);</span>
+               }
+            }
+
+            @Override
+            <span class="s0">public void </span>onNothingSelected(AdapterView&lt;?&gt; parent) {
+
+            }
+        });
+    }
+
+    <span class="s0">public void </span>click(){
+        closeInspectionBinding.back.setOnClickListener(<span class="s0">this</span>);
+        closeInspectionBinding.selectedimgs.setOnClickListener(<span class="s0">this</span>);
+        closeInspectionBinding.closeinspection.setOnClickListener(<span class="s0">this</span>);
+        closeInspectionBinding.dtebtn.setOnClickListener(<span class="s0">this</span>);
+    }
+
+    @Override
+    <span class="s0">public void </span>onClick(View view) {
+        <span class="s0">if </span>(view.getId()==R.id.back){
+            <span class="s0">if </span>(Utlity.get_user(<span class="s0">this</span>).getUserroles_id().equalsIgnoreCase(<span class="s3">&quot;2&quot;</span>)){
+                startActivity(<span class="s0">new </span>Intent(<span class="s0">this</span>,AdminMainActivity.<span class="s0">class</span>));
+                finishAffinity();
+            }
+            <span class="s0">else if </span>(Utlity.get_user(<span class="s0">this</span>).getUserroles_id().equalsIgnoreCase(<span class="s3">&quot;3&quot;</span>)){
+                startActivity(<span class="s0">new </span>Intent(<span class="s0">this</span>,UserMainActivity.<span class="s0">class</span>));
+                finishAffinity();
+            }
+        }
+        <span class="s0">else if </span>(view.getId()==R.id.selectedimgs){
+            selectImage(<span class="s0">this</span>);
+        }
+        <span class="s0">else if </span>(view.getId()==R.id.closeinspection){
+            commentvalue = closeInspectionBinding.commentbox.getText().toString();
+            cost = closeInspectionBinding.costbox.getText().toString();
+            fileds = <span class="s0">new </span>ArrayList&lt;&gt;();
+            fileds.add(<span class="s0">new </span>Validation_custome(<span class="s3">&quot;text&quot;</span>, closeInspectionBinding.commentbox));
+            <span class="s0">if </span>(Utlity.validation(<span class="s0">this</span>,fileds)){
+                <span class="s0">if </span>(Utlity.is_online(CloseInspection.<span class="s0">this</span>)) {
+                    closeall();
+
+                } <span class="s0">else </span>{
+                    Utlity.show_toast(CloseInspection.<span class="s0">this</span>, getResources().getString(R.string.nointernet));
+                }
+               <span class="s4">/* if(CapGalImg==null){ 
+                    Utlity.show_toast(CloseInspection.this, &quot;please select image&quot;); 
+                } 
+                else { 
+ 
+                }*/</span>
+
+            }
+        }<span class="s0">else if </span>(view.getId()== R.id.dtebtn){
+            show_date_picker(CloseInspection.<span class="s0">this</span>,closeInspectionBinding.tvshowdate);
+        }
+
+    }
+    <span class="s0">public void </span>show_date_picker(Activity activity, <span class="s0">final </span>TextView tv) {
+        <span class="s0">final </span>Calendar calendar = Calendar.getInstance();
+        DatePickerDialog dialog = <span class="s0">new </span>DatePickerDialog(activity, <span class="s0">new </span>DatePickerDialog.OnDateSetListener() {
+            @Override
+            <span class="s0">public void </span>onDateSet(DatePicker arg0, <span class="s0">int </span>year, <span class="s0">int </span>month, <span class="s0">int </span>day_of_month) {
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, (month));
+                calendar.set(Calendar.DAY_OF_MONTH, day_of_month);
+                String myFormat = <span class="s3">&quot;yyyy-MM-dd&quot;</span>;
+                SimpleDateFormat sdf = <span class="s0">new </span>SimpleDateFormat(myFormat, Locale.getDefault());
+                tv.setText(sdf.format(calendar.getTime()));
+                inprocessdate= String.valueOf(tv.getText());
+            }
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        calendar.add(Calendar.YEAR, <span class="s2">0</span>);
+        <span class="s4">//dialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());// TODO: used to hide future date,month and year</span>
+        dialog.getDatePicker().setMinDate(calendar.getTimeInMillis());<span class="s4">// TODO: used to hide past date,month and year</span>
+        dialog.show();
+    }
+
+    <span class="s0">private void </span>selectImage(Context context) {
+        <span class="s0">final </span>CharSequence[] options = { <span class="s3">&quot;Take Photo&quot;</span>, <span class="s3">&quot;Choose from Gallery&quot;</span>,<span class="s3">&quot;Cancel&quot; </span>};
+
+        AlertDialog.Builder builder = <span class="s0">new </span>AlertDialog.Builder(context);
+        builder.setTitle(<span class="s3">&quot;Choose your profile picture&quot;</span>);
+
+        builder.setItems(options, <span class="s0">new </span>DialogInterface.OnClickListener() {
+            <span class="s0">private static final </span>String TAG = <span class="s3">&quot;tag&quot;</span>;
+
+            @Override
+            <span class="s0">public void </span>onClick(DialogInterface dialog, <span class="s0">int </span>item) {
+
+                <span class="s0">if </span>(options[item].equals(<span class="s3">&quot;Take Photo&quot;</span>)) {
+                    <span class="s4">/*Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE); 
+                    startActivityForResult(takePicture, 0);*/</span>
+
+                    Intent takePicture = <span class="s0">new </span>Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    <span class="s0">if </span>(takePicture.resolveActivity(getPackageManager()) != <span class="s0">null</span>) {
+                        <span class="s4">// Create the File where the photo should go</span>
+                        File photoFile = <span class="s0">null</span>;
+                        <span class="s0">try </span>{
+                            photoFile = createImageFile();
+                        } <span class="s0">catch </span>(IOException ex) {
+                            <span class="s4">// Error occurred while creating the File</span>
+                            Log.i(TAG, <span class="s3">&quot;IOException&quot;</span>);
+                        }
+
+                        StrictMode.VmPolicy.Builder builder = <span class="s0">new </span>StrictMode.VmPolicy.Builder();
+                        StrictMode.setVmPolicy(builder.build());
+                        builder.detectFileUriExposure();
+                        <span class="s4">// Continue only if the File was successfully created</span>
+                        <span class="s0">if </span>(photoFile != <span class="s0">null</span>) {
+                            takePicture.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                            startActivityForResult(takePicture, REQUEST_IMAGE_CAPTURE);
+                        }
+                    }
+
+                } <span class="s0">else if </span>(options[item].equals(<span class="s3">&quot;Choose from Gallery&quot;</span>)) {
+                    Intent pickPhoto = <span class="s0">new </span>Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(pickPhoto , REQUEST_IMAGE_CAPTURE2);
+
+                } <span class="s0">else if </span>(options[item].equals(<span class="s3">&quot;Cancel&quot;</span>)) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    <span class="s0">private </span>File createImageFile() <span class="s0">throws </span>IOException {
+        <span class="s4">// Create an image file name</span>
+        String timeStamp = <span class="s0">new </span>SimpleDateFormat(<span class="s3">&quot;yyyyMMdd_HHmmss&quot;</span>).format(<span class="s0">new </span>Date());
+        String imageFileName = <span class="s3">&quot;JPEG_&quot; </span>+ timeStamp + <span class="s3">&quot;_&quot;</span>;
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  <span class="s4">// prefix</span>
+                <span class="s3">&quot;.jpg&quot;</span>,         <span class="s4">// suffix</span>
+                storageDir      <span class="s4">// directory</span>
+        );
+
+        <span class="s4">// Save a file: path for use with ACTION_VIEW intents</span>
+        mCurrentPhotoPath = <span class="s3">&quot;file:&quot; </span>+ image.getAbsolutePath();
+        <span class="s0">return </span>image;
+    }
+
+    @Override
+    <span class="s0">protected void </span>onActivityResult(<span class="s0">int </span>requestCode, <span class="s0">int </span>resultCode, Intent data) {
+        <span class="s0">super</span>.onActivityResult(requestCode, resultCode, data);
+        <span class="s0">if </span>(resultCode == RESULT_OK) {
+            <span class="s0">if </span>(requestCode== REQUEST_IMAGE_CAPTURE) {
+                <span class="s0">try </span>{
+                    mImageBitmap = MediaStore.Images.Media.getBitmap(<span class="s0">this</span>.getContentResolver(), Uri.parse(mCurrentPhotoPath));
+                    closeInspectionBinding.afterimg.setImageBitmap(mImageBitmap);
+                    CapGalImg=bitmapToFile(mImageBitmap);
+                    CapGalCompImg=saveBitmapToFile(CapGalImg);
+                    <span class="s4">// startActivityForResult(new Intent(this, EditImageActivity.class).putExtra(&quot;image&quot;,mCurrentPhotoPath),REQUEST_IMAGE_CAPTURE);</span>
+
+                } <span class="s0">catch </span>(IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            <span class="s0">else if </span>(requestCode== REQUEST_IMAGE_CAPTURE2) {
+                Uri selectedImage = data.getData();
+                String[] filePath = { MediaStore.Images.Media.DATA };
+                Cursor c = getContentResolver().query(selectedImage,filePath, <span class="s0">null</span>, <span class="s0">null</span>, <span class="s0">null</span>);
+                c.moveToFirst();
+                <span class="s0">int </span>columnIndex = c.getColumnIndex(filePath[<span class="s2">0</span>]);
+                String picturePath = c.getString(columnIndex);
+                <span class="s4">//startActivityForResult(new Intent(this, EditImageActivity.class).putExtra(&quot;image&quot;,picturePath),REQUEST_IMAGE_CAPTURE2);</span>
+                c.close();
+                closeInspectionBinding.afterimg.setImageURI(selectedImage);
+                Bitmap bitmap = (BitmapFactory.decodeFile(picturePath));
+                CapGalImg=bitmapToFile(bitmap);
+                CapGalCompImg=saveBitmapToFile(CapGalImg);
+
+            }
+
+        }
+
+    }
+
+    <span class="s0">public </span>Bitmap loadBitmap(String url)
+    {
+        Bitmap bm = <span class="s0">null</span>;
+        InputStream is = <span class="s0">null</span>;
+        BufferedInputStream bis = <span class="s0">null</span>;
+        <span class="s0">try</span>
+        {
+            URLConnection conn = <span class="s0">new </span>URL(url).openConnection();
+            conn.connect();
+            is = conn.getInputStream();
+            bis = <span class="s0">new </span>BufferedInputStream(is, <span class="s2">8000</span>);
+            bm = BitmapFactory.decodeStream(bis);
+        }
+        <span class="s0">catch </span>(Exception e)
+        {
+            e.printStackTrace();
+        }
+        <span class="s0">finally </span>{
+            <span class="s0">if </span>(bis != <span class="s0">null</span>)
+            {
+                <span class="s0">try</span>
+                {
+                    bis.close();
+                }
+                <span class="s0">catch </span>(IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            <span class="s0">if </span>(is != <span class="s0">null</span>)
+            {
+                <span class="s0">try</span>
+                {
+                    is.close();
+                }
+                <span class="s0">catch </span>(IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+        <span class="s0">return </span>bm;
+    }
+
+    <span class="s0">public  </span>Bitmap decodeBitmap(Uri selectedImage) <span class="s0">throws </span>FileNotFoundException {
+        BitmapFactory.Options o = <span class="s0">new </span>BitmapFactory.Options();
+        o.inJustDecodeBounds = <span class="s0">true</span>;
+        BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage), <span class="s0">null</span>, o);
+
+        <span class="s0">final int </span>REQUIRED_SIZE = <span class="s2">100</span>;
+
+        <span class="s0">int </span>width_tmp = o.outWidth, height_tmp = o.outHeight;
+        <span class="s0">int </span>scale = <span class="s2">1</span>;
+        <span class="s0">while </span>(<span class="s0">true</span>) {
+            <span class="s0">if </span>(width_tmp / <span class="s2">2 </span>&lt; REQUIRED_SIZE || height_tmp / <span class="s2">2 </span>&lt; REQUIRED_SIZE) {
+                <span class="s0">break</span>;
+            }
+            width_tmp /= <span class="s2">2</span>;
+            height_tmp /= <span class="s2">2</span>;
+            scale *= <span class="s2">2</span>;
+        }
+
+        BitmapFactory.Options o2 = <span class="s0">new </span>BitmapFactory.Options();
+        o2.inSampleSize = scale;
+        <span class="s0">return </span>BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage), <span class="s0">null</span>, o2);
+    }
+
+    <span class="s0">public </span>File bitmapToFile(Bitmap bmp) {
+        <span class="s0">try </span>{
+            <span class="s0">int </span>size = <span class="s2">4000</span>;
+            String name = System.currentTimeMillis() + <span class="s3">&quot;.jpeg&quot;</span>;
+            ByteArrayOutputStream bos = <span class="s0">new </span>ByteArrayOutputStream(size);
+            bmp.compress(Bitmap.CompressFormat.JPEG, <span class="s2">100</span>, bos);
+            <span class="s0">byte</span>[] bArr = bos.toByteArray();
+            bos.flush();
+            bos.close();
+
+            FileOutputStream fos = openFileOutput(name, Context.MODE_APPEND);
+            fos.write(bArr);
+            fos.flush();
+            fos.close();
+
+            File mFile = <span class="s0">new </span>File(getFilesDir().getAbsolutePath(), name);
+            <span class="s0">return </span>mFile;
+        } <span class="s0">catch </span>(FileNotFoundException e) {
+            e.printStackTrace();
+            <span class="s0">return null</span>;
+        } <span class="s0">catch </span>(IOException e) {
+            e.printStackTrace();
+            <span class="s0">return null</span>;
+        }
+    }
+    <span class="s0">public </span>File saveBitmapToFile(File file){
+        <span class="s0">try </span>{
+            <span class="s4">// BitmapFactory options to downsize the image</span>
+            BitmapFactory.Options o = <span class="s0">new </span>BitmapFactory.Options();
+            o.inJustDecodeBounds = <span class="s0">true</span>;
+            o.inSampleSize = <span class="s2">6</span>;
+            <span class="s4">// factor of downsizing the image</span>
+
+            FileInputStream inputStream = <span class="s0">new </span>FileInputStream(file);
+            <span class="s4">//Bitmap selectedBitmap = null;</span>
+            BitmapFactory.decodeStream(inputStream, <span class="s0">null</span>, o);
+            inputStream.close();
+
+            <span class="s4">// The new size we want to scale to</span>
+            <span class="s0">final int </span>REQUIRED_SIZE=<span class="s2">75</span>;
+
+            <span class="s4">// Find the correct scale value. It should be the power of 2.</span>
+            <span class="s0">int </span>scale = <span class="s2">1</span>;
+            <span class="s0">while</span>(o.outWidth / scale / <span class="s2">2 </span>&gt;= REQUIRED_SIZE &amp;&amp;
+                    o.outHeight / scale / <span class="s2">2 </span>&gt;= REQUIRED_SIZE) {
+                scale *= <span class="s2">2</span>;
+            }
+
+            BitmapFactory.Options o2 = <span class="s0">new </span>BitmapFactory.Options();
+            o2.inSampleSize = scale;
+            inputStream = <span class="s0">new </span>FileInputStream(file);
+
+            Bitmap selectedBitmap = BitmapFactory.decodeStream(inputStream, <span class="s0">null</span>, o2);
+            inputStream.close();
+
+            <span class="s4">// here i override the original image file</span>
+            file.createNewFile();
+            FileOutputStream outputStream = <span class="s0">new </span>FileOutputStream(file);
+
+            selectedBitmap.compress(Bitmap.CompressFormat.JPEG, <span class="s2">100 </span>, outputStream);
+
+            <span class="s0">return </span>file;
+        } <span class="s0">catch </span>(Exception e) {
+            <span class="s0">return null</span>;
+        }
+    }
+
+    <span class="s0">private void </span>closeall() {
+        Utlity.show_progress(<span class="s0">this</span>);
+        MultipartBody.Builder builder = <span class="s0">new </span>MultipartBody.Builder();
+        <span class="s0">if </span>(CapGalCompImg!=<span class="s0">null</span>){
+            Log.d(<span class="s3">&quot;validate_file_size&quot;</span>, String.valueOf(CapGalImg.length() / <span class="s2">1024</span>));
+            builder.addFormDataPart(<span class="s3">&quot;after_img&quot;</span>, CapGalCompImg.getName(), RequestBody.create(MediaType.parse(<span class="s3">&quot;multipart/form-data&quot;</span>), CapGalCompImg));
+        }
+        <span class="s0">else </span>{
+            builder.addFormDataPart(<span class="s3">&quot;after_img&quot;</span>,<span class="s3">&quot;&quot;</span>, RequestBody.create(MediaType.parse(<span class="s3">&quot;multipart/form-data&quot;</span>),<span class="s3">&quot;&quot;</span>));
+        }
+
+        MediaType JSON = MediaType.parse(<span class="s3">&quot;application/json; charset=utf-8&quot;</span>);
+        Gson gson = <span class="s0">new </span>Gson();
+        builder.setType(MultipartBody.FORM);
+        builder.addFormDataPart(<span class="s3">&quot;id&quot;</span>,id);
+      <span class="s4">//  builder.addFormDataPart(&quot;inprocess&quot;, String.valueOf(inprocessid));</span>
+        <span class="s0">if </span>(inprocessid==<span class="s2">4</span>){
+            builder.addFormDataPart(<span class="s3">&quot;inprocessdate&quot;</span>,inprocessdate);
+        }<span class="s0">else </span>{
+
+        }
+
+        builder.addFormDataPart(<span class="s3">&quot;after_comment&quot;</span>,commentvalue);
+        builder.addFormDataPart(<span class="s3">&quot;process_cost&quot;</span>,cost);
+        <span class="s0">if </span>(spinnervalue!=<span class="s0">null</span>){
+            builder.addFormDataPart(<span class="s3">&quot;ins_status&quot;</span>,spinnervalue);
+        }
+        <span class="s0">else </span>{
+            builder.addFormDataPart(<span class="s3">&quot;ins_status&quot;</span>,String.valueOf(inprocessid));
+        }
+
+
+        MultipartBody body = builder.build();
+
+        <span class="s0">final </span>Request request = <span class="s0">new </span>Request.Builder()
+                .url(Apis.closeinspection)
+                .header(<span class="s3">&quot;Authorization&quot;</span>, <span class="s3">&quot;Bearer &quot;</span>+Utlity.get_user(<span class="s0">this</span>).getToken())
+                .post(body)
+                .build();
+
+        OkHttpClient okHttpClient = <span class="s0">new </span>OkHttpClient.Builder()
+                .connectTimeout(<span class="s2">100</span>, TimeUnit.SECONDS)
+                .readTimeout(<span class="s2">100</span>,TimeUnit.SECONDS).build();
+        okHttpClient.retryOnConnectionFailure();
+        okHttpClient.connectTimeoutMillis();
+        okHttpClient.newCall(request).enqueue(<span class="s0">new </span>okhttp3.Callback() {
+            @Override
+            <span class="s0">public void </span>onFailure(okhttp3.Call call, IOException e) {
+                Utlity.dismiss_dilog(CloseInspection.<span class="s0">this</span>);
+            }
+
+            @Override
+            <span class="s0">public void </span>onResponse(okhttp3.Call call, <span class="s0">final </span>okhttp3.Response response) <span class="s0">throws </span>IOException {
+
+                runOnUiThread(<span class="s0">new </span>Runnable() {
+                    @Override
+                    <span class="s0">public void </span>run() {
+                        <span class="s0">try </span>{
+                            Utlity.dismiss_dilog(CloseInspection.<span class="s0">this</span>);
+
+                           <span class="s4">/* StrictMode.ThreadPolicy policy = 
+                                    new StrictMode.ThreadPolicy.Builder().permitAll().build(); 
+                            StrictMode.setThreadPolicy(policy); 
+ 
+                            */</span>
+                            String apidata = response.body().string();
+                            Log.d(<span class="s3">&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;</span>,apidata);
+                            <span class="s0">if </span>(response.isSuccessful()){
+                                <span class="s4">//Utlity.show_toast(CloseInspection.this,apidata+&quot; Success&quot;);</span>
+                                <span class="s0">if </span>(valuesall==<span class="s2">0</span>){
+                                    startActivity(<span class="s0">new </span>Intent(CloseInspection.<span class="s0">this</span>,InspectionActivity.<span class="s0">class</span>));
+                                    finish();
+                                }
+                                <span class="s0">else if </span>(valuesall==<span class="s2">1</span>){
+                                    startActivity(<span class="s0">new </span>Intent(CloseInspection.<span class="s0">this</span>,InspectionActivity.<span class="s0">class</span>));
+                                    finish();
+                                }
+
+                            }
+                            <span class="s0">else </span>{
+                                Utlity.show_toast(CloseInspection.<span class="s0">this</span>,<span class="s3">&quot;failed&quot;</span>);
+                            }
+                        } <span class="s0">catch </span>(IOException e){
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+            }
+        });
+
+    }
+
+
+}</pre>
+</body>
+</html>

@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".Activities.CMFFiltterActivity">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/purple_200"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/pad5"
+                android:paddingBottom="@dimen/pad5"
+                android:weightSum="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/back"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".10"
+                    android:padding="@dimen/pad5"
+                    android:src="@drawable/ic_home" />
+
+                <TextView
+                    android:id="@+id/titles"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".80"
+                    android:gravity="center"
+                    android:padding="@dimen/pad5"
+                    android:text="@string/cleaningmaintenance"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/login"
+                    android:textStyle="bold" />
+                <ImageView
+                    android:id="@+id/filter"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".10"
+                    android:padding="@dimen/pad5"
+                    android:src="@drawable/ic_funnel" />
+                <ImageView
+                    android:id="@+id/refreshimage"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".10"
+                    android:padding="@dimen/pad5"
+                    android:layout_gravity="left"
+                    android:src="@drawable/ic_refreshpageiconwhite"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/cmfflitterlist"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ceaninglist"
+                    />
+                <TextView
+                    android:id="@+id/noreords"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    android:text="@string/norecord"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:textColor="@color/colorDarkgreen"
+                    android:textSize="@dimen/login"
+                    />
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/cmfflitterdata"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/pad10"
+                android:paddingRight="@dimen/pad10"
+                android:paddingTop="@dimen/pad10"
+                android:visibility="visible"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/pad7"
+                    android:background="@drawable/editback1"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                            android:id="@+id/selecttype"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/pad3"
+                            />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/pad7"
+                    android:background="@drawable/editback1"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                            android:id="@+id/zonecfm"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/pad3"
+                            />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/pad7"
+                    android:background="@drawable/editback1"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                            android:id="@+id/locations"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/pad3"
+                            />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearsublocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/pad7"
+                    android:background="@drawable/editback1"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                            android:id="@+id/subloctioncfm"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/pad3"
+                            android:spinnerMode="dropdown"
+
+                            />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/pad7"
+                    android:background="@drawable/editback1"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                            android:id="@+id/responsbility"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/pad3"
+                            />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linearequipment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/pad7"
+                    android:background="@drawable/editback1"
+                    android:visibility="gone"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                            android:id="@+id/equipmentcfm"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/pad3"
+                            android:spinnerMode="dropdown"
+
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/pad7"
+                    android:background="@drawable/editback1"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <Spinner
+                            android:id="@+id/status"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/pad3"
+                            android:spinnerMode="dropdown"
+
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:orientation="horizontal"
+                    android:layout_margin="@dimen/pad7"
+                    android:background="@drawable/syncback"
+                    android:weightSum="1">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight=".80"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_gravity="center"
+                        android:padding="@dimen/pad5">
+
+                        <TextView
+                            android:id="@+id/firstdateshow"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/login"
+                            android:hint="@string/from"
+                            android:paddingLeft="@dimen/pad5"
+                            />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_weight=".20"
+                        android:layout_height="match_parent"
+                        android:id="@+id/fromdtebtn"
+                        android:src="@drawable/ic_calendar"
+                        android:layout_gravity="center"
+                        android:padding="@dimen/pad5"
+                        android:background="@drawable/btnback1"
+                        android:layout_margin="@dimen/marz4"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:orientation="horizontal"
+                    android:layout_margin="@dimen/pad7"
+                    android:background="@drawable/syncback"
+                    android:weightSum="1">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight=".80"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_gravity="center"
+                        android:padding="@dimen/pad5">
+
+                        <TextView
+                            android:id="@+id/seconddateshow"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/login"
+                            android:hint="@string/to"
+                            android:paddingLeft="@dimen/pad5"
+                            />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_weight=".20"
+                        android:layout_height="match_parent"
+                        android:id="@+id/todtebtn"
+                        android:src="@drawable/ic_calendar"
+                        android:layout_gravity="center"
+                        android:padding="@dimen/pad5"
+                        android:background="@drawable/btnback1"
+                        android:layout_margin="@dimen/marz4"
+                        />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="7dp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:background="@drawable/btnback1">
+
+                    <TextView
+                        android:id="@+id/btnFilter"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:text="@string/filter"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/login"
+                        android:padding="@dimen/pad5"
+                        android:textAlignment="center"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:textAllCaps="true"
+                        />
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

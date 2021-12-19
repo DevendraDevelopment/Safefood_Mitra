@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".Activities.SubdocumentlistActivity"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/purple_200"
+            android:weightSum="1"
+            android:paddingTop="@dimen/pad5"
+            android:paddingBottom="@dimen/pad5"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".10"
+                android:padding="@dimen/pad5"
+                android:src="@drawable/ic_home" />
+
+            <TextView
+                android:id="@+id/titles"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".90"
+                android:gravity="center"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/login"
+                android:textStyle="bold"
+                android:text="@string/fsmsdocuments"
+                android:padding="@dimen/pad5"
+                />
+
+        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/pad10"
+            android:id="@+id/dashlist"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/pad10"
+            android:id="@+id/fillelist"/>
+        <TextView
+            android:id="@+id/noreords"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:text="No Records found"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:textColor="@color/colorDarkgreen"
+            android:textSize="@dimen/login"
+            />
+    </LinearLayout>
+</layout>

@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/lineardetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:weightSum="1">
+            <TextView
+                android:id="@+id/titles"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".90"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:text="@string/inspectfilter"
+                android:gravity="center|start"
+                android:textSize="@dimen/dim1"
+                android:textStyle="bold"
+                android:padding="3dp"
+                />
+
+            <ImageView
+                android:id="@+id/filtercancle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".10"
+                android:padding="@dimen/pad5"
+                android:src="@drawable/ic_cancel1" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/pad7"
+            android:background="@drawable/editback1"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:orientation="vertical"
+                android:gravity="center">
+                <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                    android:id="@+id/locations"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/pad3"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/pad7"
+            android:background="@drawable/editback1"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:orientation="vertical"
+                android:gravity="center">
+                <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                    android:id="@+id/responsbility"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/pad3"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/pad7"
+            android:background="@drawable/editback1"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:orientation="vertical"
+                android:gravity="center">
+                <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                    android:id="@+id/concernarea"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/pad3"
+                    android:spinnerMode="dropdown"
+
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/pad7"
+            android:background="@drawable/editback1"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:orientation="vertical"
+                android:gravity="center">
+                <Spinner
+                    android:id="@+id/status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/pad3"
+                    android:spinnerMode="dropdown"
+
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:orientation="horizontal"
+                android:layout_margin="@dimen/pad7"
+                android:background="@drawable/syncback"
+                android:weightSum="1">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight=".80"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/pad5">
+
+                    <TextView
+                        android:id="@+id/firstdateshow"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/login"
+                        android:hint="@string/from"
+                        />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight=".20"
+                    android:layout_height="match_parent"
+                    android:id="@+id/fromdtebtn"
+                    android:src="@drawable/ic_calendar"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/pad5"
+                    android:background="@drawable/btnback1"
+                    android:layout_margin="@dimen/marz4"
+                    />
+
+            </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="horizontal"
+            android:layout_margin="@dimen/pad7"
+            android:background="@drawable/syncback"
+            android:weightSum="1">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight=".80"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:padding="@dimen/pad5">
+
+                <TextView
+                    android:id="@+id/seconddateshow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/login"
+                    android:hint="@string/to"
+                    />
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight=".20"
+                android:layout_height="match_parent"
+                android:id="@+id/todtebtn"
+                android:src="@drawable/ic_calendar"
+                android:layout_gravity="center"
+                android:padding="@dimen/pad5"
+                android:background="@drawable/btnback1"
+                android:layout_margin="@dimen/marz4"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="horizontal"
+            android:layout_margin="@dimen/pad7"
+            android:background="@drawable/syncback"
+            android:weightSum="1"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight=".80"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:padding="@dimen/pad5">
+
+                <TextView
+                    android:id="@+id/tvclosefromdata"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/login"
+                    android:hint="@string/closefrom"
+                    />
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight=".20"
+                android:layout_height="match_parent"
+                android:id="@+id/closefromdtebtn"
+                android:src="@drawable/ic_calendar"
+                android:layout_gravity="center"
+                android:padding="@dimen/pad5"
+                android:background="@drawable/btnback1"
+                android:layout_margin="@dimen/marz4"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="horizontal"
+            android:layout_margin="@dimen/pad7"
+            android:background="@drawable/syncback"
+            android:weightSum="1"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight=".80"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:padding="@dimen/pad5">
+
+                <TextView
+                    android:id="@+id/tvtoclosedate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/login"
+                    android:hint="@string/closeto"
+                    />
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight=".20"
+                android:layout_height="match_parent"
+                android:id="@+id/closetodtebtn"
+                android:src="@drawable/ic_calendar"
+                android:layout_gravity="center"
+                android:padding="@dimen/pad5"
+                android:background="@drawable/btnback1"
+                android:layout_margin="@dimen/marz4"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/btnback1">
+
+            <TextView
+                android:id="@+id/btnFilter"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:text="@string/filter"
+                android:textColor="@color/white"
+                android:textSize="@dimen/login"
+                android:padding="@dimen/pad5"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

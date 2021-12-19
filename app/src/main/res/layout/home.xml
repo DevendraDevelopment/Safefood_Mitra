@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+     <ScrollView
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="vertical">
+            <!-- <androidx.constraintlayout.widget.ConstraintLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:id="@+id/slider"
+                 android:orientation="vertical">
+                 <View
+                     android:id="@+id/view"
+                     android:layout_width="match_parent"
+                     android:layout_height="200dp"
+                     android:background="@color/white"
+                     app:layout_constraintBottom_toBottomOf="parent"
+                     app:layout_constraintEnd_toEndOf="parent"
+                     app:layout_constraintHorizontal_bias="1.0"
+                     app:layout_constraintStart_toStartOf="parent"
+                     app:layout_constraintTop_toTopOf="parent"
+                     app:layout_constraintVertical_bias="0.0" />
+                 <androidx.viewpager2.widget.ViewPager2
+                     android:id="@+id/viewPager"
+                     android:layout_width="match_parent"
+                     android:layout_height="200dp"
+                     app:layout_constraintBottom_toBottomOf="parent"
+                     app:layout_constraintEnd_toEndOf="parent"
+                     app:layout_constraintStart_toStartOf="parent"
+                     app:layout_constraintTop_toTopOf="@+id/view"
+                     app:layout_constraintVertical_bias="0.199">
+
+                 </androidx.viewpager2.widget.ViewPager2>
+
+                 <LinearLayout
+                     android:id="@+id/lay_indicator"
+                     android:layout_width="0dp"
+                     android:layout_height="wrap_content"
+                     android:gravity="center"
+                     android:orientation="horizontal"
+                     android:padding="15dp"
+                     app:layout_constraintBottom_toBottomOf="parent"
+                     app:layout_constraintEnd_toEndOf="parent"
+                     app:layout_constraintHorizontal_bias="1.0"
+                     app:layout_constraintStart_toStartOf="parent"
+                     android:layout_marginBottom="@dimen/pad10"
+                     app:layout_constraintVertical_bias="0.43">
+
+                 </LinearLayout>
+             </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+             <com.smarteist.autoimageslider.SliderView
+                 android:id="@+id/slider"
+                 android:layout_width="match_parent"
+                 android:layout_height="200dp"
+                 android:layout_centerInParent="true"
+                 app:sliderAnimationDuration="600"
+                 app:sliderAutoCycleDirection="back_and_forth"
+                 app:sliderIndicatorAnimationDuration="600"
+                 app:sliderIndicatorEnabled="true"
+                 app:sliderIndicatorGravity="center_horizontal|bottom"
+                 app:sliderIndicatorMarginBottom="@dimen/pad20"
+                 app:sliderIndicatorMargin="15dp"
+                 app:sliderIndicatorOrientation="horizontal"
+                 app:sliderIndicatorPadding="3dp"
+                 app:sliderIndicatorRadius="3dp"
+                 app:sliderIndicatorSelectedColor="#056314"
+                 app:sliderIndicatorUnselectedColor="#FFF"
+                 app:sliderScrollTimeInSec="1" />
+             <androidx.cardview.widget.CardView
+                 app:cardCornerRadius="5dp"
+                 app:cardUseCompatPadding="true"
+                 app:cardElevation="5dp"
+                 android:layout_marginLeft="@dimen/pad5"
+                 android:layout_marginRight="@dimen/pad5"
+                 android:layout_marginBottom="@dimen/pad10"
+                 android:layout_centerHorizontal="true"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent">
+                 <LinearLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent"
+                     android:orientation="vertical">
+                     <androidx.recyclerview.widget.RecyclerView
+                         android:layout_width="match_parent"
+                         android:layout_height="match_parent"
+                         android:layout_margin="@dimen/pad5"
+                         android:id="@+id/dashlist"/>
+                 </LinearLayout>
+             </androidx.cardview.widget.CardView>
+         </LinearLayout>
+     </ScrollView>
+
+
+
+
+</LinearLayout>
+</layout>

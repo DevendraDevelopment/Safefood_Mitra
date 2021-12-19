@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/purple_200"
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:gravity="start"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/adminname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/pad2"
+                android:text="Admin"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sixteen"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/adminumbers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/pad2"
+                android:text="+1120330494995"
+                android:textColor="@color/white"
+                android:textSize="@dimen/fourteen" />
+
+            <TextView
+                android:id="@+id/adminemail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/pad2"
+                android:text="Admin@gmail.com"
+                android:textColor="@color/white"
+                android:textSize="@dimen/fourteen" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/editback1"
+            android:layout_margin="7dp"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
+                <Spinner
+                    android:id="@+id/adminlists"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/pad5"
+                    android:spinnerMode="dropdown"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:id="@+id/zones"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/pad7"
+                android:text="@string/zones"
+                android:textColor="@color/colorDarkgreen"
+                android:textSize="@dimen/fourteen"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                />
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/teal_700"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:id="@+id/locations"
+            >
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/pad7"
+                android:textColor="@color/colorDarkgreen"
+                android:text="@string/locations"
+                android:textSize="@dimen/fourteen"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                />
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/teal_700"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:id="@+id/department"
+            >
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/pad7"
+                android:textColor="@color/colorDarkgreen"
+                android:text="@string/deparment"
+                android:textSize="@dimen/fourteen"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                />
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/teal_700"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:id="@+id/equipment"
+
+            >
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/pad7"
+                android:textColor="@color/colorDarkgreen"
+                android:text="@string/equipement"
+                android:textSize="@dimen/fourteen"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                />
+
+
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/teal_700"/>
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:id="@+id/records"
+            >
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/pad7"
+                android:textColor="@color/colorDarkgreen"
+                android:text="@string/Records"
+                android:textSize="@dimen/fourteen"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                />
+
+
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/teal_700"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:id="@+id/unit"
+            >
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/pad7"
+                android:textColor="@color/colorDarkgreen"
+                android:text="@string/units"
+                android:textSize="@dimen/fourteen"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                />
+
+
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/teal_700"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:id="@+id/users"
+            >
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/pad7"
+                android:textColor="@color/colorDarkgreen"
+                android:text="@string/users"
+                android:textSize="@dimen/fourteen"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                />
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/teal_700"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:id="@+id/inspectrespo"
+            >
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/pad7"
+                android:textColor="@color/colorDarkgreen"
+                android:text="@string/inspectionrespo"
+                android:textSize="@dimen/fourteen"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                />
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/teal_700"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:id="@+id/joballocation"
+            >
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/pad7"
+                android:textColor="@color/colorDarkgreen"
+                android:text="@string/joballocation"
+                android:textSize="@dimen/fourteen"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                />
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/teal_700"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:id="@+id/howtouse"
+            >
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/pad7"
+                android:textColor="@color/colorDarkgreen"
+                android:text="@string/howtouse"
+                android:textSize="@dimen/fourteen"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                />
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/teal_700"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/logout"
+            android:layout_margin="7dp"
+            >
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/pad7"
+                android:textColor="@color/colorDarkgreen"
+                android:text="@string/logout"
+                android:textSize="@dimen/fourteen"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                />
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/teal_700"/>
+
+
+    </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".Activities.AboutApp">
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+        <Button
+            android:id="@+id/getstart"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="@string/started"
+            android:textColor="@android:color/white"
+            android:background="@drawable/strtbtn1"
+            android:textAllCaps="false"
+            android:textSize="@dimen/sixteen"
+            android:textStyle="bold"
+            android:visibility="gone"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/size24"
+            android:layout_marginRight="@dimen/size24"
+            android:layout_marginBottom="50dp"
+            />
+
+
+        <LinearLayout
+            android:id="@+id/layoutDots"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dots_height"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/dots_margin_bottom"
+            android:gravity="center"
+            android:orientation="horizontal"
+            >
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

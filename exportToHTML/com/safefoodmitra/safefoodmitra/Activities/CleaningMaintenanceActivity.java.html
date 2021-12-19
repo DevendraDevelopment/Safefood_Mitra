@@ -1,0 +1,787 @@
+<html>
+<head>
+<title>CleaningMaintenanceActivity.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #000080; font-weight: bold;}
+.s1 { color: #000000;}
+.s2 { color: #008000; font-weight: bold;}
+.s3 { color: #0000ff;}
+.s4 { color: #808080; font-style: italic;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+CleaningMaintenanceActivity.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span>com.safefoodmitra.safefoodmitra.Activities;
+
+<span class="s0">import </span>androidx.appcompat.app.AlertDialog;
+<span class="s0">import </span>androidx.appcompat.app.AppCompatActivity;
+<span class="s0">import </span>androidx.databinding.DataBindingUtil;
+<span class="s0">import </span>androidx.recyclerview.widget.LinearLayoutManager;
+<span class="s0">import </span>androidx.recyclerview.widget.RecyclerView;
+<span class="s0">import </span>androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+<span class="s0">import </span>androidx.viewpager.widget.ViewPager;
+
+<span class="s0">import </span>android.app.Dialog;
+<span class="s0">import </span>android.content.DialogInterface;
+<span class="s0">import </span>android.content.Intent;
+<span class="s0">import </span>android.content.SharedPreferences;
+<span class="s0">import </span>android.os.Bundle;
+<span class="s0">import </span>android.text.TextUtils;
+<span class="s0">import </span>android.util.Log;
+<span class="s0">import </span>android.view.View;
+<span class="s0">import </span>android.view.Window;
+<span class="s0">import </span>android.view.WindowManager;
+<span class="s0">import </span>android.widget.AdapterView;
+<span class="s0">import </span>android.widget.ArrayAdapter;
+<span class="s0">import </span>android.widget.Button;
+<span class="s0">import </span>android.widget.CalendarView;
+<span class="s0">import </span>android.widget.CompoundButton;
+<span class="s0">import </span>android.widget.EditText;
+<span class="s0">import </span>android.widget.ImageButton;
+<span class="s0">import </span>android.widget.ImageView;
+<span class="s0">import </span>android.widget.LinearLayout;
+<span class="s0">import </span>android.widget.RadioButton;
+<span class="s0">import </span>android.widget.RadioGroup;
+<span class="s0">import </span>android.widget.Spinner;
+<span class="s0">import </span>android.widget.TextView;
+<span class="s0">import </span>android.widget.Toast;
+
+<span class="s0">import </span>com.google.gson.Gson;
+<span class="s0">import </span>com.google.gson.reflect.TypeToken;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Adapter.CleaningMaintenanceAdapter;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Adapter.CustomArrayAdapter;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Adapter.EqupmentAdapter;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Adapter.LocationAdapter;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Adapter.ZoneAdapter;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Apis.ApiClients;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Apis.RetApis;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Helper.Utlity;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.CleaningMaintModel;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.EqupmentModals;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.InspectrespoModals;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.InspectrespoModals2;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.LocationModals;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.RespoModal;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.ZoneModals;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.R;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.databinding.ActivityCleaningMaintenanceBinding;
+
+<span class="s0">import </span>org.json.JSONArray;
+<span class="s0">import </span>org.json.JSONException;
+<span class="s0">import </span>org.json.JSONObject;
+
+<span class="s0">import </span>java.io.IOException;
+<span class="s0">import </span>java.util.ArrayList;
+<span class="s0">import </span>java.util.HashMap;
+<span class="s0">import </span>java.util.List;
+<span class="s0">import </span>java.util.Map;
+
+<span class="s0">import </span>okhttp3.ResponseBody;
+<span class="s0">import </span>retrofit2.Call;
+<span class="s0">import </span>retrofit2.Callback;
+<span class="s0">import </span>retrofit2.Response;
+
+<span class="s0">import static </span>com.safefoodmitra.safefoodmitra.Activities.AdminMainActivity.respoid;
+<span class="s0">import static </span>com.safefoodmitra.safefoodmitra.Adapter.CustomArrayAdapter.arraylistequpment;
+
+
+<span class="s0">public class </span>CleaningMaintenanceActivity <span class="s0">extends </span>AppCompatActivity <span class="s0">implements </span>View.OnClickListener {
+    ActivityCleaningMaintenanceBinding cleaningMaintenanceBinding;
+    CleaningMaintenanceAdapter cleaningMaintenanceAdapter;
+    Spinner selcttypecfm,zonecfm,locationcfm,sublocationcfm,equipmentcfm,responsiblitycfm;
+    ArrayList&lt;String&gt; selecttypecfm;
+    List&lt;CleaningMaintModel&gt; cleaningMaintModels;
+    RetApis apiInterface;
+    String displedate,currentedate,prevdate,enddate,comment;
+    SharedPreferences pref;
+    ArrayList&lt;String&gt; zonelist;
+    List&lt;ZoneModals&gt; zoneModals;
+    <span class="s0">public </span>List&lt;LocationModals&gt; locationModals;
+    ArrayList&lt;String&gt; locationlist;
+    <span class="s0">public </span>List&lt;LocationModals&gt; sublocationModals;
+    ArrayList&lt;String&gt; sublocationlist;
+    <span class="s0">public </span>ArrayList&lt;EqupmentModals&gt; equpmentModals;
+    List&lt;RespoModal&gt;respoModals;
+    ArrayList&lt;String&gt; respolist;
+    LinearLayout linearsublocation,linearequipment,linearcommentbox;
+    TextView tvsave,tvdate,tvtime,tvstartdate;
+    EditText etrepeatedate,etcomment;
+    String cmftype,cmfzoneid,cmflocid,cmfsublocid,cmfequid,cmfrespoid,cmfreponce,cmfoncedate,cmftime,cmfstartdate,cmfrepeateone;
+    <span class="s0">private static </span>Dialog progressDialog = <span class="s0">null</span>;
+    ImageView cancle;
+    String respoid1;
+    @Override
+    <span class="s0">protected void </span>onCreate(Bundle savedInstanceState) {
+        <span class="s0">super</span>.onCreate(savedInstanceState);
+        cleaningMaintenanceBinding = DataBindingUtil.setContentView(<span class="s0">this</span>,R.layout.activity_cleaning_maintenance);
+
+        progressDialog = <span class="s0">new </span>Dialog(CleaningMaintenanceActivity.<span class="s0">this</span>);
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        progressDialog.setCancelable(<span class="s0">false</span>);
+        progressDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        progressDialog.setContentView(R.layout.custom_progress);
+        pref = <span class="s0">this</span>.getSharedPreferences(<span class="s2">&quot;MyG9&quot;</span>, MODE_PRIVATE);
+        respoid1 = pref.getString(<span class="s2">&quot;respoid&quot;</span>,<span class="s0">null</span>);
+        cmflocid=<span class="s2">&quot;1&quot;</span>;
+        <span class="s0">if </span>(Utlity.is_online(<span class="s0">this</span>)){
+            getdatacleaning();
+
+
+        }
+        <span class="s0">else </span>{
+            Utlity.show_toast(CleaningMaintenanceActivity.<span class="s0">this</span>, getResources().getString(R.string.nointernet));
+        }
+
+        <span class="s0">if </span>(Utlity.get_user(<span class="s0">this</span>).getUserroles_id().equalsIgnoreCase(<span class="s2">&quot;2&quot;</span>)){
+            cleaningMaintenanceBinding.addcleaning.setVisibility(View.VISIBLE);
+
+        }
+        <span class="s0">else if </span>(Utlity.get_user(<span class="s0">this</span>).getUserroles_id().equalsIgnoreCase(<span class="s2">&quot;3&quot;</span>)){
+            cleaningMaintenanceBinding.addcleaning.setVisibility(View.GONE);
+        }
+        click();
+
+
+    }
+
+    <span class="s0">private void </span>getdatacleaning() {
+        Utlity.show_progress(<span class="s0">this</span>);
+        String respoid1 = pref.getString(<span class="s2">&quot;respoid&quot;</span>,<span class="s0">null</span>);
+        apiInterface = ApiClients.getClient1().create(RetApis.<span class="s0">class</span>);
+        retrofit2.Call&lt;ResponseBody&gt; call=apiInterface.CFMLisetget(respoid1,<span class="s2">&quot;Bearer &quot;</span>+ Utlity.get_user(<span class="s0">this</span>).getToken());
+        call.enqueue(<span class="s0">new </span>retrofit2.Callback&lt;ResponseBody&gt;() {
+            @Override
+            <span class="s0">public void </span>onResponse(retrofit2.Call&lt;ResponseBody&gt; call, retrofit2.Response&lt;ResponseBody&gt; response) {
+                <span class="s0">if </span>(response.isSuccessful()) {
+                    String apidata = <span class="s0">null</span>;
+                    <span class="s0">try </span>{
+                        Utlity.dismiss_dilog(CleaningMaintenanceActivity.<span class="s0">this</span>);
+                        apidata = response.body().string();
+                        Log.d(<span class="s2">&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;</span>,apidata);
+                        JSONObject object = <span class="s0">new </span>JSONObject(apidata);
+                        displedate = object.getString(<span class="s2">&quot;disptitle&quot;</span>);
+                        currentedate = object.getString(<span class="s2">&quot;currentdate&quot;</span>);
+                        prevdate = object.getString(<span class="s2">&quot;prevdate&quot;</span>);
+                        enddate = object.getString(<span class="s2">&quot;enddate&quot;</span>);
+                        cleaningMaintModels = Utlity.gson.fromJson(object.getJSONArray(<span class="s2">&quot;success&quot;</span>).toString(), <span class="s0">new </span>TypeToken&lt;List&lt;CleaningMaintModel&gt;&gt;() {}.getType());
+                        <span class="s0">if</span>(cleaningMaintModels.size()!=<span class="s3">0</span>) {
+                            cleaningMaintenanceBinding.linearcmf.setVisibility(View.VISIBLE);
+                            cleaningMaintenanceBinding.displedate.setText(displedate);
+                            cleaningMaintenanceBinding.ceaninglist.setHasFixedSize(<span class="s0">true</span>);
+                            cleaningMaintenanceBinding.ceaninglist.setLayoutManager(<span class="s0">new </span>LinearLayoutManager(CleaningMaintenanceActivity.<span class="s0">this</span>, RecyclerView.VERTICAL,<span class="s0">false</span>));
+                            cleaningMaintenanceAdapter = <span class="s0">new </span>CleaningMaintenanceAdapter(CleaningMaintenanceActivity.<span class="s0">this</span>,cleaningMaintModels);
+                            cleaningMaintenanceBinding.ceaninglist.setAdapter(cleaningMaintenanceAdapter);
+                        }
+                        <span class="s0">else</span>
+                        {
+                            cleaningMaintenanceBinding.noreords.setVisibility(View.VISIBLE);
+                        }
+
+                    } <span class="s0">catch </span>(IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+            @Override
+            <span class="s0">public void </span>onFailure(retrofit2.Call&lt;ResponseBody&gt; call, Throwable t) {
+                Utlity.dismiss_dilog(CleaningMaintenanceActivity.<span class="s0">this</span>);
+
+            }
+        });
+    }
+
+
+    <span class="s0">private void </span>click() {
+        cleaningMaintenanceBinding.back.setOnClickListener(<span class="s0">this</span>::onClick);
+        cleaningMaintenanceBinding.imgbackward.setOnClickListener(<span class="s0">this</span>);
+        cleaningMaintenanceBinding.imgforward.setOnClickListener(<span class="s0">this</span>);
+        cleaningMaintenanceBinding.addcleaning.setOnClickListener(<span class="s0">this</span>);
+        cleaningMaintenanceBinding.refreshimage.setOnClickListener(<span class="s0">this</span>);
+    }
+
+    @Override
+    <span class="s0">public void </span>onClick(View v) {
+        <span class="s0">if </span>(v.getId() == R.id.back){
+            onBackPressed();
+        }<span class="s0">else if </span>(v.getId() == R.id.imgbackward){
+            data(prevdate);
+        }<span class="s0">else if </span>(v.getId() == R.id.imgforward){
+            data(enddate);
+        }<span class="s0">else if </span>(v.getId() == R.id.addcleaning){
+            showdata();
+            selecttype();
+            seletzone();
+            seletloction();
+            seletsubloction(cmflocid);
+            seletequipment();
+            seletresponsibility();
+
+        }<span class="s0">else if </span>(v.getId() == R.id.refreshimage){
+            getdatacleaning();
+        }
+    }
+
+    <span class="s0">private void </span>seletresponsibility() {
+        progressDialog.show();
+        String respoid1 = pref.getString(<span class="s2">&quot;respoid&quot;</span>,<span class="s0">null</span>);
+        apiInterface = ApiClients.getClient1().create(RetApis.<span class="s0">class</span>);
+        retrofit2.Call&lt;ResponseBody&gt; call=apiInterface.Depatlist(respoid1,<span class="s2">&quot;Bearer &quot;</span>+ Utlity.get_user(<span class="s0">this</span>).getToken());
+        call.enqueue(<span class="s0">new </span>retrofit2.Callback&lt;ResponseBody&gt;() {
+            @Override
+            <span class="s0">public void </span>onResponse(retrofit2.Call&lt;ResponseBody&gt; call, retrofit2.Response&lt;ResponseBody&gt; response) {
+                <span class="s0">if </span>(response.isSuccessful()) {
+                    String apidata = <span class="s0">null</span>;
+                    <span class="s0">try </span>{
+                       progressDialog.cancel();
+                        apidata = response.body().string();
+                        Log.d(<span class="s2">&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;</span>,apidata);
+                        JSONObject object = <span class="s0">new </span>JSONObject(apidata);
+                        respoModals = Utlity.gson.fromJson(object.getJSONArray(<span class="s2">&quot;success&quot;</span>).toString(), <span class="s0">new </span>TypeToken&lt;List&lt;RespoModal&gt;&gt;() {}.getType());
+                        respolist=<span class="s0">new </span>ArrayList&lt;&gt;();
+                        respolist.add(<span class="s2">&quot;Select Reponsibility&quot;</span>);
+                        <span class="s0">for </span>(RespoModal respoModal:respoModals){
+                            respolist.add(respoModal.getDept_name());
+                        }
+                        ArrayAdapter&lt;String&gt; adapter =
+                                <span class="s0">new </span>ArrayAdapter&lt;String&gt;(CleaningMaintenanceActivity.<span class="s0">this</span>,  R.layout.spinneritem, respolist);
+                        adapter.setDropDownViewResource( R.layout.spinneritem);
+                        responsiblitycfm.setAdapter(adapter);
+                        responsiblitycfm.setOnItemSelectedListener(<span class="s0">new </span>AdapterView.OnItemSelectedListener() {
+                            @Override
+                            <span class="s0">public void </span>onItemSelected(AdapterView&lt;?&gt; parent, View view, <span class="s0">int </span>position, <span class="s0">long </span>id) {
+                                <span class="s0">if </span>(position !=<span class="s3">0</span>){
+                                    cmfrespoid = respoModals.get(position-<span class="s3">1</span>).getId();
+                                }
+                            }
+
+                            @Override
+                            <span class="s0">public void </span>onNothingSelected(AdapterView&lt;?&gt; parent) {
+
+                            }
+                        });
+
+                    } <span class="s0">catch </span>(IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+            @Override
+            <span class="s0">public void </span>onFailure(retrofit2.Call&lt;ResponseBody&gt; call, Throwable t) {
+                progressDialog.cancel();
+
+            }
+        });
+
+    }
+
+    <span class="s0">private void </span>seletequipment() {
+        progressDialog.show();
+        String respoid1 = pref.getString(<span class="s2">&quot;respoid&quot;</span>,<span class="s0">null</span>);
+        apiInterface = ApiClients.getClient().create(RetApis.<span class="s0">class</span>);
+        retrofit2.Call&lt;ResponseBody&gt; call=apiInterface.Equpments(respoid1,<span class="s2">&quot;Bearer &quot;</span>+ Utlity.get_user(<span class="s0">this</span>).getToken());
+        call.enqueue(<span class="s0">new </span>retrofit2.Callback&lt;ResponseBody&gt;() {
+            @Override
+            <span class="s0">public void </span>onResponse(retrofit2.Call&lt;ResponseBody&gt; call, retrofit2.Response&lt;ResponseBody&gt; response) {
+                <span class="s0">if </span>(response.isSuccessful()) {
+                    String apidata = <span class="s0">null</span>;
+                    <span class="s0">try </span>{
+                        progressDialog.cancel();
+                        <span class="s4">//   Utlity.dismiss_dilog(CleaningMaintenanceActivity.this);</span>
+                        apidata = response.body().string();
+                        Log.d(<span class="s2">&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;</span>,apidata);
+                        JSONObject object = <span class="s0">new </span>JSONObject(apidata);
+                        equpmentModals = Utlity.gson.fromJson(object.getJSONArray(<span class="s2">&quot;success&quot;</span>).toString(), <span class="s0">new </span>TypeToken&lt;List&lt;EqupmentModals&gt;&gt;() {}.getType());
+                       <span class="s4">//  equpmentModals.add(new EqupmentModals(&quot;Select Equipment&quot;));</span>
+
+                       <span class="s4">// equpmentlist=new ArrayList&lt;&gt;();</span>
+                      <span class="s4">//  equpmentlist.add(&quot;Select Equipment&quot;);</span>
+                      <span class="s4">//  for (EqupmentModals equpmentModals1:equpmentModals){</span>
+                       <span class="s4">//     equpmentlist.add(equpmentModals1.getEquip_name());</span>
+                       <span class="s4">// }</span>
+                        String headerText = <span class="s2">&quot;Select Equipment&quot;</span>;
+                        CustomArrayAdapter myAdapter = <span class="s0">new </span>CustomArrayAdapter(CleaningMaintenanceActivity.<span class="s0">this</span>,headerText, <span class="s3">0</span>,
+                                equpmentModals);
+                     <span class="s4">//   ArrayAdapter&lt;String&gt; adapter =</span>
+                         <span class="s4">//       new ArrayAdapter&lt;String&gt;(CleaningMaintenanceActivity.this,  R.layout.spinneritem, equpmentlist);</span>
+                       <span class="s4">// adapter.setDropDownViewResource( R.layout.spinneritem);</span>
+                        equipmentcfm.setAdapter(myAdapter);
+                      <span class="s4">/*  equipmentcfm.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() { 
+                            @Override 
+                            public void onItemSelected(AdapterView&lt;?&gt; parent, View view, int position, long id) { 
+                                if (position !=0){ 
+                                    cmfequid = equpmentModals.get(position-1).getId(); 
+                                    Utlity.show_toast(CleaningMaintenanceActivity.this,cmfequid); 
+                                } 
+                            } 
+ 
+                            @Override 
+                            public void onNothingSelected(AdapterView&lt;?&gt; parent) { 
+ 
+                            } 
+                        });*/</span>
+
+                    } <span class="s0">catch </span>(IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+            @Override
+            <span class="s0">public void </span>onFailure(retrofit2.Call&lt;ResponseBody&gt; call, Throwable t) {
+                progressDialog.cancel();
+                <span class="s4">// Utlity.dismiss_dilog(CleaningMaintenanceActivity.this);</span>
+
+            }
+        });
+    }
+
+    <span class="s0">private void </span>seletsubloction(String cmflocid) {
+
+        progressDialog.show();
+        String respoid1 = pref.getString(<span class="s2">&quot;respoid&quot;</span>,<span class="s0">null</span>);
+        apiInterface = ApiClients.getClient().create(RetApis.<span class="s0">class</span>);
+        retrofit2.Call&lt;ResponseBody&gt; call=apiInterface.SubLocations(respoid1,cmflocid,<span class="s2">&quot;Bearer &quot;</span>+ Utlity.get_user(<span class="s0">this</span>).getToken());
+        call.enqueue(<span class="s0">new </span>retrofit2.Callback&lt;ResponseBody&gt;() {
+            @Override
+            <span class="s0">public void </span>onResponse(retrofit2.Call&lt;ResponseBody&gt; call, retrofit2.Response&lt;ResponseBody&gt; response) {
+                <span class="s0">if </span>(response.isSuccessful()) {
+                    String apidata = <span class="s0">null</span>;
+                    <span class="s0">try </span>{
+                       progressDialog.cancel();
+                        apidata = response.body().string();
+                        Log.d(<span class="s2">&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;</span>,apidata);
+                        JSONObject object = <span class="s0">new </span>JSONObject(apidata);
+                        sublocationModals = Utlity.gson.fromJson(object.getJSONArray(<span class="s2">&quot;success&quot;</span>).toString(), <span class="s0">new </span>TypeToken&lt;List&lt;LocationModals&gt;&gt;() {}.getType());
+                        sublocationlist=<span class="s0">new </span>ArrayList&lt;&gt;();
+                        sublocationlist.add(<span class="s2">&quot;Select SubLocation&quot;</span>);
+                        <span class="s0">for </span>(LocationModals locationModals1:sublocationModals){
+                            sublocationlist.add(locationModals1.getLoc_name());
+                        }
+                        ArrayAdapter&lt;String&gt; adapter =
+                                <span class="s0">new </span>ArrayAdapter&lt;String&gt;(CleaningMaintenanceActivity.<span class="s0">this</span>,  R.layout.spinneritem, sublocationlist);
+                        adapter.setDropDownViewResource( R.layout.spinneritem);
+                        sublocationcfm.setAdapter(adapter);
+
+                        sublocationcfm.setOnItemSelectedListener(<span class="s0">new </span>AdapterView.OnItemSelectedListener() {
+                            @Override
+                            <span class="s0">public void </span>onItemSelected(AdapterView&lt;?&gt; parent, View view, <span class="s0">int </span>position, <span class="s0">long </span>id) {
+                                <span class="s0">if </span>(position !=<span class="s3">0</span>){
+                                    cmfsublocid = sublocationModals.get(position-<span class="s3">1</span>).getId();
+                                  <span class="s4">//  Utlity.show_toast(CleaningMaintenanceActivity.this,cmfsublocid);</span>
+                                }
+                            }
+
+                            @Override
+                            <span class="s0">public void </span>onNothingSelected(AdapterView&lt;?&gt; parent) {
+
+                            }
+                        });
+                    } <span class="s0">catch </span>(IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+            @Override
+            <span class="s0">public void </span>onFailure(retrofit2.Call&lt;ResponseBody&gt; call, Throwable t) {
+                progressDialog.cancel();
+
+            }
+        });
+
+    }
+
+    <span class="s0">private void </span>seletloction() {
+        String respoid1 = pref.getString(<span class="s2">&quot;respoid&quot;</span>,<span class="s0">null</span>);
+        apiInterface = ApiClients.getClient().create(RetApis.<span class="s0">class</span>);
+        retrofit2.Call&lt;ResponseBody&gt; call=apiInterface.Locationstype(respoid1,<span class="s2">&quot;Bearer &quot;</span>+ Utlity.get_user(<span class="s0">this</span>).getToken());
+        call.enqueue(<span class="s0">new </span>retrofit2.Callback&lt;ResponseBody&gt;() {
+            @Override
+            <span class="s0">public void </span>onResponse(retrofit2.Call&lt;ResponseBody&gt; call, retrofit2.Response&lt;ResponseBody&gt; response) {
+                <span class="s0">if </span>(response.isSuccessful()) {
+                    String apidata = <span class="s0">null</span>;
+                    <span class="s0">try </span>{
+                        <span class="s4">//  Utlity.dismiss_dilog(CleaningMaintenanceActivity.this);</span>
+                        apidata = response.body().string();
+                        Log.d(<span class="s2">&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;</span>,apidata);
+                        JSONObject object = <span class="s0">new </span>JSONObject(apidata);
+                        locationModals = Utlity.gson.fromJson(object.getJSONArray(<span class="s2">&quot;success&quot;</span>).toString(), <span class="s0">new </span>TypeToken&lt;List&lt;LocationModals&gt;&gt;() {}.getType());
+                        locationlist=<span class="s0">new </span>ArrayList&lt;&gt;();
+                        locationlist.add(<span class="s2">&quot;Select Location&quot;</span>);
+                        <span class="s0">for </span>(LocationModals locationModals1:locationModals){
+                            locationlist.add(locationModals1.getLoc_name());
+                        }
+                        ArrayAdapter&lt;String&gt; adapter =
+                                <span class="s0">new </span>ArrayAdapter&lt;String&gt;(CleaningMaintenanceActivity.<span class="s0">this</span>,  R.layout.spinneritem, locationlist);
+                        adapter.setDropDownViewResource( R.layout.spinneritem);
+                        locationcfm.setAdapter(adapter);
+
+                        locationcfm.setOnItemSelectedListener(<span class="s0">new </span>AdapterView.OnItemSelectedListener() {
+                            @Override
+                            <span class="s0">public void </span>onItemSelected(AdapterView&lt;?&gt; parent, View view, <span class="s0">int </span>position, <span class="s0">long </span>id) {
+                                <span class="s0">if </span>(position !=<span class="s3">0</span>){
+                                    cmflocid = locationModals.get(position-<span class="s3">1</span>).getId();
+                                    seletsubloction(cmflocid);
+                                   <span class="s4">// Utlity.show_toast(CleaningMaintenanceActivity.this,cmflocid);</span>
+                                }
+                            }
+
+                            @Override
+                            <span class="s0">public void </span>onNothingSelected(AdapterView&lt;?&gt; parent) {
+
+                            }
+                        });
+                    } <span class="s0">catch </span>(IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+            @Override
+            <span class="s0">public void </span>onFailure(retrofit2.Call&lt;ResponseBody&gt; call, Throwable t) {
+                <span class="s4">//    Utlity.dismiss_dilog(CleaningMaintenanceActivity.this);</span>
+
+            }
+        });
+
+    }
+
+    <span class="s0">private void </span>seletzone() {
+        String respoid1 = pref.getString(<span class="s2">&quot;respoid&quot;</span>,<span class="s0">null</span>);
+        apiInterface = ApiClients.getClient().create(RetApis.<span class="s0">class</span>);
+        retrofit2.Call&lt;ResponseBody&gt; call=apiInterface.Zones(respoid1,<span class="s2">&quot;Bearer &quot;</span>+ Utlity.get_user(<span class="s0">this</span>).getToken());
+        call.enqueue(<span class="s0">new </span>retrofit2.Callback&lt;ResponseBody&gt;() {
+            @Override
+            <span class="s0">public void </span>onResponse(retrofit2.Call&lt;ResponseBody&gt; call, retrofit2.Response&lt;ResponseBody&gt; response) {
+                <span class="s0">if </span>(response.isSuccessful()) {
+                    String apidata = <span class="s0">null</span>;
+                    <span class="s0">try </span>{
+                        <span class="s4">// Utlity.dismiss_dilog(CleaningMaintenanceActivity.this);</span>
+                        apidata = response.body().string();
+                        Log.d(<span class="s2">&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;</span>,apidata);
+                        JSONObject object = <span class="s0">new </span>JSONObject(apidata);
+                        zoneModals = Utlity.gson.fromJson(object.getJSONArray(<span class="s2">&quot;success&quot;</span>).toString(), <span class="s0">new </span>TypeToken&lt;List&lt;ZoneModals&gt;&gt;() {}.getType());
+                        zonelist=<span class="s0">new </span>ArrayList&lt;&gt;();
+                        zonelist.add(<span class="s2">&quot;Select Zone&quot;</span>);
+                        <span class="s0">for </span>(ZoneModals zoneModals1:zoneModals){
+                            zonelist.add(zoneModals1.getZone_name());
+                        }
+                        ArrayAdapter&lt;String&gt; adapter =
+                                <span class="s0">new </span>ArrayAdapter&lt;String&gt;(CleaningMaintenanceActivity.<span class="s0">this</span>,  R.layout.spinneritem, zonelist);
+                        adapter.setDropDownViewResource( R.layout.spinneritem);
+                        zonecfm.setAdapter(adapter);
+                        zonecfm.setOnItemSelectedListener(<span class="s0">new </span>AdapterView.OnItemSelectedListener() {
+                            @Override
+                            <span class="s0">public void </span>onItemSelected(AdapterView&lt;?&gt; parent, View view, <span class="s0">int </span>position, <span class="s0">long </span>id) {
+                                <span class="s0">if </span>(position !=<span class="s3">0</span>){
+                                    cmfzoneid = zoneModals.get(position-<span class="s3">1</span>).getId();
+                                    <span class="s4">//Utlity.show_toast(CleaningMaintenanceActivity.this,cmfzoneid);</span>
+                                }
+                            }
+
+                            @Override
+                            <span class="s0">public void </span>onNothingSelected(AdapterView&lt;?&gt; parent) {
+
+                            }
+                        });
+
+                    } <span class="s0">catch </span>(IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+            @Override
+            <span class="s0">public void </span>onFailure(retrofit2.Call&lt;ResponseBody&gt; call, Throwable t) {
+                <span class="s4">//  Utlity.dismiss_dilog(CleaningMaintenanceActivity.this);</span>
+
+            }
+        });
+
+    }
+    <span class="s0">private void </span>selecttype() {
+        selecttypecfm=<span class="s0">new </span>ArrayList&lt;&gt;();
+        selecttypecfm.add(<span class="s2">&quot;Select Type&quot;</span>);
+        selecttypecfm.add(<span class="s2">&quot;Cleaning&quot;</span>);
+        selecttypecfm.add(<span class="s2">&quot;Fumigation&quot;</span>);
+        selecttypecfm.add(<span class="s2">&quot;Maintenance&quot;</span>);
+
+        ArrayAdapter&lt;String&gt; adapter =
+                <span class="s0">new </span>ArrayAdapter&lt;String&gt;(<span class="s0">this</span>,  R.layout.spinneritem, selecttypecfm);
+        adapter.setDropDownViewResource( R.layout.spinneritem);
+        selcttypecfm.setAdapter(adapter);
+
+        selcttypecfm.setOnItemSelectedListener(<span class="s0">new </span>AdapterView.OnItemSelectedListener() {
+            @Override
+            <span class="s0">public void </span>onItemSelected(AdapterView&lt;?&gt; parent, View view, <span class="s0">int </span>position, <span class="s0">long </span>id) {
+                cmftype = selcttypecfm.getItemAtPosition(position).toString();
+                <span class="s0">if </span>(position == <span class="s3">0</span>){
+                    linearequipment.setVisibility(View.GONE);
+                   <span class="s4">// linearsublocation.setVisibility(View.GONE);</span>
+                    cmfequid = <span class="s2">&quot;&quot;</span>;
+                    linearcommentbox.setVisibility(View.GONE);
+                   <span class="s4">// cmfsublocid = &quot;&quot;;</span>
+                }<span class="s0">else if </span>(position == <span class="s3">2</span>){
+                    linearequipment.setVisibility(View.GONE);
+                    linearcommentbox.setVisibility(View.VISIBLE);
+                    cmfequid = <span class="s2">&quot;&quot;</span>;
+                }<span class="s0">else </span>{
+                    linearequipment.setVisibility(View.VISIBLE);
+                    linearcommentbox.setVisibility(View.GONE);
+                  <span class="s4">//  linearsublocation.setVisibility(View.GONE);</span>
+                 <span class="s4">//   cmfsublocid = &quot;&quot;;</span>
+                }
+
+
+            }
+
+            @Override
+            <span class="s0">public void </span>onNothingSelected(AdapterView&lt;?&gt; parent) {
+
+            }
+
+        });
+    }
+    <span class="s0">private void </span>data(String cerrdate) {
+        Utlity.show_progress(<span class="s0">this</span>);
+        String respoid1 = pref.getString(<span class="s2">&quot;respoid&quot;</span>,<span class="s0">null</span>);
+        apiInterface = ApiClients.getClient1().create(RetApis.<span class="s0">class</span>);
+        retrofit2.Call&lt;ResponseBody&gt; call=apiInterface.CFMLisetpost(respoid1,<span class="s2">&quot;Bearer &quot;</span>+ Utlity.get_user(<span class="s0">this</span>).getToken(),cerrdate);
+        call.enqueue(<span class="s0">new </span>retrofit2.Callback&lt;ResponseBody&gt;() {
+            @Override
+            <span class="s0">public void </span>onResponse(retrofit2.Call&lt;ResponseBody&gt; call, retrofit2.Response&lt;ResponseBody&gt; response) {
+                <span class="s0">if </span>(response.isSuccessful()) {
+                    String apidata = <span class="s0">null</span>;
+                    <span class="s0">try </span>{
+                        Utlity.dismiss_dilog(CleaningMaintenanceActivity.<span class="s0">this</span>);
+                        apidata = response.body().string();
+                        Log.d(<span class="s2">&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;</span>, apidata);
+                        JSONObject object = <span class="s0">new </span>JSONObject(apidata);
+                        displedate = object.getString(<span class="s2">&quot;disptitle&quot;</span>);
+                        currentedate = object.getString(<span class="s2">&quot;currentdate&quot;</span>);
+                        prevdate = object.getString(<span class="s2">&quot;prevdate&quot;</span>);
+                        enddate = object.getString(<span class="s2">&quot;enddate&quot;</span>);
+
+                        cleaningMaintModels = Utlity.gson.fromJson(object.getJSONArray(<span class="s2">&quot;success&quot;</span>).toString(), <span class="s0">new </span>TypeToken&lt;List&lt;CleaningMaintModel&gt;&gt;() {
+                        }.getType());
+                        <span class="s0">if </span>(cleaningMaintModels.size() != <span class="s3">0</span>) {
+                            cleaningMaintenanceBinding.linearcmf.setVisibility(View.VISIBLE);
+                            cleaningMaintenanceBinding.displedate.setText(displedate);
+                            cleaningMaintenanceBinding.noreords.setVisibility(View.GONE);
+                            cleaningMaintenanceBinding.ceaninglist.setHasFixedSize(<span class="s0">true</span>);
+                            cleaningMaintenanceBinding.ceaninglist.setLayoutManager(<span class="s0">new </span>LinearLayoutManager(CleaningMaintenanceActivity.<span class="s0">this</span>, RecyclerView.VERTICAL, <span class="s0">false</span>));
+                            cleaningMaintenanceAdapter = <span class="s0">new </span>CleaningMaintenanceAdapter(CleaningMaintenanceActivity.<span class="s0">this</span>, cleaningMaintModels);
+                            cleaningMaintenanceBinding.ceaninglist.setAdapter(cleaningMaintenanceAdapter);
+                        } <span class="s0">else </span>{
+                            cleaningMaintenanceBinding.noreords.setVisibility(View.VISIBLE);
+                        }
+
+
+                    } <span class="s0">catch </span>(IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+            @Override
+            <span class="s0">public void </span>onFailure(retrofit2.Call&lt;ResponseBody&gt; call, Throwable t) {
+                Utlity.dismiss_dilog(CleaningMaintenanceActivity.<span class="s0">this</span>);
+
+            }
+        });
+    }
+
+    <span class="s0">private void </span>showdata(){
+        <span class="s0">final </span>Dialog dialog = <span class="s0">new </span>Dialog(CleaningMaintenanceActivity.<span class="s0">this</span>);
+        <span class="s0">final </span>ImageButton cancle;
+
+        RadioButton rbrepeate,rbonce;
+        ImageView imgdate,imgtime,imgdatestart;
+        LinearLayout lineardate,linearrepeatedate;
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.cleaninglist);
+        dialog.getWindow().setLayout(ViewPager.LayoutParams.MATCH_PARENT, ViewPager.LayoutParams.WRAP_CONTENT);
+        cancle=dialog.findViewById(R.id.cancle);
+        selcttypecfm = dialog.findViewById(R.id.selecttype);
+        zonecfm = dialog.findViewById(R.id.zonecfm);
+        locationcfm = dialog.findViewById(R.id.locationscfm);
+        sublocationcfm = dialog.findViewById(R.id.subloctioncfm);
+        equipmentcfm = dialog.findViewById(R.id.equipmentcfm);
+        responsiblitycfm = dialog.findViewById(R.id.resposibilitycfm);
+        linearequipment = dialog.findViewById(R.id.linearequipment);
+        linearsublocation = dialog.findViewById(R.id.linearsublocation);
+        etrepeatedate = dialog.findViewById(R.id.etrepeatedate);
+        etcomment = dialog.findViewById(R.id.commentbox);
+        linearcommentbox = dialog.findViewById(R.id.linearcommentbox);
+        lineardate = dialog.findViewById(R.id.lineardate);
+        imgdate = dialog.findViewById(R.id.imgdate);
+        linearrepeatedate = dialog.findViewById(R.id.linearrepeateday);
+        imgtime = dialog.findViewById(R.id.imgtime);
+        tvdate = dialog.findViewById(R.id.tvdate);
+        tvtime = dialog.findViewById(R.id.tvtime);
+        rbrepeate = dialog.findViewById(R.id.radiorepeate);
+        rbonce = dialog.findViewById(R.id.radioonce);
+        tvstartdate = dialog.findViewById(R.id.tvstartdate);
+        imgdatestart = dialog.findViewById(R.id.imgdatestart);
+        cmfrepeateone = rbrepeate.getText().toString();
+        imgdate.setOnClickListener(<span class="s0">new </span>View.OnClickListener() {
+            @Override
+            <span class="s0">public void </span>onClick(View v) {
+                Utlity.show_date_picker(CleaningMaintenanceActivity.<span class="s0">this</span>,tvdate);
+            }
+        });
+        imgdatestart.setOnClickListener(<span class="s0">new </span>View.OnClickListener() {
+            @Override
+            <span class="s0">public void </span>onClick(View v) {
+                Utlity.show_date_picker(CleaningMaintenanceActivity.<span class="s0">this</span>,tvstartdate);
+            }
+        });
+        imgtime.setOnClickListener(<span class="s0">new </span>View.OnClickListener() {
+            @Override
+            <span class="s0">public void </span>onClick(View v) {
+                Utlity.show_time_picker(CleaningMaintenanceActivity.<span class="s0">this</span>,tvtime);
+            }
+        });
+        rbrepeate.setOnCheckedChangeListener(<span class="s0">new </span>CompoundButton.OnCheckedChangeListener() {
+            @Override
+            <span class="s0">public void </span>onCheckedChanged(CompoundButton buttonView, <span class="s0">boolean </span>isChecked) {
+                <span class="s0">if </span>(isChecked){
+                    rbonce.setChecked(<span class="s0">false</span>);
+                    lineardate.setVisibility(View.GONE);
+                    linearrepeatedate.setVisibility(View.VISIBLE);
+                    cmfrepeateone = rbrepeate.getText().toString();
+                }
+            }
+        });
+        rbonce.setOnCheckedChangeListener(<span class="s0">new </span>CompoundButton.OnCheckedChangeListener() {
+            @Override
+            <span class="s0">public void </span>onCheckedChanged(CompoundButton buttonView, <span class="s0">boolean </span>isChecked) {
+                <span class="s0">if </span>(isChecked){
+                    rbrepeate.setChecked(<span class="s0">false</span>);
+                    lineardate.setVisibility(View.VISIBLE);
+                    linearrepeatedate.setVisibility(View.GONE);
+                    cmfrepeateone = rbonce.getText().toString();
+                }
+            }
+        });
+        tvsave = dialog.findViewById(R.id.tvsave);
+        cancle.setOnClickListener(<span class="s0">new </span>View.OnClickListener() {
+            @Override
+            <span class="s0">public void </span>onClick(View v) {
+                dialog.cancel();
+            }
+        });
+        tvsave.setOnClickListener(<span class="s0">new </span>View.OnClickListener() {
+            @Override
+            <span class="s0">public void </span>onClick(View v) {
+                <span class="s0">if </span>(selcttypecfm.getSelectedItemPosition() == <span class="s3">0</span>){
+                    Utlity.show_toast(CleaningMaintenanceActivity.<span class="s0">this</span>,<span class="s2">&quot;Please Select Types&quot;</span>);
+                }<span class="s0">else if </span>(zonecfm.getSelectedItemPosition() == <span class="s3">0</span>){
+                    Utlity.show_toast(CleaningMaintenanceActivity.<span class="s0">this</span>,<span class="s2">&quot;Please Select Zone&quot;</span>);
+                }<span class="s0">else if </span>(locationcfm.getSelectedItemPosition() == <span class="s3">0</span>){
+                    Utlity.show_toast(CleaningMaintenanceActivity.<span class="s0">this</span>,<span class="s2">&quot;Please Select Location&quot;</span>);
+                }<span class="s0">else if </span>(sublocationcfm.getSelectedItemPosition() == <span class="s3">0 </span>&amp;&amp; equipmentcfm.getSelectedItemPosition() == <span class="s3">0</span>){
+                    <span class="s0">if </span>(cmftype.equals(<span class="s2">&quot;Fumigation&quot;</span>)){
+                        Utlity.show_toast(CleaningMaintenanceActivity.<span class="s0">this</span>,<span class="s2">&quot;Please Select SubLocation&quot;</span>);
+                    }<span class="s0">else </span>{
+                        Utlity.show_toast(CleaningMaintenanceActivity.<span class="s0">this</span>,<span class="s2">&quot;Please Select Equipment&quot;</span>);
+                    }
+
+                }<span class="s0">else if </span>(responsiblitycfm.getSelectedItemPosition() == <span class="s3">0</span>){
+                    Utlity.show_toast(CleaningMaintenanceActivity.<span class="s0">this</span>,<span class="s2">&quot;Please Select Responsibility&quot;</span>);
+                }<span class="s0">else if </span>(linearrepeatedate.getVisibility()==View.VISIBLE &amp;&amp; etrepeatedate.getText().toString().equals(<span class="s2">&quot;&quot;</span>)){
+                    Utlity.show_toast(CleaningMaintenanceActivity.<span class="s0">this</span>,<span class="s2">&quot;Please Select Repeatedate&quot;</span>);
+                }
+                <span class="s0">else if </span>(tvtime.getText().toString().equals(<span class="s2">&quot;&quot;</span>)){
+                    Utlity.show_toast(CleaningMaintenanceActivity.<span class="s0">this</span>,<span class="s2">&quot;Please Select Tme&quot;</span>);
+                }
+                <span class="s0">else if </span>(tvstartdate.getText().toString().equals(<span class="s2">&quot;&quot;</span>)){
+                    Utlity.show_toast(CleaningMaintenanceActivity.<span class="s0">this</span>,<span class="s2">&quot;Please Select StartDate&quot;</span>);
+                }<span class="s0">else if </span>( tvdate.getText().toString().equals(<span class="s2">&quot;&quot;</span>) &amp;&amp; lineardate.getVisibility()==View.VISIBLE){
+                    Utlity.show_toast(CleaningMaintenanceActivity.<span class="s0">this</span>,<span class="s2">&quot;Please Select Date&quot;</span>);
+                }
+                <span class="s0">else </span>{
+                    savedata();
+                    dialog.cancel();
+                }
+
+            }
+        });
+        dialog.show();
+    }
+
+    <span class="s0">private void </span>savedata() {
+        Utlity.show_progress(<span class="s0">this</span>);
+        Gson gson = <span class="s0">new </span>Gson();
+        Log.d(<span class="s2">&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;</span>,gson.toJson(arraylistequpment));
+        cmfreponce = etrepeatedate.getText().toString();
+        cmfoncedate = tvdate.getText().toString();
+        cmftime = tvtime.getText().toString();
+        cmfstartdate = tvstartdate.getText().toString();
+        comment = etcomment.getText().toString();
+        HashMap&lt;String,String&gt; hmap = <span class="s0">new </span>HashMap&lt;String, String&gt;();
+        hmap.put(<span class="s2">&quot;cmtype&quot;</span>,cmftype);
+        hmap.put(<span class="s2">&quot;zoneid&quot;</span>,cmfzoneid);
+        hmap.put(<span class="s2">&quot;locatinid&quot;</span>,cmflocid);
+        hmap.put(<span class="s2">&quot;sublocatinid&quot;</span>,cmfsublocid);
+        hmap.put(<span class="s2">&quot;equipmentid&quot;</span>,gson.toJson(arraylistequpment));
+        hmap.put(<span class="s2">&quot;responsibilityid&quot;</span>,cmfrespoid);
+        hmap.put(<span class="s2">&quot;taskrepetition&quot;</span>,cmfrepeateone);
+        hmap.put(<span class="s2">&quot;repetitiondays&quot;</span>,cmfreponce);
+        hmap.put(<span class="s2">&quot;dateassigned&quot;</span>,cmfoncedate);
+        hmap.put(<span class="s2">&quot;assigntime&quot;</span>,cmftime);
+        hmap.put(<span class="s2">&quot;startedfrom&quot;</span>,cmfstartdate);
+        hmap.put(<span class="s2">&quot;taskcomment&quot;</span>,comment);
+
+        String respoid1 = pref.getString(<span class="s2">&quot;respoid&quot;</span>,<span class="s0">null</span>);
+        apiInterface = ApiClients.getClient1().create(RetApis.<span class="s0">class</span>);
+        Call&lt;ResponseBody&gt; call=apiInterface.CFMSaveLiset(respoid1,<span class="s2">&quot;Bearer &quot;</span>+ Utlity.get_user(<span class="s0">this</span>).getToken(),hmap);
+        call.enqueue(<span class="s0">new </span>Callback&lt;ResponseBody&gt;() {
+            @Override
+            <span class="s0">public void </span>onResponse(Call&lt;ResponseBody&gt; call, Response&lt;ResponseBody&gt; response) {
+                <span class="s0">if </span>(response.isSuccessful()){
+                    Utlity.dismiss_dilog(CleaningMaintenanceActivity.<span class="s0">this</span>);
+                    <span class="s0">try </span>{
+                        String apidata = response.body().string();
+                        Log.d(<span class="s2">&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;</span>,apidata);
+                        arraylistequpment.clear();
+                        Utlity.show_toast(CleaningMaintenanceActivity.<span class="s0">this</span>,response.body().string());
+                        Intent intent= getIntent();
+                        finish();
+                        startActivity(intent);
+                    } <span class="s0">catch </span>(IOException e) {
+                        e.printStackTrace();
+                    }
+                }<span class="s0">else </span>{
+                    Utlity.show_toast(CleaningMaintenanceActivity.<span class="s0">this</span>,<span class="s2">&quot;responce&quot;</span>);
+                }
+            }
+
+            @Override
+            <span class="s0">public void </span>onFailure(Call&lt;ResponseBody&gt; call, Throwable t) {
+                Utlity.dismiss_dilog(CleaningMaintenanceActivity.<span class="s0">this</span>);
+                Utlity.show_toast(CleaningMaintenanceActivity.<span class="s0">this</span>,t.getMessage());
+            }
+        });
+    }
+
+
+
+}</pre>
+</body>
+</html>

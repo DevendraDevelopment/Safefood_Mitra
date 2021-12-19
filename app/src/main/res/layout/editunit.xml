@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/lineardetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="7dp"
+            android:weightSum="1"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/editunit"
+                android:textColor="@color/black"
+                android:textSize="@dimen/login"
+                android:padding="@dimen/pad5"
+                android:layout_weight=".85"
+                android:textStyle="bold"
+                />
+
+            <ImageButton
+                android:id="@+id/cancle"
+                android:layout_width="0dp"
+                android:layout_weight=".15"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_cancel1"
+                android:padding="@dimen/pad5"
+                android:layout_gravity="right"
+                android:background="@android:color/transparent"
+
+                />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/pad10"
+            android:background="@drawable/editback1"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:orientation="vertical"
+                android:gravity="center">
+                <Spinner
+                    android:id="@+id/fobtype"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/pad5"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/pad10"
+            android:orientation="vertical"
+            android:background="@drawable/editback1">
+            <EditText
+                android:id="@+id/unitnme"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:hint="@string/editunitnme"
+                android:padding="@dimen/pad5"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:textSize="@dimen/login"
+                android:inputType="text"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/pad10"
+            android:orientation="vertical"
+            android:background="@drawable/editback1">
+            <EditText
+                android:id="@+id/citynme"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:hint="@string/editunitcity"
+                android:padding="@dimen/pad5"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:textSize="@dimen/login"
+                android:inputType="text"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/pad10"
+            android:orientation="vertical"
+            android:background="@drawable/editback1">
+            <EditText
+                android:id="@+id/statenme"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:hint="@string/editstatenme"
+                android:padding="@dimen/pad5"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:textSize="@dimen/login"
+                android:inputType="text"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/pad10"
+            android:orientation="vertical"
+            android:background="@drawable/editback1">
+            <EditText
+                android:id="@+id/zipcode"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:hint="@string/editzipcode"
+                android:padding="@dimen/pad5"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:textSize="@dimen/login"
+                android:inputType="text"
+                />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/pad10"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/btnback1">
+
+            <TextView
+                android:id="@+id/editunits"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:text="@string/save"
+                android:textColor="@color/white"
+                android:textSize="@dimen/login"
+                android:padding="@dimen/pad5"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

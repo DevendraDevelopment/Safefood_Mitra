@@ -1,0 +1,23 @@
+package com.safefoodmitra.safefoodmitra.Modals;
+
+public class ConcernModal {
+
+    String id,area_name;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getArea_name() {
+        return area_name;
+    }
+
+    public void setArea_name(String area_name) {
+        this.area_name = area_name;
+    }
+
+}

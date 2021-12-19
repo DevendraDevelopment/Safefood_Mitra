@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.CloseInspection"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/purple_200"
+            android:paddingTop="@dimen/pad5"
+            android:paddingBottom="@dimen/pad5">
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/pad5"
+                android:src="@drawable/ic_home" />
+
+            <TextView
+                android:id="@+id/titles"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/login"
+                android:textStyle="bold"
+                android:text="@string/closeinspection"
+                android:padding="@dimen/pad5"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_margin="@dimen/pad7"
+                android:orientation="vertical"
+                android:background="@drawable/editback1"
+                android:gravity="center"
+                android:id="@+id/selectedimgs"
+                >
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_photo_camera"
+                    android:layout_gravity="center"
+                    android:id="@+id/afterimg"
+                    android:scaleType="fitCenter"
+                    />
+
+            </LinearLayout>
+ <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/pad7"
+            android:background="@drawable/editback1"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:orientation="vertical"
+                android:gravity="center">
+                <Spinner
+                    android:id="@+id/selectprocess"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/pad3"
+                    />
+
+            </LinearLayout>
+ </LinearLayout>
+            <LinearLayout
+                android:id="@+id/linearshowdata"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:orientation="horizontal"
+                android:layout_margin="@dimen/pad7"
+                android:background="@drawable/syncback"
+                android:visibility="gone"
+                android:weightSum="1">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight=".80"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/pad5">
+
+                    <TextView
+                        android:id="@+id/tvshowdate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/login"
+                        android:hint="@string/inprocessdate"
+                        />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight=".20"
+                    android:layout_height="match_parent"
+                    android:id="@+id/dtebtn"
+                    android:src="@drawable/ic_calendar"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/pad5"
+                    android:background="@drawable/btnback1"
+                    android:layout_margin="@dimen/marz4"
+                    />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/linearcost"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:layout_margin="@dimen/pad7"
+                android:orientation="horizontal"
+                android:visibility="visible"
+                android:gravity="center|start">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:textColor="@color/black"
+                    android:paddingLeft="@dimen/pad5"
+                    android:paddingRight="@dimen/pad5"
+                    android:textSize="@dimen/login"
+                    android:text="Cost"
+                    />
+                <EditText
+                    android:id="@+id/costbox"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:textSize="@dimen/login"
+                    android:inputType="number"
+                    android:hint="Rs."
+                    android:background="@drawable/editback1"
+                    android:gravity="center|start"
+                    android:paddingLeft="@dimen/pad5"
+                    android:paddingRight="@dimen/pad5"
+                    android:paddingTop="@dimen/pad3"
+                    android:paddingBottom="@dimen/pad3"
+                    />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_margin="@dimen/pad7"
+                android:orientation="vertical"
+                android:background="@drawable/editback1"
+                android:gravity="top|start">
+                <EditText
+                    android:id="@+id/commentbox"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:hint="@string/commentbox"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:textSize="@dimen/login"
+                    android:inputType="textMultiLine"
+                    android:gravity="top|start"
+                    android:paddingLeft="@dimen/pad5"
+                    android:paddingRight="@dimen/pad5"
+                    android:paddingTop="@dimen/pad3"
+                    android:paddingBottom="@dimen/pad3"
+                    android:maxLines="10"
+                    android:minLines="1"
+                    android:lines="8"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/pad7"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/closeinspection"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:text="@string/save"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/login"
+                    android:padding="@dimen/pad3"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:textAllCaps="true"
+                    android:textStyle="bold"
+                    android:background="@drawable/btnback1"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
+</layout>

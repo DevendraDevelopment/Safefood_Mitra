@@ -1,0 +1,36 @@
+<html>
+<head>
+<title>Summary.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #000080; font-weight: bold;}
+.s1 { color: #000000;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Summary.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span>com.safefoodmitra.safefoodmitra.Activities;
+
+<span class="s0">import </span>androidx.appcompat.app.AppCompatActivity;
+<span class="s0">import </span>androidx.databinding.DataBindingUtil;
+
+<span class="s0">import </span>android.os.Bundle;
+
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.R;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.databinding.ActivitySummaryBinding;
+
+<span class="s0">public class </span>Summary <span class="s0">extends </span>AppCompatActivity {
+    ActivitySummaryBinding activitySummaryBinding;
+    @Override
+    <span class="s0">protected void </span>onCreate(Bundle savedInstanceState) {
+        <span class="s0">super</span>.onCreate(savedInstanceState);
+        activitySummaryBinding = DataBindingUtil.setContentView(<span class="s0">this</span>,R.layout.activity_summary);
+
+    }
+}</pre>
+</body>
+</html>

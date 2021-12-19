@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "278051764801",
+    "firebase_url": "https://safe-food-mitra-default-rtdb.firebaseio.com",
+    "project_id": "safe-food-mitra",
+    "storage_bucket": "safe-food-mitra.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:278051764801:android:e9004c40a03cfaeec4e4c0",
+        "android_client_info": {
+          "package_name": "com.safefoodmitra.safefoodmitra"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "278051764801-7a0n78lhk2kbht8d48bmpitqfe3ca9tv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.safefoodmitra.safefoodmitra",
+            "certificate_hash": "938c5c10980047e1bbaae5b7587b3e01b71f2bbf"
+          }
+        },
+        {
+          "client_id": "278051764801-pd39oguqsb6m80lsfmuhmjv0nqhj1i08.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.safefoodmitra.safefoodmitra",
+            "certificate_hash": "a5b87f5b38003fcb1d9f012ec906af377cd446cf"
+          }
+        },
+        {
+          "client_id": "278051764801-ta3tmpcpkjdevr75dva373q5sko91v63.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9wi4V-j9iqo4Aq1OgtWcZGo1F1bXy2EI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "278051764801-ta3tmpcpkjdevr75dva373q5sko91v63.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

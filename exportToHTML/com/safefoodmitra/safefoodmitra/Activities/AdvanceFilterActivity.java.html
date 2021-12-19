@@ -1,0 +1,1173 @@
+<html>
+<head>
+<title>AdvanceFilterActivity.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #000080; font-weight: bold;}
+.s1 { color: #000000;}
+.s2 { color: #0000ff;}
+.s3 { color: #808080; font-style: italic;}
+.s4 { color: #008000; font-weight: bold;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+AdvanceFilterActivity.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span>com.safefoodmitra.safefoodmitra.Activities;
+
+<span class="s0">import </span>android.annotation.SuppressLint;
+<span class="s0">import </span>android.app.Activity;
+<span class="s0">import </span>android.app.Dialog;
+<span class="s0">import </span>android.content.Intent;
+<span class="s0">import </span>android.os.Build;
+<span class="s0">import </span>android.os.Bundle;
+<span class="s0">import </span>android.os.StrictMode;
+<span class="s0">import </span>android.text.Editable;
+<span class="s0">import </span>android.text.TextUtils;
+<span class="s0">import </span>android.text.TextWatcher;
+<span class="s0">import </span>android.util.Log;
+<span class="s0">import </span>android.view.Gravity;
+<span class="s0">import </span>android.view.KeyEvent;
+<span class="s0">import </span>android.view.LayoutInflater;
+<span class="s0">import </span>android.view.View;
+<span class="s0">import </span>android.view.ViewGroup;
+<span class="s0">import </span>android.view.Window;
+<span class="s0">import </span>android.view.WindowManager;
+<span class="s0">import </span>android.view.animation.Animation;
+<span class="s0">import </span>android.view.animation.AnimationUtils;
+<span class="s0">import </span>android.widget.AdapterView;
+<span class="s0">import </span>android.widget.ArrayAdapter;
+<span class="s0">import </span>android.widget.ExpandableListView;
+<span class="s0">import </span>android.widget.ImageButton;
+<span class="s0">import </span>android.widget.ImageView;
+<span class="s0">import </span>android.widget.LinearLayout;
+<span class="s0">import </span>android.widget.ListAdapter;
+<span class="s0">import </span>android.widget.ListView;
+<span class="s0">import </span>android.widget.PopupWindow;
+<span class="s0">import </span>android.widget.RadioButton;
+<span class="s0">import </span>android.widget.ScrollView;
+<span class="s0">import </span>android.widget.SearchView;
+<span class="s0">import </span>android.widget.Spinner;
+<span class="s0">import </span>android.widget.TextView;
+<span class="s0">import </span>android.widget.Toast;
+
+
+<span class="s0">import </span>androidx.annotation.RequiresApi;
+<span class="s0">import </span>androidx.appcompat.app.AppCompatActivity;
+<span class="s0">import </span>androidx.databinding.DataBindingUtil;
+<span class="s0">import </span>androidx.recyclerview.widget.LinearLayoutManager;
+<span class="s0">import </span>androidx.recyclerview.widget.RecyclerView;
+<span class="s0">import </span>androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+<span class="s0">import </span>androidx.viewpager.widget.ViewPager;
+
+<span class="s0">import </span>com.google.gson.reflect.TypeToken;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Adapter.CustomCatsearchSpinnerAdapter;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Adapter.CustomsearchSpinnerAdapter;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Adapter.ExpandAdapter;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Adapter.SearchShowAdapter;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Apis.ApiClients;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Apis.Apis;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Apis.RetApis;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Helper.Utlity;
+
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.CategoryModel;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.InspectrespoModals;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.InspectrespoModals2;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.ParameterCategoryModel;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.Root;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.SubCategoryModel;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.SubCategoryModel2;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.SubCategoryModel3;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.R;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.databinding.ActivityAdvanceFilterBinding;
+
+<span class="s0">import </span>org.json.JSONException;
+<span class="s0">import </span>org.json.JSONObject;
+
+<span class="s0">import </span>java.io.IOException;
+<span class="s0">import </span>java.util.ArrayList;
+<span class="s0">import </span>java.util.HashMap;
+<span class="s0">import </span>java.util.LinkedHashMap;
+<span class="s0">import </span>java.util.List;
+
+<span class="s0">import </span>okhttp3.FormBody;
+<span class="s0">import </span>okhttp3.OkHttpClient;
+<span class="s0">import </span>okhttp3.Request;
+<span class="s0">import </span>okhttp3.RequestBody;
+<span class="s0">import </span>okhttp3.ResponseBody;
+<span class="s0">import </span>retrofit2.Call;
+<span class="s0">import </span>retrofit2.Callback;
+<span class="s0">import </span>retrofit2.Response;
+
+<span class="s0">import static </span>com.safefoodmitra.safefoodmitra.Adapter.CustomCatsearchSpinnerAdapter.catid;
+<span class="s0">import static </span>com.safefoodmitra.safefoodmitra.Adapter.CustomsearchSpinnerAdapter.subcatid;
+<span class="s0">import static </span>com.safefoodmitra.safefoodmitra.Apis.Apis.subcategorylist;
+
+<span class="s0">public class </span>AdvanceFilterActivity <span class="s0">extends </span>AppCompatActivity <span class="s0">implements </span>View.OnClickListener {
+   ActivityAdvanceFilterBinding activityAdvanceFilterBinding;
+   List&lt;CategoryModel&gt; categoryModels;
+   List&lt;SubCategoryModel&gt; subCategoryModels;
+   List&lt;SubCategoryModel2&gt; subCategoryModels2;
+   List&lt;SubCategoryModel3&gt; subCategoryModels3;
+   List&lt;ParameterCategoryModel&gt; parameterCategoryModels;
+
+   List&lt;Root&gt; advanceDataModels;
+    RetApis apiInterface;
+    ArrayList&lt;String&gt; catlist;
+    String cateid,subcateid,subcateid2,subcateid3,subcateid4,keyword,cat1,cat2,cat3,cat4,cat5,search;
+    <span class="s0">public </span>SearchShowAdapter searchShowAdapter;
+    <span class="s0">int </span>count=<span class="s2">0</span>;
+    ExpandAdapter expandAdapter;
+    <span class="s0">private </span>LinkedHashMap&lt;String, Root&gt; myroot = <span class="s0">new </span>LinkedHashMap&lt;String, Root&gt;();
+    <span class="s0">private </span>ArrayList&lt;Root&gt; roottList = <span class="s0">new </span>ArrayList&lt;Root&gt;();
+    Animation topanim;
+    <span class="s0">public static </span>TextView subcatename,catname;
+    <span class="s0">public static </span>LinearLayout layoutcatfirst;
+    <span class="s0">public static </span>Dialog dialog,catdialog;
+    CustomsearchSpinnerAdapter customsearchSpinnerAdapter;
+    CustomCatsearchSpinnerAdapter customCatsearchSpinnerAdapter;
+    <span class="s0">private static </span>Dialog progressDialog = <span class="s0">null</span>;
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    <span class="s0">protected void </span>onCreate(Bundle savedInstanceState) {
+        <span class="s0">super</span>.onCreate(savedInstanceState);
+        activityAdvanceFilterBinding = DataBindingUtil.setContentView(<span class="s0">this</span>, R.layout.activity_advance_filter);
+        subcatename = activityAdvanceFilterBinding.subcatname;
+        catname = activityAdvanceFilterBinding.catname;
+        layoutcatfirst = activityAdvanceFilterBinding.catfirst;
+        progressDialog = <span class="s0">new </span>Dialog(AdvanceFilterActivity.<span class="s0">this</span>);
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        progressDialog.setCancelable(<span class="s0">false</span>);
+        progressDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        progressDialog.setContentView(R.layout.custom_progress);
+        <span class="s0">if </span>(Utlity.is_online(<span class="s0">this</span>)){
+           <span class="s3">/* activityAdvanceFilterBinding.swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() { 
+                @Override 
+                public void onRefresh() { 
+                    searchData(); 
+                    activityAdvanceFilterBinding.swipeToRefresh.setRefreshing(false); 
+                } 
+            });*/</span>
+        }
+        <span class="s0">else </span>Utlity.show_toast(AdvanceFilterActivity.<span class="s0">this</span>,getResources().getString(R.string.nointernet));
+        click();
+
+        activityAdvanceFilterBinding.expanddata.setOnGroupClickListener(<span class="s0">new </span>ExpandableListView.OnGroupClickListener() {
+
+            @Override
+            <span class="s0">public boolean </span>onGroupClick(ExpandableListView parent, View v,
+                                        <span class="s0">int </span>groupPosition, <span class="s0">long </span>id) {
+                setListViewHeight(parent, groupPosition);
+                <span class="s0">return false</span>;
+            }
+        });
+      <span class="s3">/*  activityAdvanceFilterBinding.searching.addTextChangedListener(new TextWatcher() { 
+            @Override 
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { 
+ 
+            } 
+ 
+            @Override 
+            public void onTextChanged(CharSequence s, int start, int before, int count) { 
+ 
+                //expandAdapter.getFilter().filter(s); 
+ 
+               *//* String searchedVal = s.toString(); 
+ 
+                String categoryString = &quot;&quot;; 
+                ArrayList&lt;Root&gt; cacheMenuResList = new ArrayList&lt;&gt;(); 
+                List&lt;Root.ValuesBean&gt; ms = new ArrayList&lt;&gt;(); 
+ 
+                if (TextUtils.isEmpty(searchedVal)) { 
+                    expandAdapter.setCacheMenuRes(roottList); 
+ 
+                } else { 
+                    for (Root c : roottList) { 
+                        List&lt;Root.ValuesBean&gt; menuList = c.getValues(); 
+ 
+                        for (Root.ValuesBean m : menuList) { 
+ 
+                            try { 
+                                if (m.getParameter().toLowerCase().contains(searchedVal) || m.getPerm_limit().toLowerCase().contains(searchedVal) || m.getPerm_desc().toLowerCase().contains(searchedVal)) { 
+                                    categoryString = c.getParcat_name(); 
+                                    ms.add(m); 
+                                } *//**//*else if (m.getPerm_limit().toLowerCase().contains(searchedVal)) { 
+                                    categoryString = c.getParcat_name(); 
+                                    ms.add(m); 
+                                } else if (m.getPerm_desc().toLowerCase().contains(searchedVal)) { 
+                                    categoryString = c.getParcat_name(); 
+                                    ms.add(m); 
+                                }*//**//* 
+ 
+ 
+                            }catch (NullPointerException e){ 
+                                e.printStackTrace(); 
+                            } 
+ 
+                        } 
+ 
+                       *//**//* for (Root.ValuesBean m : menuList) { 
+                            try { 
+ 
+                                if (m.getProd_name().toLowerCase().contains(searchedVal)) { 
+                                    categoryString = c.getParcat_name(); 
+                                    ms.add(m); 
+                                } 
+                            }catch (NullPointerException e){ 
+                                e.printStackTrace(); 
+                            } 
+ 
+                        }*//**//* 
+ 
+ 
+                    } 
+                    cacheMenuResList.add(new Root(categoryString, ms)); 
+                    expandAdapter.setCacheMenuRes(cacheMenuResList); 
+                } 
+*//* 
+            } 
+ 
+            @Override 
+            public void afterTextChanged(Editable s) { 
+ 
+            } 
+        });*/</span>
+
+
+    }
+
+
+    <span class="s0">private void </span>setListViewHeight(ExpandableListView listView, <span class="s0">int </span>group) {
+        <span class="s0">int </span>totalHeight = <span class="s2">0</span>;
+        <span class="s0">int </span>desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(),
+                View.MeasureSpec.EXACTLY);
+        <span class="s0">for </span>(<span class="s0">int </span>i = <span class="s2">0</span>; i &lt; expandAdapter.getGroupCount(); i++) {
+            View groupItem = expandAdapter.getGroupView(i, <span class="s0">false</span>, <span class="s0">null</span>, listView);
+            groupItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+
+            totalHeight += groupItem.getMeasuredHeight();
+
+            <span class="s0">if </span>(((listView.isGroupExpanded(i)) &amp;&amp; (i != group))
+                    || ((!listView.isGroupExpanded(i)) &amp;&amp; (i == group))) {
+                <span class="s0">for </span>(<span class="s0">int </span>j = <span class="s2">0</span>; j &lt; expandAdapter.getChildrenCount(i); j++) {
+                    View listItem = expandAdapter.getChildView(i, j, <span class="s0">false</span>, <span class="s0">null</span>,
+                            listView);
+                    listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+
+                    totalHeight += listItem.getMeasuredHeight();
+
+                }
+                <span class="s3">//Add Divider Height</span>
+                totalHeight += listView.getDividerHeight() * (expandAdapter.getChildrenCount(i) - <span class="s2">1</span>);
+            }
+        }
+        <span class="s3">//Add Divider Height</span>
+        totalHeight += listView.getDividerHeight() * (expandAdapter.getGroupCount() - <span class="s2">1</span>);
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        <span class="s0">int </span>height = totalHeight
+                + (listView.getDividerHeight() * (expandAdapter.getGroupCount() - <span class="s2">1</span>));
+        <span class="s0">if </span>(height &lt; <span class="s2">10</span>)
+            height = <span class="s2">200</span>;
+        params.height = height;
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+    }
+
+
+    <span class="s0">public void </span>click(){
+        activityAdvanceFilterBinding.back.setOnClickListener(<span class="s0">this</span>);
+        activityAdvanceFilterBinding.btnSearch.setOnClickListener(<span class="s0">this</span>);
+        activityAdvanceFilterBinding.imgfilter.setOnClickListener(<span class="s0">this</span>);
+        activityAdvanceFilterBinding.searchfilterdata.setOnClickListener(<span class="s0">this</span>);
+        activityAdvanceFilterBinding.cancelsearchfilterdata.setOnClickListener(<span class="s0">this</span>);
+         activityAdvanceFilterBinding.subcatdownarrow.setOnClickListener(<span class="s0">this</span>);
+        activityAdvanceFilterBinding.catdownarrow.setOnClickListener(<span class="s0">this</span>);
+        activityAdvanceFilterBinding.refreshimage.setOnClickListener(<span class="s0">this</span>);
+    }
+
+    @SuppressLint(<span class="s4">&quot;ResourceType&quot;</span>)
+    @Override
+    <span class="s0">public void </span>onClick(View v) {
+        topanim= AnimationUtils.loadAnimation(<span class="s0">this</span>,R.xml.top_animation);
+        <span class="s0">if </span>(v.getId()== R.id.back){
+            <span class="s0">if </span>(Utlity.get_user(<span class="s0">this</span>).getUserroles_id().equalsIgnoreCase(<span class="s4">&quot;2&quot;</span>)){
+                startActivity(<span class="s0">new </span>Intent(<span class="s0">this</span>,AdminMainActivity.<span class="s0">class</span>));
+                finishAffinity();
+            }
+            <span class="s0">else if </span>(Utlity.get_user(<span class="s0">this</span>).getUserroles_id().equalsIgnoreCase(<span class="s4">&quot;3&quot;</span>)){
+                startActivity(<span class="s0">new </span>Intent(<span class="s0">this</span>,UserMainActivity.<span class="s0">class</span>));
+                finishAffinity();
+            }
+        }
+        <span class="s0">else if </span>(v.getId()== R.id.btnSearch) {
+
+           <span class="s3">/* fileds = new ArrayList&lt;&gt;(); 
+            fileds.add(new Validation_custome(&quot;text&quot;, activityAdvanceFilterBinding.etkeyword));*/</span>
+            <span class="s3">//if (Utlity.validation(this, fileds)) {</span>
+          <span class="s3">/*  if (activityAdvanceFilterBinding.catspinner.getSelectedItemPosition() == 0) { 
+                Utlity.show_toast(this, &quot;please select Any Option&quot;); 
+            } 
+            else {*/</span>
+            searchData();
+
+            <span class="s3">//}</span>
+
+       <span class="s3">// }</span>
+
+
+        }<span class="s0">else if </span>(v.getId()==R.id.imgfilter){
+           <span class="s3">// catshowdata();</span>
+           <span class="s3">// categorydata();</span>
+            <span class="s3">//activityAdvanceFilterBinding.etkeyword.setText(&quot; &quot;);</span>
+            catid=<span class="s0">null</span>;
+            subcatid=<span class="s0">null</span>;
+            layoutcatfirst.setVisibility(View.GONE);
+            activityAdvanceFilterBinding.linearsearchdata.setVisibility(View.VISIBLE);
+            activityAdvanceFilterBinding.linearshowdata.setVisibility(View.GONE);
+            catname.setText(<span class="s4">&quot;Category&quot;</span>);
+            subcatename.setText(<span class="s4">&quot;Sub Category&quot;</span>);
+        }<span class="s0">else if </span>(v.getId()==R.id.searchfilterdata){
+            searchAdavanceFilterData();
+            activityAdvanceFilterBinding.cancelsearchfilterdata.setVisibility(View.VISIBLE);
+            activityAdvanceFilterBinding.searchfilterdata.setVisibility(View.GONE);
+
+        }<span class="s0">else if </span>(v.getId()== R.id.cancelsearchfilterdata){
+            searchData();
+            activityAdvanceFilterBinding.cancelsearchfilterdata.setVisibility(View.GONE);
+            activityAdvanceFilterBinding.searchfilterdata.setVisibility(View.VISIBLE);
+            activityAdvanceFilterBinding.searching.getText().clear();
+        }<span class="s0">else if </span>(v.getId() == R.id.subcatdownarrow){
+            showdata(catid);
+        }<span class="s0">else if </span>(v.getId() == R.id.catdownarrow){
+            catshowdata();
+        }<span class="s0">else if </span>(v.getId()==R.id.refreshimage){
+            searchData();
+        }
+    }
+
+   <span class="s3">/* public void categorydata(){ 
+        Utlity.show_progress(this); 
+        apiInterface = ApiClients.getClient1().create(RetApis.class); 
+        Call&lt;ResponseBody&gt; call=apiInterface.Categories(&quot;Bearer &quot;+ Utlity.get_user(this).getToken()); 
+        call.enqueue(new Callback&lt;ResponseBody&gt;() { 
+            @Override 
+            public void onResponse(Call&lt;ResponseBody&gt; call, Response&lt;ResponseBody&gt; response) { 
+                if (response.isSuccessful()) { 
+                    String apidata = null; 
+                    try { 
+                        Utlity.dismiss_dilog(AdvanceFilterActivity.this); 
+                        apidata = response.body().string(); 
+                        Log.d(&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;,apidata); 
+                        JSONObject object = new JSONObject(apidata); 
+                        categoryModels = Utlity.gson.fromJson(object.getJSONArray(&quot;success&quot;).toString(), new TypeToken&lt;List&lt;CategoryModel&gt;&gt;() {}.getType()); 
+                        catlist=new ArrayList&lt;&gt;(); 
+                        catlist.add(&quot;Category&quot;); 
+                        for (CategoryModel categoryModel:categoryModels){ 
+                            catlist.add(categoryModel.getCat_name()); 
+                        } 
+ 
+                        ArrayAdapter&lt;String&gt; adapter1 = 
+                                new ArrayAdapter&lt;String&gt;(AdvanceFilterActivity.this,  R.layout.spinner_item, catlist); 
+                        adapter1.setDropDownViewResource( R.layout.spinneritem); 
+                        activityAdvanceFilterBinding.catspinner.setAdapter(adapter1); 
+                        activityAdvanceFilterBinding.catspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() { 
+                            @Override 
+                            public void onItemSelected(AdapterView&lt;?&gt; parent, View view, int position, long id) { 
+                                if (position!=0){ 
+                                    cateid=categoryModels.get(position-1).getId(); 
+                                    cat1=categoryModels.get(position-1).getCat_name(); 
+                                   // subCatdata(cateid); 
+                                    //showdata(cateid); 
+                                    layoutcatfirst.setVisibility(View.VISIBLE); 
+                                    Utlity.show_toast(AdvanceFilterActivity.this, cateid); 
+                                    count++; 
+                                    if (count&gt;1) { 
+                                      //  activityAdvanceFilterBinding.subcatspinner2.setAdapter(null); 
+                                       // activityAdvanceFilterBinding.subcatspinner3.setAdapter(null); 
+                                       // activityAdvanceFilterBinding.subcatspinner4.setAdapter(null); 
+                                        cat2=&quot;&quot;; 
+                                       // cat3=&quot;&quot;; 
+                                       // cat4=&quot;&quot;; 
+                                       // cat5=&quot;&quot;; 
+                                      //  activityAdvanceFilterBinding.catsecond.setVisibility(View.GONE); 
+                                      //  activityAdvanceFilterBinding.catthird.setVisibility(View.GONE); 
+                                      //  activityAdvanceFilterBinding.catfour.setVisibility(View.GONE); 
+                                        //subCategoryModels.clear(); 
+                                    } 
+                                } 
+                            } 
+ 
+                            @Override 
+                            public void onNothingSelected(AdapterView&lt;?&gt; parent) { 
+ 
+                            } 
+                        }); 
+ 
+                    } catch (IOException | JSONException e) { 
+                        e.printStackTrace(); 
+                    } 
+ 
+                } 
+            } 
+ 
+            @Override 
+            public void onFailure(Call&lt;ResponseBody&gt; call, Throwable t) { 
+                Utlity.dismiss_dilog(AdvanceFilterActivity.this); 
+            } 
+        }); 
+    }*/</span>
+
+   <span class="s3">/* public void subCatdata(String categoryid){ 
+        Utlity.show_progress(this); 
+        Request result= get(this, subcategorylist+categoryid); 
+        OkHttpClient okHttpClient= new OkHttpClient(); 
+        okHttpClient.newCall(result).enqueue(new okhttp3.Callback() { 
+            @Override 
+            public void onFailure(okhttp3.Call call, IOException e) { 
+                Utlity.dismiss_dilog(AdvanceFilterActivity.this); 
+            } 
+ 
+            @Override 
+            public void onResponse(okhttp3.Call call, final okhttp3.Response response) throws IOException { 
+ 
+                runOnUiThread(new Runnable() { 
+                    @Override 
+                    public void run() { 
+                        String apidata = null; 
+                        try { 
+                            Utlity.dismiss_dilog(AdvanceFilterActivity.this); 
+                            apidata = response.body().string(); 
+                            Log.d(&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;,apidata); 
+                            JSONObject object = new JSONObject(apidata); 
+                            parameterCategoryModels = Utlity.gson.fromJson(object.getJSONArray(&quot;success&quot;).toString(), new TypeToken&lt;List&lt;ParameterCategoryModel&gt;&gt;() {}.getType()); 
+                            if (parameterCategoryModels.size()!=0){ 
+                                activityAdvanceFilterBinding.catfirst.setVisibility(View.VISIBLE); 
+                                catlist=new ArrayList&lt;&gt;(); 
+                                catlist.add(&quot;SubCategory&quot;); 
+                                for (ParameterCategoryModel parameterCategoryModel:parameterCategoryModels){ 
+                                    catlist.add(parameterCategoryModel.getCat_name()); 
+                                } 
+ 
+                                ArrayAdapter&lt;String&gt; adapter1 = 
+                                        new ArrayAdapter&lt;String&gt;(AdvanceFilterActivity.this,  R.layout.spinner_item, catlist); 
+                                adapter1.setDropDownViewResource( R.layout.spinneritem); 
+                                activityAdvanceFilterBinding.subcatspinner.setAdapter(adapter1); 
+                            } 
+                            else { 
+                                activityAdvanceFilterBinding.catfirst.setVisibility(View.GONE); 
+                            } 
+ 
+ 
+                            activityAdvanceFilterBinding.subcatspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() { 
+                                @Override 
+                                public void onItemSelected(AdapterView&lt;?&gt; parent, View view, int position, long id) { 
+                                    if (position!=0){ 
+                                        subcateid=parameterCategoryModels.get(position-1).getId(); 
+                                        cat2=parameterCategoryModels.get(position-1).getCat_name(); 
+                                        Utlity.show_toast(AdvanceFilterActivity.this, subcateid); 
+                                        //subCatdat                                                                                                                                                               a2(subcateid); 
+                                    } 
+                                } 
+ 
+                                @Override 
+                                public void onNothingSelected(AdapterView&lt;?&gt; parent) { 
+ 
+                                } 
+                            }); 
+ 
+ 
+                        } catch (IOException | JSONException e) { 
+                            e.printStackTrace(); 
+                        } 
+ 
+                    } 
+                }); 
+ 
+            } 
+ 
+        }); 
+    }*/</span>
+
+   <span class="s3">/* private void subCatdata2(String categoryid) { 
+        Utlity.show_progress(this); 
+        Request result= get(this, subcategorylist+categoryid); 
+        OkHttpClient okHttpClient= new OkHttpClient(); 
+        okHttpClient.newCall(result).enqueue(new okhttp3.Callback() { 
+            @Override 
+            public void onFailure(okhttp3.Call call, IOException e) { 
+                Utlity.dismiss_dilog(AdvanceFilterActivity.this); 
+            } 
+ 
+            @Override 
+            public void onResponse(okhttp3.Call call, final okhttp3.Response response) throws IOException { 
+ 
+                runOnUiThread(new Runnable() { 
+                    @Override 
+                    public void run() { 
+                        try { 
+                            Utlity.dismiss_dilog(AdvanceFilterActivity.this); 
+                            String apidata = response.body().string(); 
+                            Log.d(&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;,apidata); 
+                            JSONObject object = new JSONObject(apidata); 
+                            subCategoryModels = Utlity.gson.fromJson(object.getJSONArray(&quot;success&quot;).toString(), new TypeToken&lt;List&lt;SubCategoryModel&gt;&gt;() {}.getType()); 
+                            if (subCategoryModels.size()!=0) { 
+                                activityAdvanceFilterBinding.catsecond.setVisibility(View.VISIBLE); 
+                                catlist=new ArrayList&lt;&gt;(); 
+                                catlist.add(&quot;SubCategory&quot;); 
+                                for (SubCategoryModel subCategoryModel:subCategoryModels){ 
+                                    catlist.add(subCategoryModel.getCat_name()); 
+                                } 
+ 
+                                ArrayAdapter&lt;String&gt; adapter1 = 
+                                        new ArrayAdapter&lt;String&gt;(AdvanceFilterActivity.this,  R.layout.spinner_item, catlist); 
+                                adapter1.setDropDownViewResource( R.layout.spinneritem); 
+                                activityAdvanceFilterBinding.subcatspinner2.setAdapter(adapter1); 
+                            } 
+                            else { 
+                                activityAdvanceFilterBinding.catsecond.setVisibility(View.GONE); 
+                            } 
+ 
+                            activityAdvanceFilterBinding.subcatspinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() { 
+                                @Override 
+                                public void onItemSelected(AdapterView&lt;?&gt; parent, View view, int position, long id) { 
+                                    if (position!=0){ 
+                                        subcateid2=subCategoryModels.get(position-1).getId(); 
+                                        cat3=subCategoryModels.get(position-1).getCat_name(); 
+                                        Utlity.show_toast(AdvanceFilterActivity.this, subcateid2); 
+                                        subCatdata3(subcateid2); 
+                                    } 
+                                } 
+ 
+                                @Override 
+                                public void onNothingSelected(AdapterView&lt;?&gt; parent) { 
+ 
+                                } 
+                            }); 
+ 
+                        } catch (IOException | JSONException e) { 
+                            e.printStackTrace(); 
+                        } 
+ 
+                    } 
+                }); 
+ 
+            } 
+ 
+        }); 
+ 
+    }*/</span>
+   <span class="s3">/* private void subCatdata3(String categoryid) { 
+        Utlity.show_progress(this); 
+        Request result= get(this, subcategorylist+categoryid); 
+        OkHttpClient okHttpClient= new OkHttpClient(); 
+        okHttpClient.newCall(result).enqueue(new okhttp3.Callback() { 
+            @Override 
+            public void onFailure(okhttp3.Call call, IOException e) { 
+                Utlity.dismiss_dilog(AdvanceFilterActivity.this); 
+            } 
+ 
+            @Override 
+            public void onResponse(okhttp3.Call call, final okhttp3.Response response) throws IOException { 
+ 
+                runOnUiThread(new Runnable() { 
+                    @Override 
+                    public void run() { 
+                        try { 
+                            Utlity.dismiss_dilog(AdvanceFilterActivity.this); 
+                            String apidata = response.body().string(); 
+                            Log.d(&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;,apidata); 
+                            JSONObject object = new JSONObject(apidata); 
+                            subCategoryModels2 = Utlity.gson.fromJson(object.getJSONArray(&quot;success&quot;).toString(), new TypeToken&lt;List&lt;SubCategoryModel2&gt;&gt;() {}.getType()); 
+ 
+                            if (subCategoryModels2.size()!=0){ 
+                                activityAdvanceFilterBinding.catthird.setVisibility(View.VISIBLE); 
+                                catlist=new ArrayList&lt;&gt;(); 
+                                catlist.add(&quot;SubCategory&quot;); 
+                                for (SubCategoryModel2 subCategoryModel:subCategoryModels2){ 
+                                    catlist.add(subCategoryModel.getCat_name()); 
+                                } 
+ 
+                                ArrayAdapter&lt;String&gt; adapter1 = 
+                                        new ArrayAdapter&lt;String&gt;(AdvanceFilterActivity.this,  R.layout.spinner_item, catlist); 
+                                adapter1.setDropDownViewResource( R.layout.spinneritem); 
+                                activityAdvanceFilterBinding.subcatspinner3.setAdapter(adapter1); 
+                            } 
+                            else { 
+                                activityAdvanceFilterBinding.catthird.setVisibility(View.GONE); 
+                            } 
+                            activityAdvanceFilterBinding.subcatspinner3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() { 
+                                @Override 
+                                public void onItemSelected(AdapterView&lt;?&gt; parent, View view, int position, long id) { 
+                                    if (position!=0){ 
+                                        subcateid3=subCategoryModels2.get(position-1).getId(); 
+                                        cat4=subCategoryModels2.get(position-1).getCat_name(); 
+                                        Utlity.show_toast(AdvanceFilterActivity.this, subcateid3); 
+                                        subCatdata4(subcateid3); 
+ 
+ 
+                                    } 
+                                } 
+ 
+                                @Override 
+                                public void onNothingSelected(AdapterView&lt;?&gt; parent) { 
+ 
+                                } 
+                            }); 
+ 
+ 
+                        } catch (IOException | JSONException e) { 
+                            e.printStackTrace(); 
+                        } 
+ 
+                    } 
+                }); 
+ 
+            } 
+ 
+        }); 
+ 
+ 
+    } 
+    private void subCatdata4(String categoryid) { 
+        Utlity.show_progress(this); 
+        Request result= get(this, subcategorylist+categoryid); 
+        OkHttpClient okHttpClient= new OkHttpClient(); 
+        okHttpClient.newCall(result).enqueue(new okhttp3.Callback() { 
+            @Override 
+            public void onFailure(okhttp3.Call call, IOException e) { 
+                Utlity.dismiss_dilog(AdvanceFilterActivity.this); 
+            } 
+ 
+            @Override 
+            public void onResponse(okhttp3.Call call, final okhttp3.Response response) throws IOException { 
+ 
+                runOnUiThread(new Runnable() { 
+                    @Override 
+                    public void run() { 
+                        try { 
+                            Utlity.dismiss_dilog(AdvanceFilterActivity.this); 
+                            String apidata = response.body().string(); 
+                            Log.d(&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;,apidata); 
+                            JSONObject object = new JSONObject(apidata); 
+                            subCategoryModels3 = Utlity.gson.fromJson(object.getJSONArray(&quot;success&quot;).toString(), new TypeToken&lt;List&lt;SubCategoryModel3&gt;&gt;() {}.getType()); 
+                            if (subCategoryModels3.size()!=0){ 
+                                activityAdvanceFilterBinding.catfour.setVisibility(View.VISIBLE); 
+ 
+                                catlist=new ArrayList&lt;&gt;(); 
+                                catlist.add(&quot;SubCategory&quot;); 
+                                for (SubCategoryModel3 subCategoryModel:subCategoryModels3){ 
+                                    catlist.add(subCategoryModel.getCat_name()); 
+                                } 
+ 
+                                ArrayAdapter&lt;String&gt; adapter1 = 
+                                        new ArrayAdapter&lt;String&gt;(AdvanceFilterActivity.this,  R.layout.spinner_item, catlist); 
+                                adapter1.setDropDownViewResource( R.layout.spinneritem); 
+                                activityAdvanceFilterBinding.subcatspinner4.setAdapter(adapter1); 
+                            } 
+                            else { 
+                                activityAdvanceFilterBinding.catfour.setVisibility(View.GONE); 
+                            } 
+ 
+                            activityAdvanceFilterBinding.subcatspinner4.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() { 
+                                @Override 
+                                public void onItemSelected(AdapterView&lt;?&gt; parent, View view, int position, long id) { 
+                                    if (position!=0){ 
+                                        subcateid4=subCategoryModels3.get(position-1).getId(); 
+                                        cat5=subCategoryModels3.get(position-1).getCat_name(); 
+                                        Utlity.show_toast(AdvanceFilterActivity.this, subcateid4); 
+                                    } 
+                                } 
+ 
+                                @Override 
+                                public void onNothingSelected(AdapterView&lt;?&gt; parent) { 
+ 
+                                } 
+                            }); 
+ 
+                        } catch (IOException | JSONException e) { 
+                            e.printStackTrace(); 
+                        } 
+ 
+                    } 
+                }); 
+ 
+            } 
+ 
+        }); 
+ 
+ 
+    }*/</span>
+<span class="s3">/*private void searchspinner( View view){ 
+    LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE); 
+    View popupView = inflater.inflate(R.layout.searchspinner, null); 
+    int width = LinearLayout.LayoutParams.WRAP_CONTENT; 
+    int height = LinearLayout.LayoutParams.WRAP_CONTENT; 
+    boolean focusable = true; // lets taps outside the popup also dismiss it 
+    final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable); 
+    popupWindow.showAtLocation(view, Gravity.END, 50, 70); 
+}*/</span>
+    <span class="s0">private void </span>searchData() {
+       <span class="s3">// keyword=activityAdvanceFilterBinding.etkeyword.getText().toString();</span>
+        Utlity.show_progress(<span class="s0">this</span>);
+        HashMap&lt;String, String&gt; keys = <span class="s0">new </span>HashMap&lt;&gt;();
+        keys.put(<span class="s4">&quot;cat_id&quot;</span>, catid);
+        keys.put(<span class="s4">&quot;subcat_id1&quot;</span>, subcatid);
+       <span class="s3">// keys.put(&quot;subcat_id2&quot;, subcateid2);</span>
+       <span class="s3">// keys.put(&quot;subcat_id3&quot;, subcateid3);</span>
+      <span class="s3">//  keys.put(&quot;subcat_id4&quot;, subcateid4);</span>
+        <span class="s3">// keys.put(&quot;paramcats_id&quot;, paracateid);</span>
+       <span class="s3">// keys.put(&quot;keyword&quot;, keyword);</span>
+        Request result= post( keys, Apis.advancefilter);
+        OkHttpClient okHttpClient= <span class="s0">new </span>OkHttpClient();
+        okHttpClient.newCall(result).enqueue(<span class="s0">new </span>okhttp3.Callback() {
+            @Override
+            <span class="s0">public void </span>onFailure(okhttp3.Call call, IOException e) {
+                Utlity.dismiss_dilog(AdvanceFilterActivity.<span class="s0">this</span>);
+            }
+
+            @Override
+            <span class="s0">public void </span>onResponse(okhttp3.Call call, <span class="s0">final </span>okhttp3.Response response) <span class="s0">throws </span>IOException {
+
+                runOnUiThread(<span class="s0">new </span>Runnable() {
+                    @Override
+                    <span class="s0">public void </span>run() {
+                        <span class="s0">try </span>{
+
+                            String apidata = response.body().string();
+                            Log.d(<span class="s4">&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;</span>,apidata);
+                            JSONObject object = <span class="s0">new </span>JSONObject(apidata);
+
+
+                            <span class="s0">if </span>(response.isSuccessful()){
+                                <span class="s3">//peoples = new JSONArray(apidata);</span>
+                                roottList = Utlity.gson.fromJson(object.getJSONArray(<span class="s4">&quot;success&quot;</span>).toString(), <span class="s0">new </span>TypeToken&lt;ArrayList&lt;Root&gt;&gt;() {}.getType());
+                                <span class="s3">//Log.d(&quot;responce&quot;,advanceDataModels.toString());</span>
+
+                               <span class="s3">/* for(int i=0;i&lt;peoples.length();i++){ 
+                                    JSONObject c = peoples.getJSONObject(i); 
+                                    parcat_name = c.getString(&quot;parcat_name&quot;); 
+                                    parameter = c.getString(&quot;parameter&quot;); 
+                                    expandableListTitle.add(parcat_name); 
+                                    top250.add(parameter); 
+                                    expandableListDetail.put(expandableListTitle.get(i), top250); 
+                                }*/</span>
+                                <span class="s0">if </span>(roottList.size()!=<span class="s2">0</span>){
+                                    activityAdvanceFilterBinding.linearsearchdata.setVisibility(View.GONE);
+                                    activityAdvanceFilterBinding.linearshowdata.setVisibility(View.VISIBLE);
+                                   <span class="s3">// activityAdvanceFilterBinding.searchdata.setVisibility(View.VISIBLE);</span>
+                                    activityAdvanceFilterBinding.expanddata.setVisibility(View.VISIBLE);
+                                    activityAdvanceFilterBinding.line.setVisibility(View.VISIBLE);
+                                    activityAdvanceFilterBinding.noreords.setVisibility(View.GONE);
+
+                                   <span class="s3">// expandableListDetail = ExpendModal.getData();</span>
+                                 <span class="s3">//   expandableListTitle = new ArrayList&lt;String&gt;(expandableListDetail.keySet());</span>
+                                    expandAdapter = <span class="s0">new </span>ExpandAdapter(AdvanceFilterActivity.<span class="s0">this</span>, roottList);
+                                    activityAdvanceFilterBinding.expanddata.setAdapter(expandAdapter);
+                                    Utlity.dismiss_dilog(AdvanceFilterActivity.<span class="s0">this</span>);
+                                    activityAdvanceFilterBinding.nesscrool.post(<span class="s0">new </span>Runnable() {
+                                        @Override
+                                        <span class="s0">public void </span>run() {
+                                            activityAdvanceFilterBinding.nesscrool.fullScroll(ScrollView.FOCUS_UP);
+                                        }
+                                    });
+                                    <span class="s3">/*activityAdvanceFilterBinding.searchdata.setHasFixedSize(true); 
+                                    activityAdvanceFilterBinding.searchdata.setLayoutManager(new LinearLayoutManager(AdvanceFilterActivity.this)); 
+                                    activityAdvanceFilterBinding.searchdata.addItemDecoration(new DividerItemDecoration(AdvanceFilterActivity.this, DividerItemDecoration.HORIZONTAL)); 
+                                    searchShowAdapter= new SearchShowAdapter(AdvanceFilterActivity.this,advanceDataModels); 
+                                    activityAdvanceFilterBinding.searchdata.setAdapter(searchShowAdapter);*/</span>
+
+                                }
+                                <span class="s0">else </span>{
+                                    activityAdvanceFilterBinding.expanddata.setVisibility(View.GONE);
+                                    activityAdvanceFilterBinding.line.setVisibility(View.GONE);
+                                   <span class="s3">// activityAdvanceFilterBinding.searchdata.setVisibility(View.GONE);</span>
+                                    activityAdvanceFilterBinding.noreords.setVisibility(View.VISIBLE);
+                                    activityAdvanceFilterBinding.linearshowdata.setVisibility(View.VISIBLE);
+                                    activityAdvanceFilterBinding.linearsearchdata.setVisibility(View.GONE);
+                                    Utlity.dismiss_dilog(AdvanceFilterActivity.<span class="s0">this</span>);
+                                }
+
+                                <span class="s3">/*if (keyword.equals(&quot;&quot;)){ 
+                                    activityAdvanceFilterBinding.keyword.setVisibility(View.GONE); 
+                                } 
+                                else { 
+                                    activityAdvanceFilterBinding.keyword.setText(keyword); 
+                                }*/</span>
+
+                                <span class="s0">if </span>(catname==<span class="s0">null</span>){
+                                    activityAdvanceFilterBinding.parcat1.setText(getResources().getString(R.string.parentcategory));
+
+                                }
+                                <span class="s0">else </span>{
+                                    activityAdvanceFilterBinding.parcat1.setText(catname.getText().toString());
+
+                                }
+
+                              <span class="s0">if </span>(subcatename==<span class="s0">null</span>){
+                                    activityAdvanceFilterBinding.cat2.setVisibility(View.GONE);
+
+                                }
+                                <span class="s0">else </span>{
+                                    activityAdvanceFilterBinding.cat2.setText(subcatename.getText().toString());
+
+                                }
+
+                               <span class="s3">/* if (cat3==null){ 
+                                    activityAdvanceFilterBinding.cat3.setText(getResources().getString(R.string.parametercategory)); 
+ 
+                                } 
+                                else { 
+                                    activityAdvanceFilterBinding.cat3.setText(cat3); 
+ 
+                                } 
+ 
+                                if (cat4==null){ 
+                                    activityAdvanceFilterBinding.cat4.setText(getResources().getString(R.string.parametercategory1)); 
+ 
+                                } 
+                                else { 
+                                    activityAdvanceFilterBinding.cat4.setText(cat4); 
+ 
+                                } 
+ 
+                                if (cat5==null){ 
+                                    activityAdvanceFilterBinding.cat5.setText(getResources().getString(R.string.parametercategory2)); 
+                                } 
+                                else { 
+                                    activityAdvanceFilterBinding.cat5.setText(cat5); 
+                                }*/</span>
+
+                                <span class="s3">//startActivity(new Intent(AdvanceFilterActivity.this,SearchShowActivity.class).putExtra(&quot;detail&quot;, Utlity.gson.toJson(advanceDataModels)));</span>
+                                <span class="s3">// Utlity.show_toast(AdvanceFilterActivity.this,object.getInt(&quot;success&quot;)+&quot; Added Sucessfully&quot;);</span>
+
+                            }
+                            <span class="s0">else </span>{
+                                Utlity.show_toast(AdvanceFilterActivity.<span class="s0">this</span>,<span class="s4">&quot;Unauthorised&quot;</span>);
+                            }
+                        }
+                        <span class="s0">catch </span>(IOException e) {
+                            e.printStackTrace();
+                        }<span class="s0">catch </span>(JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+            }
+
+        });
+
+    }
+    <span class="s0">private void </span>searchAdavanceFilterData() {
+        Utlity.show_progress(<span class="s0">this</span>);
+       <span class="s3">// keyword=activityAdvanceFilterBinding.etkeyword.getText().toString();</span>
+         search =  activityAdvanceFilterBinding.searching.getText().toString();
+        HashMap&lt;String, String&gt; keys = <span class="s0">new </span>HashMap&lt;&gt;();
+        keys.put(<span class="s4">&quot;cat_id&quot;</span>, catid);
+        keys.put(<span class="s4">&quot;subcat_id1&quot;</span>, subcatid);
+       <span class="s3">// keys.put(&quot;keyword&quot;, keyword);</span>
+        keys.put(<span class="s4">&quot;searchkeyword&quot;</span>, search);
+        Request result= post( keys, Apis.advancefiltersearchdata);
+        OkHttpClient okHttpClient= <span class="s0">new </span>OkHttpClient();
+        okHttpClient.newCall(result).enqueue(<span class="s0">new </span>okhttp3.Callback() {
+            @Override
+            <span class="s0">public void </span>onFailure(okhttp3.Call call, IOException e) {
+                Utlity.dismiss_dilog(AdvanceFilterActivity.<span class="s0">this</span>);
+            }
+
+            @Override
+            <span class="s0">public void </span>onResponse(okhttp3.Call call, <span class="s0">final </span>okhttp3.Response response) <span class="s0">throws </span>IOException {
+
+                runOnUiThread(<span class="s0">new </span>Runnable() {
+                    @Override
+                    <span class="s0">public void </span>run() {
+                        <span class="s0">try </span>{
+
+                            String apidata = response.body().string();
+                            Log.d(<span class="s4">&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;</span>,apidata);
+                            JSONObject object = <span class="s0">new </span>JSONObject(apidata);
+
+
+                            <span class="s0">if </span>(response.isSuccessful()){
+                                <span class="s3">//peoples = new JSONArray(apidata);</span>
+                                roottList = Utlity.gson.fromJson(object.getJSONArray(<span class="s4">&quot;success&quot;</span>).toString(), <span class="s0">new </span>TypeToken&lt;ArrayList&lt;Root&gt;&gt;() {}.getType());
+                                <span class="s3">//Log.d(&quot;responce&quot;,advanceDataModels.toString());</span>
+
+                               <span class="s3">/* for(int i=0;i&lt;peoples.length();i++){ 
+                                    JSONObject c = peoples.getJSONObject(i); 
+                                    parcat_name = c.getString(&quot;parcat_name&quot;); 
+                                    parameter = c.getString(&quot;parameter&quot;); 
+                                    expandableListTitle.add(parcat_name); 
+                                    top250.add(parameter); 
+                                    expandableListDetail.put(expandableListTitle.get(i), top250); 
+                                }*/</span>
+                                <span class="s0">if </span>(roottList.size()!=<span class="s2">0</span>){
+                                    activityAdvanceFilterBinding.linearsearchdata.setVisibility(View.GONE);
+                                    activityAdvanceFilterBinding.linearshowdata.setVisibility(View.VISIBLE);
+                                    <span class="s3">// activityAdvanceFilterBinding.searchdata.setVisibility(View.VISIBLE);</span>
+                                    activityAdvanceFilterBinding.expanddata.setVisibility(View.VISIBLE);
+                                    activityAdvanceFilterBinding.line.setVisibility(View.VISIBLE);
+                                    activityAdvanceFilterBinding.noreords.setVisibility(View.GONE);
+
+                                    <span class="s3">// expandableListDetail = ExpendModal.getData();</span>
+                                    <span class="s3">//   expandableListTitle = new ArrayList&lt;String&gt;(expandableListDetail.keySet());</span>
+                                    expandAdapter = <span class="s0">new </span>ExpandAdapter(AdvanceFilterActivity.<span class="s0">this</span>, roottList);
+                                    activityAdvanceFilterBinding.expanddata.setAdapter(expandAdapter);
+                                    Utlity.dismiss_dilog(AdvanceFilterActivity.<span class="s0">this</span>);
+                                    <span class="s3">/*activityAdvanceFilterBinding.searchdata.setHasFixedSize(true); 
+                                    activityAdvanceFilterBinding.searchdata.setLayoutManager(new LinearLayoutManager(AdvanceFilterActivity.this)); 
+                                    activityAdvanceFilterBinding.searchdata.addItemDecoration(new DividerItemDecoration(AdvanceFilterActivity.this, DividerItemDecoration.HORIZONTAL)); 
+                                    searchShowAdapter= new SearchShowAdapter(AdvanceFilterActivity.this,advanceDataModels); 
+                                    activityAdvanceFilterBinding.searchdata.setAdapter(searchShowAdapter);*/</span>
+
+                                }
+                                <span class="s0">else </span>{
+                                    activityAdvanceFilterBinding.expanddata.setVisibility(View.GONE);
+                                    activityAdvanceFilterBinding.line.setVisibility(View.GONE);
+                                    <span class="s3">// activityAdvanceFilterBinding.searchdata.setVisibility(View.GONE);</span>
+                                    activityAdvanceFilterBinding.noreords.setVisibility(View.VISIBLE);
+                                    activityAdvanceFilterBinding.linearshowdata.setVisibility(View.VISIBLE);
+                                    activityAdvanceFilterBinding.linearsearchdata.setVisibility(View.GONE);
+                                    Utlity.dismiss_dilog(AdvanceFilterActivity.<span class="s0">this</span>);
+                                }
+
+                            }
+                            <span class="s0">else </span>{
+                                Utlity.show_toast(AdvanceFilterActivity.<span class="s0">this</span>,<span class="s4">&quot;Unauthorised&quot;</span>);
+                            }
+                        }
+                        <span class="s0">catch </span>(IOException e) {
+                            e.printStackTrace();
+                        }<span class="s0">catch </span>(JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+            }
+
+        });
+
+    }
+
+    <span class="s0">public </span>Request post(HashMap&lt;String, String&gt; keys, String api_name) {
+        StrictMode.ThreadPolicy policy =
+                <span class="s0">new </span>StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        FormBody.Builder body = <span class="s0">new </span>FormBody.Builder();
+        <span class="s0">for </span>(Object key : keys.keySet()) {
+            String value = keys.get(key);
+            <span class="s0">if</span>(!TextUtils.isEmpty(value)) {
+                body.add(key.toString(), value);
+            }
+            <span class="s0">else </span>{
+                body.add(key.toString(), <span class="s4">&quot;&quot;</span>);
+            }
+        }
+        RequestBody parmetrs = body.build();
+        <span class="s0">return new </span>Request.Builder()
+                .url(api_name)
+                .header(<span class="s4">&quot;Authorization&quot;</span>,<span class="s4">&quot;Bearer &quot;</span>+ Utlity.get_user(<span class="s0">this</span>).getToken())
+                .post(parmetrs)
+                .build();
+    }
+    <span class="s0">public </span>Request get(Activity activity, String api_name) {
+        StrictMode.ThreadPolicy policy =
+                <span class="s0">new </span>StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        <span class="s0">return new </span>Request.Builder()
+                .url(api_name)
+                .get()
+                .header(<span class="s4">&quot;Authorization&quot;</span>,<span class="s4">&quot;Bearer &quot;</span>+ Utlity.get_user(<span class="s0">this</span>).getToken())
+                .build();
+    }
+    <span class="s0">private void </span>showdata(String categoryid) {
+
+        dialog = <span class="s0">new </span>Dialog(AdvanceFilterActivity.<span class="s0">this</span>);
+        SearchView searchView;
+        RecyclerView recyclerView;
+        TextView tvcancel,norecods;
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.customsearch);
+        dialog.getWindow().setLayout(ViewPager.LayoutParams.MATCH_PARENT, ViewPager.LayoutParams.WRAP_CONTENT);
+        searchView = dialog.findViewById(R.id.search);
+        recyclerView = dialog.findViewById(R.id.customsearchrecyler);
+        tvcancel = dialog.findViewById(R.id.customclose);
+        norecods = dialog.findViewById(R.id.noreords);
+        Request result= get(<span class="s0">this</span>, subcategorylist+categoryid);
+        OkHttpClient okHttpClient= <span class="s0">new </span>OkHttpClient();
+        okHttpClient.newCall(result).enqueue(<span class="s0">new </span>okhttp3.Callback() {
+            @Override
+            <span class="s0">public void </span>onFailure(okhttp3.Call call, IOException e) {
+                progressDialog.cancel();
+            }
+
+            @Override
+            <span class="s0">public void </span>onResponse(okhttp3.Call call, <span class="s0">final </span>okhttp3.Response response) <span class="s0">throws </span>IOException {
+
+                runOnUiThread(<span class="s0">new </span>Runnable() {
+                    @Override
+                    <span class="s0">public void </span>run() {
+                        String apidata = <span class="s0">null</span>;
+                        <span class="s0">try </span>{
+                            apidata = response.body().string();
+                            Log.d(<span class="s4">&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;</span>,apidata);
+                            JSONObject object = <span class="s0">new </span>JSONObject(apidata);
+                            parameterCategoryModels = Utlity.gson.fromJson(object.getJSONArray(<span class="s4">&quot;success&quot;</span>).toString(), <span class="s0">new </span>TypeToken&lt;List&lt;ParameterCategoryModel&gt;&gt;() {}.getType());
+                            <span class="s0">if </span>(parameterCategoryModels.size()!=<span class="s2">0</span>){
+                                recyclerView.setVisibility(View.VISIBLE);
+                                recyclerView.setLayoutManager(<span class="s0">new </span>LinearLayoutManager(AdvanceFilterActivity.<span class="s0">this</span>,RecyclerView.VERTICAL,<span class="s0">false</span>));
+                                customsearchSpinnerAdapter = <span class="s0">new </span>CustomsearchSpinnerAdapter(AdvanceFilterActivity.<span class="s0">this</span>,parameterCategoryModels);
+                                recyclerView.setAdapter(customsearchSpinnerAdapter);
+                                recyclerView.setHasFixedSize(<span class="s0">true</span>);
+                                searchView.setOnQueryTextListener(<span class="s0">new </span>SearchView.OnQueryTextListener() {
+                                    @Override
+                                    <span class="s0">public boolean </span>onQueryTextSubmit(String query) {
+                                        <span class="s0">if</span>(parameterCategoryModels.contains(query)){
+                                            customsearchSpinnerAdapter.getFilter().filter(query);
+                                        }<span class="s0">else</span>{
+                                            Toast.makeText(AdvanceFilterActivity.<span class="s0">this</span>, <span class="s4">&quot;No Match found&quot;</span>,Toast.LENGTH_LONG).show();
+                                        }
+                                        <span class="s0">return false</span>;
+                                    }
+                                    @Override
+                                    <span class="s0">public boolean </span>onQueryTextChange(String newText) {
+                                        customsearchSpinnerAdapter.getFilter().filter(newText);
+                                        <span class="s0">return false</span>;
+                                    }
+                                });
+                                progressDialog.cancel();
+                                <span class="s3">//  ArrayAdapter&lt;String&gt; adapter1 =</span>
+                                <span class="s3">//          new ArrayAdapter&lt;String&gt;(AdvanceFilterActivity.this,  R.layout.spinner_item, catlist);</span>
+                                <span class="s3">// adapter1.setDropDownViewResource( R.layout.spinneritem);</span>
+                                <span class="s3">//  activityAdvanceFilterBinding.subcatspinner.setAdapter(adapter1);</span>
+                            }
+                            <span class="s0">else </span>{
+                                activityAdvanceFilterBinding.catfirst.setVisibility(View.GONE);
+                                norecods.setVisibility(View.VISIBLE);
+                                recyclerView.setVisibility(View.GONE);
+                                progressDialog.cancel();
+                            }
+
+
+                           <span class="s3">/* activityAdvanceFilterBinding.subcatspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() { 
+                                @Override 
+                                public void onItemSelected(AdapterView&lt;?&gt; parent, View view, int position, long id) { 
+                                    if (position!=0){ 
+                                        subcateid=parameterCategoryModels.get(position-1).getId(); 
+                                        cat2=parameterCategoryModels.get(position-1).getCat_name(); 
+                                        Utlity.show_toast(AdvanceFilterActivity.this, subcateid); 
+                                        //subCatdata2(subcateid); 
+                                    } 
+                                } 
+ 
+                                @Override 
+                                public void onNothingSelected(AdapterView&lt;?&gt; parent) { 
+ 
+                                } 
+                            }); 
+*/</span>
+
+                        } <span class="s0">catch </span>(IOException | JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                });
+
+            }
+
+        });
+        dialog.show();
+        progressDialog.show();
+   tvcancel.setOnClickListener(<span class="s0">new </span>View.OnClickListener() {
+       @Override
+       <span class="s0">public void </span>onClick(View v) {
+           dialog.cancel();
+       }
+   });
+    }
+    <span class="s0">private void </span>catshowdata() {
+        catdialog = <span class="s0">new </span>Dialog(AdvanceFilterActivity.<span class="s0">this</span>);
+        SearchView catsearchView;
+        RecyclerView catrecyclerView;
+        TextView cattvcancel;
+        catdialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        catdialog.setContentView(R.layout.customcatsearch);
+        catdialog.getWindow().setLayout(ViewPager.LayoutParams.MATCH_PARENT, ViewPager.LayoutParams.WRAP_CONTENT);
+        catsearchView = catdialog.findViewById(R.id.catsearch);
+        catrecyclerView = catdialog.findViewById(R.id.catcustomsearchrecyler);
+        cattvcancel = catdialog.findViewById(R.id.catcustomclose);
+        apiInterface = ApiClients.getClient1().create(RetApis.<span class="s0">class</span>);
+        Call&lt;ResponseBody&gt; call=apiInterface.Categories(<span class="s4">&quot;Bearer &quot;</span>+ Utlity.get_user(<span class="s0">this</span>).getToken());
+        call.enqueue(<span class="s0">new </span>Callback&lt;ResponseBody&gt;() {
+            @Override
+            <span class="s0">public void </span>onResponse(Call&lt;ResponseBody&gt; call, Response&lt;ResponseBody&gt; response) {
+                <span class="s0">if </span>(response.isSuccessful()) {
+                    String apidata = <span class="s0">null</span>;
+                    <span class="s0">try </span>{
+                        progressDialog.cancel();
+                        apidata = response.body().string();
+                        Log.d(<span class="s4">&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;</span>,apidata);
+                        JSONObject object = <span class="s0">new </span>JSONObject(apidata);
+                        categoryModels = Utlity.gson.fromJson(object.getJSONArray(<span class="s4">&quot;success&quot;</span>).toString(), <span class="s0">new </span>TypeToken&lt;List&lt;CategoryModel&gt;&gt;() {}.getType());
+                        <span class="s0">if </span>(categoryModels.size()!=<span class="s2">0</span>){
+                            catrecyclerView.setLayoutManager(<span class="s0">new </span>LinearLayoutManager(AdvanceFilterActivity.<span class="s0">this</span>,RecyclerView.VERTICAL,<span class="s0">false</span>));
+                            customCatsearchSpinnerAdapter = <span class="s0">new </span>CustomCatsearchSpinnerAdapter(AdvanceFilterActivity.<span class="s0">this</span>,categoryModels);
+                            catrecyclerView.setAdapter(customCatsearchSpinnerAdapter);
+                            catrecyclerView.setHasFixedSize(<span class="s0">true</span>);
+                            catsearchView.setOnQueryTextListener(<span class="s0">new </span>SearchView.OnQueryTextListener() {
+                                @Override
+                                <span class="s0">public boolean </span>onQueryTextSubmit(String query) {
+                                    <span class="s0">if</span>(categoryModels.contains(query)){
+                                        customCatsearchSpinnerAdapter.getFilter().filter(query);
+                                    }<span class="s0">else</span>{
+                                        Toast.makeText(AdvanceFilterActivity.<span class="s0">this</span>, <span class="s4">&quot;No Match found&quot;</span>,Toast.LENGTH_LONG).show();
+                                    }
+                                    <span class="s0">return false</span>;
+                                }
+                                @Override
+                                <span class="s0">public boolean </span>onQueryTextChange(String newText) {
+                                    customCatsearchSpinnerAdapter.getFilter().filter(newText);
+                                    <span class="s0">return false</span>;
+                                }
+                            });
+
+                            <span class="s3">//  ArrayAdapter&lt;String&gt; adapter1 =</span>
+                            <span class="s3">//          new ArrayAdapter&lt;String&gt;(AdvanceFilterActivity.this,  R.layout.spinner_item, catlist);</span>
+                            <span class="s3">// adapter1.setDropDownViewResource( R.layout.spinneritem);</span>
+                            <span class="s3">//  activityAdvanceFilterBinding.subcatspinner.setAdapter(adapter1);</span>
+                        }
+                        <span class="s0">else </span>{
+                            activityAdvanceFilterBinding.catfirst.setVisibility(View.GONE);
+                        }
+
+
+                    } <span class="s0">catch </span>(IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+            @Override
+            <span class="s0">public void </span>onFailure(Call&lt;ResponseBody&gt; call, Throwable t) {
+                progressDialog.cancel();
+            }
+        });
+        catdialog.show();
+        progressDialog.show();
+        cattvcancel.setOnClickListener(<span class="s0">new </span>View.OnClickListener() {
+            @Override
+            <span class="s0">public void </span>onClick(View v) {
+                catdialog.cancel();
+            }
+        });
+    }
+}</pre>
+</body>
+</html>

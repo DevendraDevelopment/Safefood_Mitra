@@ -1,0 +1,1496 @@
+<html>
+<head>
+<title>InspectionActivity.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #000080; font-weight: bold;}
+.s1 { color: #000000;}
+.s2 { color: #808080; font-style: italic;}
+.s3 { color: #008000; font-weight: bold;}
+.s4 { color: #0000ff;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+InspectionActivity.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span>com.safefoodmitra.safefoodmitra.Activities;
+
+<span class="s0">import </span>androidx.annotation.RequiresApi;
+<span class="s0">import </span>androidx.appcompat.app.AlertDialog;
+<span class="s0">import </span>androidx.appcompat.app.AppCompatActivity;
+<span class="s0">import </span>androidx.core.content.ContextCompat;
+<span class="s0">import </span>androidx.core.content.FileProvider;
+<span class="s0">import </span>androidx.databinding.DataBindingUtil;
+<span class="s0">import </span>androidx.recyclerview.widget.LinearLayoutManager;
+<span class="s0">import </span>androidx.recyclerview.widget.RecyclerView;
+<span class="s0">import </span>androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+<span class="s0">import </span>androidx.viewpager.widget.ViewPager;
+
+<span class="s0">import </span>android.annotation.SuppressLint;
+<span class="s0">import </span>android.app.Activity;
+<span class="s0">import </span>android.app.ActivityOptions;
+<span class="s0">import </span>android.app.DatePickerDialog;
+<span class="s0">import </span>android.app.Dialog;
+<span class="s0">import </span>android.app.DownloadManager;
+<span class="s0">import </span>android.app.ProgressDialog;
+<span class="s0">import </span>android.content.ActivityNotFoundException;
+<span class="s0">import </span>android.content.ContentResolver;
+<span class="s0">import </span>android.content.Context;
+<span class="s0">import </span>android.content.DialogInterface;
+<span class="s0">import </span>android.content.Intent;
+<span class="s0">import </span>android.content.SharedPreferences;
+<span class="s0">import </span>android.graphics.Bitmap;
+<span class="s0">import </span>android.graphics.BitmapFactory;
+<span class="s0">import </span>android.graphics.Color;
+<span class="s0">import </span>android.graphics.PixelFormat;
+<span class="s0">import </span>android.net.Uri;
+<span class="s0">import </span>android.os.AsyncTask;
+<span class="s0">import </span>android.os.Build;
+<span class="s0">import </span>android.os.Bundle;
+<span class="s0">import </span>android.os.Environment;
+<span class="s0">import </span>android.os.FileUriExposedException;
+<span class="s0">import </span>android.os.StrictMode;
+<span class="s0">import </span>android.provider.MediaStore;
+<span class="s0">import </span>android.transition.Explode;
+<span class="s0">import </span>android.util.Log;
+<span class="s0">import </span>android.view.Gravity;
+<span class="s0">import </span>android.view.View;
+<span class="s0">import </span>android.view.Window;
+<span class="s0">import </span>android.view.WindowManager;
+<span class="s0">import </span>android.widget.AdapterView;
+<span class="s0">import </span>android.widget.ArrayAdapter;
+<span class="s0">import </span>android.widget.Button;
+<span class="s0">import </span>android.widget.DatePicker;
+<span class="s0">import </span>android.widget.EditText;
+<span class="s0">import </span>android.widget.FrameLayout;
+<span class="s0">import </span>android.widget.ImageButton;
+<span class="s0">import </span>android.widget.ImageView;
+<span class="s0">import </span>android.widget.LinearLayout;
+<span class="s0">import </span>android.widget.Spinner;
+<span class="s0">import </span>android.widget.TableLayout;
+<span class="s0">import </span>android.widget.TextView;
+<span class="s0">import </span>android.widget.Toast;
+
+<span class="s0">import </span>com.google.android.material.bottomsheet.BottomSheetDialog;
+<span class="s0">import </span>com.google.android.material.tabs.TabLayout;
+<span class="s0">import </span>com.google.gson.Gson;
+<span class="s0">import </span>com.google.gson.reflect.TypeToken;
+<span class="s2">//import com.opencsv.CSVWriter;</span>
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Adapter.SentsAdapter;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Adapter.Viewadapter;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Apis.ApiClients;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Apis.Apis;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Apis.RetApis;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Helper.Utlity;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.ConcernModal;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.LocationModal;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.RespoModal;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.SentsModals;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.UnitModals;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.Validation_custome;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.R;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.databinding.ActivityInspectionBinding;
+
+<span class="s0">import </span>org.apache.poi.hssf.usermodel.HSSFWorkbook;
+<span class="s0">import </span>org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+<span class="s0">import </span>org.apache.poi.ss.usermodel.Cell;
+<span class="s0">import </span>org.apache.poi.ss.usermodel.CellStyle;
+<span class="s0">import </span>org.apache.poi.ss.usermodel.ClientAnchor;
+<span class="s0">import </span>org.apache.poi.ss.usermodel.CreationHelper;
+<span class="s0">import </span>org.apache.poi.ss.usermodel.Font;
+<span class="s0">import </span>org.apache.poi.ss.usermodel.IndexedColors;
+<span class="s0">import </span>org.apache.poi.ss.usermodel.PrintSetup;
+<span class="s0">import </span>org.apache.poi.ss.usermodel.Row;
+<span class="s0">import </span>org.apache.poi.ss.usermodel.Sheet;
+<span class="s0">import </span>org.apache.poi.ss.usermodel.Workbook;
+<span class="s0">import </span>org.apache.poi.ss.util.CellUtil;
+<span class="s0">import </span>org.apache.poi.util.IOUtils;
+<span class="s0">import </span>org.apache.poi.xssf.usermodel.XSSFClientAnchor;
+<span class="s0">import </span>org.apache.poi.xssf.usermodel.XSSFDrawing;
+<span class="s0">import </span>org.apache.poi.xssf.usermodel.XSSFPicture;
+<span class="s0">import </span>org.apache.poi.xssf.usermodel.XSSFShape;
+<span class="s0">import </span>org.apache.poi.xssf.usermodel.XSSFWorkbook;
+<span class="s0">import </span>org.json.JSONException;
+<span class="s0">import </span>org.json.JSONObject;
+
+<span class="s0">import </span>java.io.BufferedInputStream;
+<span class="s0">import </span>java.io.ByteArrayInputStream;
+<span class="s0">import </span>java.io.ByteArrayOutputStream;
+<span class="s0">import </span>java.io.DataInputStream;
+<span class="s0">import </span>java.io.File;
+<span class="s0">import </span>java.io.FileInputStream;
+<span class="s0">import </span>java.io.FileNotFoundException;
+<span class="s0">import </span>java.io.FileOutputStream;
+<span class="s0">import </span>java.io.FileWriter;
+<span class="s0">import </span>java.io.IOException;
+<span class="s0">import </span>java.io.InputStream;
+<span class="s0">import </span>java.io.OutputStream;
+<span class="s0">import </span>java.net.MalformedURLException;
+<span class="s0">import </span>java.net.URL;
+<span class="s0">import </span>java.text.DateFormat;
+<span class="s0">import </span>java.text.SimpleDateFormat;
+<span class="s0">import </span>java.util.ArrayList;
+<span class="s0">import </span>java.util.Calendar;
+<span class="s0">import </span>java.util.Date;
+<span class="s0">import </span>java.util.List;
+<span class="s0">import </span>java.util.Locale;
+<span class="s0">import </span>java.util.Objects;
+<span class="s0">import </span>java.util.zip.GZIPOutputStream;
+
+<span class="s0">import </span>okhttp3.MediaType;
+<span class="s0">import </span>okhttp3.MultipartBody;
+<span class="s0">import </span>okhttp3.OkHttpClient;
+<span class="s0">import </span>okhttp3.Request;
+<span class="s0">import </span>okhttp3.RequestBody;
+<span class="s0">import </span>okhttp3.ResponseBody;
+<span class="s0">import </span>okhttp3.internal.Util;
+<span class="s0">import </span>retrofit2.Call;
+<span class="s0">import </span>retrofit2.Callback;
+<span class="s0">import </span>retrofit2.Response;
+
+<span class="s0">import static </span>com.safefoodmitra.safefoodmitra.Activities.AdminMainActivity.respoid;
+<span class="s0">import static </span>com.safefoodmitra.safefoodmitra.Fragments.RecivedFragment.norecord1;
+<span class="s0">import static </span>com.safefoodmitra.safefoodmitra.Fragments.RecivedFragment.receivelist;
+<span class="s0">import static </span>com.safefoodmitra.safefoodmitra.Fragments.SentFragment.norecord;
+<span class="s0">import static </span>com.safefoodmitra.safefoodmitra.Fragments.SentFragment.sentlist;
+<span class="s0">import static </span>org.apache.poi.ss.usermodel.CellStyle.ALIGN_CENTER;
+<span class="s0">import static </span>org.apache.poi.ss.usermodel.CellStyle.ALIGN_JUSTIFY;
+
+<span class="s0">public class </span>InspectionActivity <span class="s0">extends </span>AppCompatActivity <span class="s0">implements </span>View.OnClickListener  {
+    <span class="s0">private static final </span>String TAG = <span class="s3">&quot;tag&quot;</span>;
+
+    ActivityInspectionBinding inspectionBinding;
+    Viewadapter viewAdapter;
+    RetApis apiInterface;
+    <span class="s0">public </span>List&lt;SentsModals&gt; sentsModals;
+    <span class="s0">public static </span>List&lt;SentsModals&gt; sentsModals1;
+    Spinner location,department,concern,status;
+    TextView filtesave,firstdate,seconddate;
+    ImageView cancle,todtebtn,fromdtebtn;
+    <span class="s0">public static </span>String locatioid=<span class="s3">&quot;&quot;</span>,responseid=<span class="s3">&quot;&quot;</span>,converid=<span class="s3">&quot;&quot;</span>,valuepos,onefromdate,twofromdate,spinnervalue=<span class="s3">&quot;&quot;</span>;
+    List&lt;LocationModal&gt;locationModals;
+    List&lt;RespoModal&gt;respoModals;
+    List&lt;ConcernModal&gt;concernModals;
+    ArrayList&lt;String&gt; respolist;
+    ArrayList&lt;String&gt; locationlist;
+    ArrayList&lt;String&gt; concernlist;
+    <span class="s0">public </span>SentsAdapter sentsAdapter;
+
+
+    String path=<span class="s3">&quot;&quot;</span>;
+    Workbook workbook;
+    ProgressDialog progressBar;
+    String respoiduser;
+    SharedPreferences pref;
+    Sheet sheet;
+    <span class="s0">public static int </span>valuesall=<span class="s4">0</span>,filtercheckvalue=<span class="s4">0</span>;
+    <span class="s0">public static int </span>tabvalue;
+    <span class="s0">public static </span>TabLayout tabLayout;
+    String respoid1;
+    FileOutputStream fileOut;
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    <span class="s0">protected void </span>onCreate(Bundle savedInstanceState) {
+        <span class="s0">super</span>.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        <span class="s0">if </span>(Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setEnterTransition(<span class="s0">new </span>Explode());
+        }
+
+        inspectionBinding= DataBindingUtil.setContentView(<span class="s0">this</span>,R.layout.activity_inspection);
+        pref = <span class="s0">this</span>.getSharedPreferences(<span class="s3">&quot;MyG9&quot;</span>, MODE_PRIVATE);
+        respoid1 = pref.getString(<span class="s3">&quot;respoid&quot;</span>,<span class="s0">null</span>);
+        viewAdapter = <span class="s0">new </span>Viewadapter(getSupportFragmentManager());
+        inspectionBinding.viewpager.setAdapter(viewAdapter);
+        inspectionBinding.inspectiontab.setupWithViewPager(inspectionBinding.viewpager);
+        inspectionBinding.inspectiontab.setSelectedTabIndicatorColor(ContextCompat.getColor(<span class="s0">this</span>,R.color.black));
+        inspectionBinding.inspectiontab.setTabTextColors(Color.parseColor(<span class="s3">&quot;#9C9C99&quot;</span>), Color.parseColor(<span class="s3">&quot;#056314&quot;</span>));
+        progressBar = <span class="s0">new </span>ProgressDialog(<span class="s0">this</span>);
+        progressBar.setCancelable(<span class="s0">true</span>);
+        progressBar.setMessage(getResources().getString(R.string.loading));
+        respoiduser=pref.getString(<span class="s3">&quot;respoid&quot;</span>,<span class="s0">null</span>);
+       <span class="s2">// Utlity.show_toast(InspectionActivity.this,respoiduser);</span>
+        click();
+        tabLayout=inspectionBinding.inspectiontab;
+        inspectionBinding.swipeToRefresh.setOnRefreshListener(<span class="s0">new </span>SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            <span class="s0">public void </span>onRefresh() {
+                <span class="s0">if </span>(inspectionBinding.inspectiontab.getTabAt(<span class="s4">0</span>).isSelected()){
+                    <span class="s0">if </span>(Utlity.is_online(InspectionActivity.<span class="s0">this</span>)){
+                        <span class="s0">if </span>(Utlity.get_user(InspectionActivity.<span class="s0">this</span>).getUserroles_id().equalsIgnoreCase(<span class="s3">&quot;2&quot;</span>)){
+                            inspectionsdatasentadmin();
+                            sentsModals1=<span class="s0">null</span>;
+                            valuesall=<span class="s4">0</span>;
+                            onefromdate=<span class="s0">null</span>;
+                            twofromdate=<span class="s0">null</span>;
+                        }
+                        <span class="s0">else if </span>(Utlity.get_user(InspectionActivity.<span class="s0">this</span>).getUserroles_id().equalsIgnoreCase(<span class="s3">&quot;3&quot;</span>)){
+                            inspectionsdatasentuser();
+                            sentsModals1=<span class="s0">null</span>;
+                            valuesall=<span class="s4">0</span>;
+                            onefromdate=<span class="s0">null</span>;
+                            twofromdate=<span class="s0">null</span>;
+                        }
+
+                    }
+                    <span class="s0">else </span>{
+                        Utlity.show_toast(InspectionActivity.<span class="s0">this</span>,getResources().getString(R.string.nointernet));
+
+                    }
+
+                }
+                <span class="s0">else if </span>(inspectionBinding.inspectiontab.getTabAt(<span class="s4">1</span>).isSelected()){
+                    <span class="s0">if </span>(Utlity.is_online(InspectionActivity.<span class="s0">this</span>)){
+                        <span class="s0">if </span>(Utlity.get_user(InspectionActivity.<span class="s0">this</span>).getUserroles_id().equalsIgnoreCase(<span class="s3">&quot;2&quot;</span>)){
+                            inspectionsdatarecivedadmin();
+                            sentsModals1=<span class="s0">null</span>;
+                            valuesall=<span class="s4">0</span>;
+                            onefromdate=<span class="s0">null</span>;
+                            twofromdate=<span class="s0">null</span>;
+                        }
+                        <span class="s0">else if </span>(Utlity.get_user(InspectionActivity.<span class="s0">this</span>).getUserroles_id().equalsIgnoreCase(<span class="s3">&quot;3&quot;</span>)){
+                            inspectionsdatareciveduser();
+                            sentsModals1=<span class="s0">null</span>;
+                            valuesall=<span class="s4">0</span>;
+                            onefromdate=<span class="s0">null</span>;
+                            twofromdate=<span class="s0">null</span>;
+                        }
+
+                    }
+                    <span class="s0">else </span>{
+                        Utlity.show_toast(InspectionActivity.<span class="s0">this</span>,getResources().getString(R.string.nointernet));
+                    }
+                }
+                inspectionBinding.swipeToRefresh.setRefreshing(<span class="s0">false</span>);
+            }
+        });
+
+
+    }
+
+    <span class="s0">public void </span>click(){
+        inspectionBinding.back.setOnClickListener(<span class="s0">this</span>::onClick);
+        inspectionBinding.addformat.setOnClickListener(<span class="s0">this</span>::onClick);
+        inspectionBinding.filter.setOnClickListener(<span class="s0">this</span>::onClick);
+        inspectionBinding.export.setOnClickListener(<span class="s0">this</span>::onClick);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    <span class="s0">public void </span>onClick(View view) {
+        <span class="s0">if </span>(view.getId()==R.id.back){
+            <span class="s0">if </span>(Utlity.get_user(<span class="s0">this</span>).getUserroles_id().equalsIgnoreCase(<span class="s3">&quot;2&quot;</span>)){
+                startActivity(<span class="s0">new </span>Intent(<span class="s0">this</span>,AdminMainActivity.<span class="s0">class</span>));
+                finishAffinity();
+                valuesall=<span class="s4">0</span>;
+            }
+           <span class="s0">else if </span>(Utlity.get_user(<span class="s0">this</span>).getUserroles_id().equalsIgnoreCase(<span class="s3">&quot;3&quot;</span>)){
+                startActivity(<span class="s0">new </span>Intent(<span class="s0">this</span>,UserMainActivity.<span class="s0">class</span>));
+                finishAffinity();
+                valuesall=<span class="s4">0</span>;
+            }
+
+        }
+        <span class="s0">else if </span>(view.getId()==R.id.addformat){
+            Intent intent=<span class="s0">new </span>Intent(<span class="s0">this</span>,AddInspect.<span class="s0">class</span>);
+            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(<span class="s0">this</span>).toBundle());
+        }
+        <span class="s0">else if </span>(view.getId()==R.id.filter){
+            filteraleart();
+            valuesall=<span class="s4">1</span>;
+
+
+        }
+        <span class="s0">else if </span>(view.getId()==R.id.export){
+            <span class="s0">if </span>(inspectionBinding.inspectiontab.getTabAt(<span class="s4">0</span>).isSelected()){
+                <span class="s0">if </span>(Utlity.is_online(InspectionActivity.<span class="s0">this</span>)){
+                    <span class="s0">if </span>(sentsModals1==<span class="s0">null</span>){
+                        Utlity.show_toast(InspectionActivity.<span class="s0">this</span>,<span class="s3">&quot;You Don't Export data before filter any condition.&quot;</span>);
+                    }
+                    <span class="s0">else </span>{
+                        <span class="s0">if </span>(filtercheckvalue==<span class="s4">1</span>){
+                            <span class="s0">if </span>(sentsModals1.size()!=<span class="s4">0</span>){
+                                ExportDatabaseCSVTask task=<span class="s0">new </span>ExportDatabaseCSVTask();
+                                task.execute();
+                            }
+                            <span class="s0">else </span>{
+                                Utlity.show_toast(InspectionActivity.<span class="s0">this</span>,<span class="s3">&quot;You Don't Export data before filter any condition.&quot;</span>);
+                            }
+                        }
+                        <span class="s0">else if </span>(filtercheckvalue==<span class="s4">2</span>){
+                            Utlity.show_toast(InspectionActivity.<span class="s0">this</span>,<span class="s3">&quot;You Don't Export data before filter any condition.&quot;</span>);
+                        }
+                        <span class="s0">else </span>{
+                            Utlity.show_toast(InspectionActivity.<span class="s0">this</span>,<span class="s3">&quot;You Don't Export data before filter any condition.&quot;</span>);
+                        }
+                    }
+
+
+                }
+                <span class="s0">else </span>{
+                    Utlity.show_toast(InspectionActivity.<span class="s0">this</span>,getResources().getString(R.string.nointernet));
+                }
+            }
+
+            <span class="s0">else if </span>(inspectionBinding.inspectiontab.getTabAt(<span class="s4">1</span>).isSelected()){
+                <span class="s0">if </span>(Utlity.is_online(InspectionActivity.<span class="s0">this</span>)){
+                    <span class="s0">if </span>(sentsModals1==<span class="s0">null</span>){
+                        Utlity.show_toast(InspectionActivity.<span class="s0">this</span>,<span class="s3">&quot;You Don't Export data before filter any condition.&quot;</span>);
+                    }
+                    <span class="s0">else </span>{
+                        <span class="s0">if </span>(filtercheckvalue==<span class="s4">3</span>){
+                            <span class="s0">if </span>(sentsModals1.size()!=<span class="s4">0</span>){
+                                ExportDatabaseCSVTask task=<span class="s0">new </span>ExportDatabaseCSVTask();
+                                task.execute();
+                            }
+                            <span class="s0">else </span>{
+                                Utlity.show_toast(InspectionActivity.<span class="s0">this</span>,<span class="s3">&quot;You Don't Export data before filter any condition.&quot;</span>);
+                            }
+                        }
+                        <span class="s0">else if </span>(filtercheckvalue==<span class="s4">4</span>){
+                            Utlity.show_toast(InspectionActivity.<span class="s0">this</span>,<span class="s3">&quot;You Don't Export data before filter any condition.&quot;</span>);
+                        }
+                        <span class="s0">else </span>{
+                            Utlity.show_toast(InspectionActivity.<span class="s0">this</span>,<span class="s3">&quot;You Don't Export data before filter any condition.&quot;</span>);
+                        }
+                    }
+
+                }
+                <span class="s0">else </span>{
+                    Utlity.show_toast(InspectionActivity.<span class="s0">this</span>,getResources().getString(R.string.nointernet));
+                }
+            }
+
+        }
+
+
+    }
+
+
+
+    <span class="s0">private void </span>inspectionsdatasentadmin() {
+        respoid1 = pref.getString(<span class="s3">&quot;respoid&quot;</span>,<span class="s0">null</span>);
+        Utlity.show_progress(InspectionActivity.<span class="s0">this</span>);
+        apiInterface = ApiClients.getClient1().create(RetApis.<span class="s0">class</span>);
+        retrofit2.Call&lt;ResponseBody&gt; call=apiInterface.Inspectionssend(respoid1,<span class="s3">&quot;Bearer &quot;</span>+ Utlity.get_user(InspectionActivity.<span class="s0">this</span>).getToken());
+        call.enqueue(<span class="s0">new </span>retrofit2.Callback&lt;ResponseBody&gt;() {
+            @Override
+            <span class="s0">public void </span>onResponse(retrofit2.Call&lt;ResponseBody&gt; call, retrofit2.Response&lt;ResponseBody&gt; response) {
+                <span class="s0">if </span>(response.isSuccessful()) {
+                    String apidata = <span class="s0">null</span>;
+                    <span class="s0">try </span>{
+                        Utlity.dismiss_dilog(InspectionActivity.<span class="s0">this</span>);
+                        apidata = response.body().string();
+                        Log.d(<span class="s3">&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;</span>,apidata);
+                        JSONObject object = <span class="s0">new </span>JSONObject(apidata);
+                        sentsModals = Utlity.gson.fromJson(object.getJSONArray(<span class="s3">&quot;success&quot;</span>).toString(), <span class="s0">new </span>TypeToken&lt;List&lt;SentsModals&gt;&gt;() {}.getType());
+                        <span class="s0">if</span>(sentsModals.size()!=<span class="s4">0</span>) {
+                            norecord.setVisibility(View.GONE);
+                            sentlist.setVisibility(View.VISIBLE);
+                            sentlist.setLayoutManager(<span class="s0">new </span>LinearLayoutManager(InspectionActivity.<span class="s0">this</span>, RecyclerView.VERTICAL, <span class="s0">false</span>));
+                            sentsAdapter = <span class="s0">new </span>SentsAdapter(InspectionActivity.<span class="s0">this</span>, sentsModals);
+                            sentlist.setAdapter(sentsAdapter);
+                            inspectionBinding.firstdateshow.setText(<span class="s3">&quot;&quot;</span>);
+                            inspectionBinding.seconddateshow.setText(<span class="s3">&quot;&quot;</span>);
+                            onefromdate=<span class="s0">null</span>;
+                           <span class="s2">// closefliterfromdate=null;</span>
+                            twofromdate=<span class="s0">null</span>;
+                            <span class="s2">//closeflitertodate=null;</span>
+                        }
+                        <span class="s0">else</span>
+                        {
+                            norecord.setVisibility(View.VISIBLE);
+                            sentlist.setVisibility(View.GONE);
+                        }
+
+
+                        <span class="s0">try </span>{
+                            Objects.requireNonNull(inspectionBinding.inspectiontab.getTabAt(<span class="s4">0</span>));
+
+                        }<span class="s0">catch </span>(NullPointerException e){
+                            e.printStackTrace();
+                        }
+
+                    } <span class="s0">catch </span>(IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+            @Override
+            <span class="s0">public void </span>onFailure(retrofit2.Call&lt;ResponseBody&gt; call, Throwable t) {
+                Utlity.dismiss_dilog(InspectionActivity.<span class="s0">this</span>);
+
+            }
+        });
+
+    }
+    <span class="s0">private void </span>inspectionsdatasentuser() {
+        Utlity.show_progress(InspectionActivity.<span class="s0">this</span>);
+        apiInterface = ApiClients.getClient1().create(RetApis.<span class="s0">class</span>);
+        retrofit2.Call&lt;ResponseBody&gt; call=apiInterface.Inspectionssend(respoiduser,<span class="s3">&quot;Bearer &quot;</span>+ Utlity.get_user(InspectionActivity.<span class="s0">this</span>).getToken());
+        call.enqueue(<span class="s0">new </span>retrofit2.Callback&lt;ResponseBody&gt;() {
+            @Override
+            <span class="s0">public void </span>onResponse(retrofit2.Call&lt;ResponseBody&gt; call, retrofit2.Response&lt;ResponseBody&gt; response) {
+                <span class="s0">if </span>(response.isSuccessful()) {
+                    String apidata = <span class="s0">null</span>;
+                    <span class="s0">try </span>{
+                        Utlity.dismiss_dilog(InspectionActivity.<span class="s0">this</span>);
+                        apidata = response.body().string();
+                        Log.d(<span class="s3">&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;</span>,apidata);
+                        JSONObject object = <span class="s0">new </span>JSONObject(apidata);
+                        sentsModals = Utlity.gson.fromJson(object.getJSONArray(<span class="s3">&quot;success&quot;</span>).toString(), <span class="s0">new </span>TypeToken&lt;List&lt;SentsModals&gt;&gt;() {}.getType());
+                        <span class="s0">if</span>(sentsModals.size()!=<span class="s4">0</span>) {
+                            norecord.setVisibility(View.GONE);
+                            sentlist.setVisibility(View.VISIBLE);
+                            sentlist.setLayoutManager(<span class="s0">new </span>LinearLayoutManager(InspectionActivity.<span class="s0">this</span>, RecyclerView.VERTICAL, <span class="s0">false</span>));
+                            sentsAdapter = <span class="s0">new </span>SentsAdapter(InspectionActivity.<span class="s0">this</span>, sentsModals);
+                            sentlist.setAdapter(sentsAdapter);
+                            inspectionBinding.firstdateshow.setText(<span class="s3">&quot;&quot;</span>);
+                            inspectionBinding.seconddateshow.setText(<span class="s3">&quot;&quot;</span>);
+                            onefromdate=<span class="s0">null</span>;
+                           <span class="s2">// closefliterfromdate=null;</span>
+                            twofromdate=<span class="s0">null</span>;
+                           <span class="s2">// closeflitertodate=null;</span>
+                        }
+                        <span class="s0">else</span>
+                        {
+                            norecord.setVisibility(View.VISIBLE);
+                            sentlist.setVisibility(View.GONE);
+                        }
+
+
+                        <span class="s0">try </span>{
+                            Objects.requireNonNull(inspectionBinding.inspectiontab.getTabAt(<span class="s4">0</span>));
+
+                        }<span class="s0">catch </span>(NullPointerException e){
+                            e.printStackTrace();
+                        }
+
+                    } <span class="s0">catch </span>(IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+            @Override
+            <span class="s0">public void </span>onFailure(retrofit2.Call&lt;ResponseBody&gt; call, Throwable t) {
+                Utlity.dismiss_dilog(InspectionActivity.<span class="s0">this</span>);
+
+            }
+        });
+
+    }
+
+    <span class="s0">private void </span>inspectionsdatarecivedadmin() {
+        respoid1 = pref.getString(<span class="s3">&quot;respoid&quot;</span>,<span class="s0">null</span>);
+        Utlity.show_progress(InspectionActivity.<span class="s0">this</span>);
+        apiInterface = ApiClients.getClient1().create(RetApis.<span class="s0">class</span>);
+        retrofit2.Call&lt;ResponseBody&gt; call=apiInterface.Inspectionsrecive(respoid1,<span class="s3">&quot;Bearer &quot;</span>+ Utlity.get_user(InspectionActivity.<span class="s0">this</span>).getToken());
+        call.enqueue(<span class="s0">new </span>retrofit2.Callback&lt;ResponseBody&gt;() {
+            @Override
+            <span class="s0">public void </span>onResponse(retrofit2.Call&lt;ResponseBody&gt; call, retrofit2.Response&lt;ResponseBody&gt; response) {
+                <span class="s0">if </span>(response.isSuccessful()) {
+                    String apidata = <span class="s0">null</span>;
+                    <span class="s0">try </span>{
+                        Utlity.dismiss_dilog(InspectionActivity.<span class="s0">this</span>);
+                        apidata = response.body().string();
+                        Log.d(<span class="s3">&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;</span>,apidata);
+                        JSONObject object = <span class="s0">new </span>JSONObject(apidata);
+                        sentsModals = Utlity.gson.fromJson(object.getJSONArray(<span class="s3">&quot;success&quot;</span>).toString(), <span class="s0">new </span>TypeToken&lt;List&lt;SentsModals&gt;&gt;() {}.getType());
+                        <span class="s0">if</span>(sentsModals.size()!=<span class="s4">0</span>) {
+                            norecord1.setVisibility(View.GONE);
+                            receivelist.setVisibility(View.VISIBLE);
+                            receivelist.setLayoutManager(<span class="s0">new </span>LinearLayoutManager(InspectionActivity.<span class="s0">this</span>, RecyclerView.VERTICAL, <span class="s0">false</span>));
+                            sentsAdapter = <span class="s0">new </span>SentsAdapter(InspectionActivity.<span class="s0">this</span>, sentsModals);
+                            receivelist.setAdapter(sentsAdapter);
+
+                            inspectionBinding.firstdateshow.setText(<span class="s3">&quot;&quot;</span>);
+                            inspectionBinding.seconddateshow.setText(<span class="s3">&quot;&quot;</span>);
+                            onefromdate=<span class="s0">null</span>;
+                            <span class="s2">//closefliterfromdate=null;</span>
+                            twofromdate=<span class="s0">null</span>;
+                           <span class="s2">// closeflitertodate=null;</span>
+
+                        }
+                        <span class="s0">else</span>
+                        {
+                            norecord1.setVisibility(View.VISIBLE);
+                            receivelist.setVisibility(View.GONE);
+                        }
+
+
+                        <span class="s0">try </span>{
+                            Objects.requireNonNull(inspectionBinding.inspectiontab.getTabAt(<span class="s4">0</span>));
+
+                        }<span class="s0">catch </span>(NullPointerException e){
+                            e.printStackTrace();
+                        }
+
+                    } <span class="s0">catch </span>(IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+            @Override
+            <span class="s0">public void </span>onFailure(retrofit2.Call&lt;ResponseBody&gt; call, Throwable t) {
+                Utlity.dismiss_dilog(InspectionActivity.<span class="s0">this</span>);
+
+            }
+        });
+
+    }
+    <span class="s0">private void </span>inspectionsdatareciveduser() {
+        Utlity.show_progress(InspectionActivity.<span class="s0">this</span>);
+        apiInterface = ApiClients.getClient1().create(RetApis.<span class="s0">class</span>);
+        retrofit2.Call&lt;ResponseBody&gt; call=apiInterface.Inspectionsrecive(respoiduser,<span class="s3">&quot;Bearer &quot;</span>+ Utlity.get_user(InspectionActivity.<span class="s0">this</span>).getToken());
+        call.enqueue(<span class="s0">new </span>retrofit2.Callback&lt;ResponseBody&gt;() {
+            @Override
+            <span class="s0">public void </span>onResponse(retrofit2.Call&lt;ResponseBody&gt; call, retrofit2.Response&lt;ResponseBody&gt; response) {
+                <span class="s0">if </span>(response.isSuccessful()) {
+                    String apidata = <span class="s0">null</span>;
+                    <span class="s0">try </span>{
+                        Utlity.dismiss_dilog(InspectionActivity.<span class="s0">this</span>);
+                        apidata = response.body().string();
+                        Log.d(<span class="s3">&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;</span>,apidata);
+                        JSONObject object = <span class="s0">new </span>JSONObject(apidata);
+                        sentsModals = Utlity.gson.fromJson(object.getJSONArray(<span class="s3">&quot;success&quot;</span>).toString(), <span class="s0">new </span>TypeToken&lt;List&lt;SentsModals&gt;&gt;() {}.getType());
+                        <span class="s0">if</span>(sentsModals.size()!=<span class="s4">0</span>) {
+                            norecord1.setVisibility(View.GONE);
+                            receivelist.setVisibility(View.VISIBLE);
+                            receivelist.setLayoutManager(<span class="s0">new </span>LinearLayoutManager(InspectionActivity.<span class="s0">this</span>, RecyclerView.VERTICAL, <span class="s0">false</span>));
+                            sentsAdapter = <span class="s0">new </span>SentsAdapter(InspectionActivity.<span class="s0">this</span>, sentsModals);
+                            receivelist.setAdapter(sentsAdapter);
+
+                            inspectionBinding.firstdateshow.setText(<span class="s3">&quot;&quot;</span>);
+                            inspectionBinding.seconddateshow.setText(<span class="s3">&quot;&quot;</span>);
+                            onefromdate=<span class="s0">null</span>;
+                           <span class="s2">// closefliterfromdate=null;</span>
+                            twofromdate=<span class="s0">null</span>;
+                           <span class="s2">// closeflitertodate=null;</span>
+
+                        }
+                        <span class="s0">else</span>
+                        {
+                            norecord1.setVisibility(View.VISIBLE);
+                            receivelist.setVisibility(View.GONE);
+                        }
+
+
+                        <span class="s0">try </span>{
+                            Objects.requireNonNull(inspectionBinding.inspectiontab.getTabAt(<span class="s4">0</span>));
+
+                        }<span class="s0">catch </span>(NullPointerException e){
+                            e.printStackTrace();
+                        }
+
+                    } <span class="s0">catch </span>(IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+            @Override
+            <span class="s0">public void </span>onFailure(retrofit2.Call&lt;ResponseBody&gt; call, Throwable t) {
+                Utlity.dismiss_dilog(InspectionActivity.<span class="s0">this</span>);
+
+            }
+        });
+
+    }
+
+    <span class="s0">public void </span>filteraleart(){
+        <span class="s0">final </span>Dialog dialog = <span class="s0">new </span>Dialog(InspectionActivity.<span class="s0">this</span>);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.filterdata);
+        dialog.setCanceledOnTouchOutside(<span class="s0">false</span>);
+        dialog.getWindow().setLayout(ViewPager.LayoutParams.MATCH_PARENT, ViewPager.LayoutParams.WRAP_CONTENT);
+        location=dialog.findViewById(R.id.locations);
+        status=dialog.findViewById(R.id.status);
+        department=dialog.findViewById(R.id.responsbility);
+        concern=dialog.findViewById(R.id.concernarea);
+        filtesave=dialog.findViewById(R.id.btnFilter);
+        cancle=dialog.findViewById(R.id.filtercancle);
+
+        todtebtn=dialog.findViewById(R.id.todtebtn);
+        fromdtebtn=dialog.findViewById(R.id.fromdtebtn);
+
+        firstdate=dialog.findViewById(R.id.firstdateshow);
+        seconddate=dialog.findViewById(R.id.seconddateshow);
+
+        fromdtebtn.setOnClickListener(<span class="s0">new </span>View.OnClickListener() {
+            @Override
+            <span class="s0">public void </span>onClick(View v) {
+                show_date_picker(InspectionActivity.<span class="s0">this</span>,firstdate);
+            }
+        });
+
+        todtebtn.setOnClickListener(<span class="s0">new </span>View.OnClickListener() {
+            @Override
+            <span class="s0">public void </span>onClick(View v) {
+                show_date_picker1(InspectionActivity.<span class="s0">this</span>,seconddate);
+            }
+        });
+
+        cancle.setOnClickListener(<span class="s0">new </span>View.OnClickListener() {
+            @Override
+            <span class="s0">public void </span>onClick(View v) {
+                dialog.dismiss();
+                valuesall=<span class="s4">0</span>;
+            }
+        });
+
+        filtesave.setOnClickListener(<span class="s0">new </span>View.OnClickListener() {
+            @Override
+            <span class="s0">public void </span>onClick(View v) {
+                <span class="s0">if </span>(inspectionBinding.inspectiontab.getTabAt(<span class="s4">0</span>).isSelected()){
+                    <span class="s0">if </span>(Utlity.is_online(InspectionActivity.<span class="s0">this</span>)){
+                        <span class="s0">if </span>(onefromdate!=<span class="s0">null </span>|| twofromdate!=<span class="s0">null </span>||  locatioid!=<span class="s0">null </span>|| responseid!=<span class="s0">null </span>|| converid!=<span class="s0">null </span>|| spinnervalue!=<span class="s0">null</span>){
+                            inspectionsearcsents(onefromdate,twofromdate,locatioid,responseid,converid,spinnervalue);
+                            filtercheckvalue=<span class="s4">1</span>;
+                        }
+                        <span class="s0">else</span>
+                        {
+                            inspectionsearcsents(onefromdate,twofromdate,locatioid,responseid,converid,spinnervalue);
+                            filtercheckvalue=<span class="s4">2</span>;
+                        }
+                    }
+                    <span class="s0">else </span>{
+                        Utlity.show_toast(InspectionActivity.<span class="s0">this</span>,getResources().getString(R.string.nointernet));
+                    }
+                    dialog.dismiss();
+                }
+                <span class="s0">else if </span>(inspectionBinding.inspectiontab.getTabAt(<span class="s4">1</span>).isSelected()){
+                    <span class="s0">if </span>(Utlity.is_online(InspectionActivity.<span class="s0">this</span>)){
+                        <span class="s0">if </span>(onefromdate!=<span class="s0">null </span>|| twofromdate!=<span class="s0">null </span>||  locatioid!=<span class="s0">null </span>|| responseid!=<span class="s0">null </span>|| converid!=<span class="s0">null </span>|| spinnervalue!=<span class="s0">null</span>) {
+                            inspectionsearchrecived(onefromdate,twofromdate,locatioid,responseid,converid,spinnervalue);
+                            filtercheckvalue=<span class="s4">3</span>;
+                        }<span class="s0">else </span>{
+                            inspectionsearchrecived(onefromdate,twofromdate,locatioid,responseid,converid,spinnervalue);
+                            filtercheckvalue=<span class="s4">4</span>;
+                        }
+                    }
+                    <span class="s0">else </span>{
+                        Utlity.show_toast(InspectionActivity.<span class="s0">this</span>,getResources().getString(R.string.nointernet));
+                    }
+                    dialog.dismiss();
+                }
+
+            }
+        });
+
+        department.setOnItemSelectedListener(<span class="s0">new </span>AdapterView.OnItemSelectedListener() {
+            @Override
+            <span class="s0">public void </span>onItemSelected(AdapterView&lt;?&gt; parent, View view, <span class="s0">int </span>position, <span class="s0">long </span>id) {
+                <span class="s0">if </span>(position!=<span class="s4">0</span>){
+                    responseid=respoModals.get(position-<span class="s4">1</span>).getId();
+                }
+                <span class="s0">else </span>{
+                    responseid=<span class="s0">null</span>;
+                }
+            }
+
+            @Override
+            <span class="s0">public void </span>onNothingSelected(AdapterView&lt;?&gt; parent) {
+
+            }
+
+        });
+        location.setOnItemSelectedListener(<span class="s0">new </span>AdapterView.OnItemSelectedListener() {
+            @Override
+            <span class="s0">public void </span>onItemSelected(AdapterView&lt;?&gt; parent, View view, <span class="s0">int </span>position, <span class="s0">long </span>id) {
+                <span class="s0">if </span>(position!=<span class="s4">0</span>){
+                    locatioid=locationModals.get(position).getId();
+                }
+                <span class="s0">else </span>{
+                    locatioid=<span class="s0">null</span>;
+                }
+
+            }
+
+            @Override
+            <span class="s0">public void </span>onNothingSelected(AdapterView&lt;?&gt; parent) {
+
+            }
+
+        });
+        concern.setOnItemSelectedListener(<span class="s0">new </span>AdapterView.OnItemSelectedListener() {
+            @Override
+            <span class="s0">public void </span>onItemSelected(AdapterView&lt;?&gt; parent, View view, <span class="s0">int </span>position, <span class="s0">long </span>id) {
+                <span class="s0">if </span>(position!=<span class="s4">0</span>){
+                    converid=concernModals.get(position-<span class="s4">1</span>).getId();
+                }<span class="s0">else </span>{converid=<span class="s0">null</span>;}
+            }
+
+            @Override
+            <span class="s0">public void </span>onNothingSelected(AdapterView&lt;?&gt; parent) {
+
+            }
+
+        });
+
+        List&lt;String&gt; categories = <span class="s0">new </span>ArrayList&lt;String&gt;();
+        categories.add(<span class="s3">&quot;All Status&quot;</span>);
+        categories.add(<span class="s3">&quot;Open&quot;</span>);
+        categories.add(<span class="s3">&quot;Close&quot;</span>);
+        categories.add(<span class="s3">&quot;Verify&quot;</span>);
+        categories.add(<span class="s3">&quot;In Process&quot;</span>);
+        categories.add(<span class="s3">&quot;Created Date&quot;</span>);
+        ArrayAdapter aa = <span class="s0">new </span>ArrayAdapter(<span class="s0">this</span>, R.layout.spinneritem, categories);
+        aa.setDropDownViewResource(R.layout.spinneritem);
+        status.setAdapter(aa);
+        status.setOnItemSelectedListener(<span class="s0">new </span>AdapterView.OnItemSelectedListener() {
+            @Override
+            <span class="s0">public void </span>onItemSelected(AdapterView&lt;?&gt; parent, View view, <span class="s0">int </span>position, <span class="s0">long </span>id) {
+
+               <span class="s2">// if (position!=0){</span>
+                    valuepos=categories.get(position);
+                    <span class="s2">//Utlity.show_toast(InspectionActivity.this,valuepos);</span>
+
+                    <span class="s0">if </span>(valuepos.equals(<span class="s3">&quot;Open&quot;</span>)){
+                        spinnervalue=<span class="s3">&quot;1&quot;</span>;
+                       <span class="s2">// Utlity.show_toast(InspectionActivity.this, spinnervalue);</span>
+                    }
+                    <span class="s0">else if</span>(valuepos.equals(<span class="s3">&quot;Close&quot;</span>)){
+                        spinnervalue=<span class="s3">&quot;2&quot;</span>;
+                       <span class="s2">// Utlity.show_toast(InspectionActivity.this, spinnervalue);</span>
+                    }
+
+                    <span class="s0">else if</span>(valuepos.equals(<span class="s3">&quot;Verify&quot;</span>)) {
+                        spinnervalue=<span class="s3">&quot;3&quot;</span>;
+                       <span class="s2">// Utlity.show_toast(InspectionActivity.this, spinnervalue);</span>
+
+                    }
+                    <span class="s0">else if</span>(valuepos.equals(<span class="s3">&quot;In Process&quot;</span>)) {
+                        spinnervalue=<span class="s3">&quot;4&quot;</span>;
+                        <span class="s2">// Utlity.show_toast(InspectionActivity.this, spinnervalue);</span>
+
+                    }
+                    <span class="s0">else if</span>(valuepos.equals(<span class="s3">&quot;Created Date&quot;</span>)) {
+                        spinnervalue=<span class="s3">&quot;5&quot;</span>;
+                        <span class="s2">// Utlity.show_toast(InspectionActivity.this, spinnervalue);</span>
+                    }
+                    <span class="s0">else if </span>(valuepos.equals(<span class="s3">&quot;All Status&quot;</span>)){
+                        spinnervalue=<span class="s0">null</span>;
+                    }
+                }
+          <span class="s2">//  }</span>
+
+            @Override
+            <span class="s0">public void </span>onNothingSelected(AdapterView&lt;?&gt; parent) {
+
+            }
+
+        });
+        dialog.show();
+
+        <span class="s0">if </span>(Utlity.is_online(<span class="s0">this</span>)){
+            respolist();
+            concernlist();
+            locationlist();
+        }
+        <span class="s0">else </span>{
+            Utlity.show_toast(InspectionActivity.<span class="s0">this</span>, getResources().getString(R.string.nointernet));
+        }
+    }
+
+    <span class="s0">private void </span>inspectionsearcsents(String firstdate,String secondate,String locatioid1,String respoid, String converid1, String status) {
+
+        Utlity.show_progress(InspectionActivity.<span class="s0">this</span>);
+        respoid1 = pref.getString(<span class="s3">&quot;respoid&quot;</span>,<span class="s0">null</span>);
+        apiInterface = ApiClients.getClient1().create(RetApis.<span class="s0">class</span>);
+        retrofit2.Call&lt;ResponseBody&gt; call=apiInterface.Inspectionsearchdatasen(respoid1,<span class="s3">&quot;Bearer &quot;</span>+ Utlity.get_user(InspectionActivity.<span class="s0">this</span>).getToken(),firstdate,secondate,locatioid1,respoid,converid1,status);
+        call.enqueue(<span class="s0">new </span>retrofit2.Callback&lt;ResponseBody&gt;() {
+            @Override
+            <span class="s0">public void </span>onResponse(retrofit2.Call&lt;ResponseBody&gt; call, retrofit2.Response&lt;ResponseBody&gt; response) {
+                <span class="s0">if </span>(response.isSuccessful()) {
+                    String apidata = <span class="s0">null</span>;
+                    <span class="s0">try </span>{
+                        Utlity.dismiss_dilog(InspectionActivity.<span class="s0">this</span>);
+                        apidata = response.body().string();
+                        Log.d(<span class="s3">&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;</span>,apidata);
+
+                        JSONObject object = <span class="s0">new </span>JSONObject(apidata);
+                        sentsModals1 = Utlity.gson.fromJson(object.getJSONArray(<span class="s3">&quot;success&quot;</span>).toString(), <span class="s0">new </span>TypeToken&lt;List&lt;SentsModals&gt;&gt;() {}.getType());
+                        <span class="s0">if</span>(sentsModals1.size()!=<span class="s4">0</span>) {
+                            norecord.setVisibility(View.GONE);
+                            sentlist.setLayoutManager(<span class="s0">new </span>LinearLayoutManager(InspectionActivity.<span class="s0">this</span>, RecyclerView.VERTICAL, <span class="s0">false</span>));
+                            sentsAdapter = <span class="s0">new </span>SentsAdapter(InspectionActivity.<span class="s0">this</span>, sentsModals1);
+                            sentlist.setAdapter(sentsAdapter);
+                            locatioid=<span class="s3">&quot;&quot;</span>;
+                            responseid=<span class="s3">&quot;&quot;</span>;
+                            converid=<span class="s3">&quot;&quot;</span>;
+                            valuepos=<span class="s0">null</span>;
+                            onefromdate=<span class="s0">null</span>;
+                           <span class="s2">// closefliterfromdate=null;</span>
+                            twofromdate=<span class="s0">null</span>;
+                           <span class="s2">// closeflitertodate=null;</span>
+                            spinnervalue=<span class="s3">&quot;&quot;</span>;
+                            <span class="s2">/*inspectionBinding.firstdateshow.setText(&quot;&quot;); 
+                            inspectionBinding.seconddateshow.setText(&quot;&quot;); 
+                             */</span>
+                            <span class="s2">/*onefromdate=null; 
+                            twofromdate=null;*/</span>
+
+                        }
+                        <span class="s0">else if </span>(sentsModals1.size()==<span class="s4">0</span>){
+                            norecord.setVisibility(View.VISIBLE);
+                            sentlist.setLayoutManager(<span class="s0">new </span>LinearLayoutManager(InspectionActivity.<span class="s0">this</span>, RecyclerView.VERTICAL, <span class="s0">false</span>));
+                            sentsAdapter = <span class="s0">new </span>SentsAdapter(InspectionActivity.<span class="s0">this</span>, sentsModals1);
+                            sentlist.setAdapter(sentsAdapter);
+                            locatioid=<span class="s3">&quot;&quot;</span>;
+                            responseid=<span class="s3">&quot;&quot;</span>;
+                            converid=<span class="s3">&quot;&quot;</span>;
+                            valuepos=<span class="s0">null</span>;
+                            onefromdate=<span class="s0">null</span>;
+                           <span class="s2">// closefliterfromdate=null;</span>
+                            twofromdate=<span class="s0">null</span>;
+                            <span class="s2">//closeflitertodate=null;</span>
+                            spinnervalue=<span class="s3">&quot;&quot;</span>;
+                           <span class="s2">/* inspectionBinding.firstdateshow.setText(&quot;&quot;); 
+                            inspectionBinding.seconddateshow.setText(&quot;&quot;); 
+ 
+                            */</span>
+                           <span class="s2">/* onefromdate=null; 
+                            twofromdate=null;*/</span>
+                        }
+                        <span class="s0">else</span>
+                        {
+                            norecord.setVisibility(View.VISIBLE);
+                        }
+
+
+                        <span class="s0">try </span>{
+                            Objects.requireNonNull(inspectionBinding.inspectiontab.getTabAt(<span class="s4">0</span>));
+
+                        }<span class="s0">catch </span>(NullPointerException e){
+                            e.printStackTrace();
+                        }
+
+                    } <span class="s0">catch </span>(IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+            @Override
+            <span class="s0">public void </span>onFailure(retrofit2.Call&lt;ResponseBody&gt; call, Throwable t) {
+                Utlity.dismiss_dilog(InspectionActivity.<span class="s0">this</span>);
+
+            }
+        });
+    }
+    <span class="s0">private void </span>inspectionsearchrecived(String firstdate,String secondate,String locatioid1,String responseid1, String converid1,String status) {
+        Utlity.show_progress(InspectionActivity.<span class="s0">this</span>);
+        respoid1 = pref.getString(<span class="s3">&quot;respoid&quot;</span>,<span class="s0">null</span>);
+        apiInterface = ApiClients.getClient1().create(RetApis.<span class="s0">class</span>);
+        retrofit2.Call&lt;ResponseBody&gt; call=apiInterface.Inspectionsearchdatarecive(respoid1,<span class="s3">&quot;Bearer &quot;</span>+ Utlity.get_user(InspectionActivity.<span class="s0">this</span>).getToken(),firstdate,secondate,locatioid1,responseid1,converid1,status);
+        call.enqueue(<span class="s0">new </span>retrofit2.Callback&lt;ResponseBody&gt;() {
+            @Override
+            <span class="s0">public void </span>onResponse(retrofit2.Call&lt;ResponseBody&gt; call, retrofit2.Response&lt;ResponseBody&gt; response) {
+                <span class="s0">if </span>(response.isSuccessful()) {
+                    String apidata = <span class="s0">null</span>;
+                    <span class="s0">try </span>{
+                        Utlity.dismiss_dilog(InspectionActivity.<span class="s0">this</span>);
+                        apidata = response.body().string();
+                        Log.d(<span class="s3">&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;</span>,apidata);
+                        JSONObject object = <span class="s0">new </span>JSONObject(apidata);
+                        sentsModals1 = Utlity.gson.fromJson(object.getJSONArray(<span class="s3">&quot;success&quot;</span>).toString(), <span class="s0">new </span>TypeToken&lt;List&lt;SentsModals&gt;&gt;() {}.getType());
+                        <span class="s0">if</span>(sentsModals1.size()!=<span class="s4">0</span>) {
+                            norecord1.setVisibility(View.GONE);
+                            receivelist.setLayoutManager(<span class="s0">new </span>LinearLayoutManager(InspectionActivity.<span class="s0">this</span>, RecyclerView.VERTICAL, <span class="s0">false</span>));
+                            sentsAdapter = <span class="s0">new </span>SentsAdapter(InspectionActivity.<span class="s0">this</span>, sentsModals1);
+                            receivelist.setAdapter(sentsAdapter);
+                            locatioid=<span class="s3">&quot;&quot;</span>;
+                            responseid=<span class="s3">&quot;&quot;</span>;
+                            converid=<span class="s3">&quot;&quot;</span>;
+                            valuepos=<span class="s0">null</span>;
+                            onefromdate=<span class="s0">null</span>;
+                           <span class="s2">// closefliterfromdate=null;</span>
+                            twofromdate=<span class="s0">null</span>;
+                            <span class="s2">//closeflitertodate=null;</span>
+                            spinnervalue=<span class="s3">&quot;&quot;</span>;
+                            <span class="s2">/*inspectionBinding.firstdateshow.setText(&quot;&quot;); 
+                            inspectionBinding.seconddateshow.setText(&quot;&quot;); 
+                             */</span>
+                            <span class="s2">/*onefromdate=null; 
+                            twofromdate=null; 
+*/</span>
+                        }
+                        <span class="s0">else if </span>(sentsModals1.size()==<span class="s4">0</span>){
+                            norecord1.setVisibility(View.VISIBLE);
+                            receivelist.setLayoutManager(<span class="s0">new </span>LinearLayoutManager(InspectionActivity.<span class="s0">this</span>, RecyclerView.VERTICAL, <span class="s0">false</span>));
+                            sentsAdapter = <span class="s0">new </span>SentsAdapter(InspectionActivity.<span class="s0">this</span>, sentsModals1);
+                            receivelist.setAdapter(sentsAdapter);
+                            locatioid=<span class="s3">&quot;&quot;</span>;
+                            responseid=<span class="s3">&quot;&quot;</span>;
+                            converid=<span class="s3">&quot;&quot;</span>;
+                            valuepos=<span class="s0">null</span>;
+                            onefromdate=<span class="s0">null</span>;
+                           <span class="s2">// closefliterfromdate=null;</span>
+                            twofromdate=<span class="s0">null</span>;
+                          <span class="s2">//  closeflitertodate=null;</span>
+                            spinnervalue=<span class="s3">&quot;&quot;</span>;
+                            <span class="s2">/*inspectionBinding.firstdateshow.setText(&quot;&quot;); 
+                            inspectionBinding.seconddateshow.setText(&quot;&quot;); 
+                            */</span>
+
+                         <span class="s2">/*   onefromdate=null; 
+                            twofromdate=null;*/</span>
+                        }
+                        <span class="s0">else</span>
+                        {
+                            norecord1.setVisibility(View.VISIBLE);
+                        }
+
+
+                        <span class="s0">try </span>{
+                            Objects.requireNonNull(inspectionBinding.inspectiontab.getTabAt(<span class="s4">1</span>));
+
+                        }<span class="s0">catch </span>(NullPointerException e){
+                            e.printStackTrace();
+                        }
+
+                    } <span class="s0">catch </span>(IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+            @Override
+            <span class="s0">public void </span>onFailure(retrofit2.Call&lt;ResponseBody&gt; call, Throwable t) {
+                Utlity.dismiss_dilog(InspectionActivity.<span class="s0">this</span>);
+
+            }
+        });
+
+    }
+
+    <span class="s0">private void </span>respolist() {
+        Utlity.show_progress(<span class="s0">this</span>);
+        respoid1 = pref.getString(<span class="s3">&quot;respoid&quot;</span>,<span class="s0">null</span>);
+        apiInterface = ApiClients.getClient1().create(RetApis.<span class="s0">class</span>);
+        retrofit2.Call&lt;ResponseBody&gt; call=apiInterface.Depatlist(respoid1,<span class="s3">&quot;Bearer &quot;</span>+ Utlity.get_user(<span class="s0">this</span>).getToken());
+        call.enqueue(<span class="s0">new </span>retrofit2.Callback&lt;ResponseBody&gt;() {
+            @Override
+            <span class="s0">public void </span>onResponse(retrofit2.Call&lt;ResponseBody&gt; call, retrofit2.Response&lt;ResponseBody&gt; response) {
+                <span class="s0">if </span>(response.isSuccessful()) {
+                    String apidata = <span class="s0">null</span>;
+                    <span class="s0">try </span>{
+                        Utlity.dismiss_dilog(InspectionActivity.<span class="s0">this</span>);
+                        apidata = response.body().string();
+                        Log.d(<span class="s3">&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;</span>,apidata);
+                        JSONObject object = <span class="s0">new </span>JSONObject(apidata);
+                        respoModals = Utlity.gson.fromJson(object.getJSONArray(<span class="s3">&quot;success&quot;</span>).toString(), <span class="s0">new </span>TypeToken&lt;List&lt;RespoModal&gt;&gt;() {}.getType());
+                        respolist=<span class="s0">new </span>ArrayList&lt;&gt;();
+                        respolist.add(<span class="s3">&quot;Select Responsibility&quot;</span>);
+
+                        <span class="s0">for </span>(RespoModal respoModal:respoModals){
+                            respolist.add(respoModal.getDept_name());
+                        }
+
+                        ArrayAdapter&lt;String&gt; adapter1 =
+                                <span class="s0">new </span>ArrayAdapter&lt;String&gt;(InspectionActivity.<span class="s0">this</span>,  R.layout.spinneritem, respolist);
+                        adapter1.setDropDownViewResource( R.layout.spinneritem);
+                        department.setAdapter(adapter1);
+
+
+                    } <span class="s0">catch </span>(IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+            @Override
+            <span class="s0">public void </span>onFailure(retrofit2.Call&lt;ResponseBody&gt; call, Throwable t) {
+                Utlity.dismiss_dilog(InspectionActivity.<span class="s0">this</span>);
+               <span class="s2">// Utlity.show_toast(InspectionActivity.this, &quot;Not found&quot;);</span>
+
+            }
+        });
+
+    }
+    <span class="s0">private void </span>locationlist() {
+        respoid1 = pref.getString(<span class="s3">&quot;respoid&quot;</span>,<span class="s0">null</span>);
+        apiInterface = ApiClients.getClient1().create(RetApis.<span class="s0">class</span>);
+        retrofit2.Call&lt;ResponseBody&gt; call=apiInterface.LocationList(respoid1,<span class="s3">&quot;Bearer &quot;</span>+ Utlity.get_user(<span class="s0">this</span>).getToken());
+        call.enqueue(<span class="s0">new </span>retrofit2.Callback&lt;ResponseBody&gt;() {
+            @Override
+            <span class="s0">public void </span>onResponse(retrofit2.Call&lt;ResponseBody&gt; call, retrofit2.Response&lt;ResponseBody&gt; response) {
+                <span class="s0">if </span>(response.isSuccessful()) {
+                    String apidata = <span class="s0">null</span>;
+                    <span class="s0">try </span>{
+                        apidata = response.body().string();
+                        Log.d(<span class="s3">&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;</span>,apidata);
+                        JSONObject object = <span class="s0">new </span>JSONObject(apidata);
+                        locationModals = Utlity.gson.fromJson(object.getJSONArray(<span class="s3">&quot;success&quot;</span>).toString(), <span class="s0">new </span>TypeToken&lt;List&lt;LocationModal&gt;&gt;() {}.getType());
+                        locationlist=<span class="s0">new </span>ArrayList&lt;&gt;();
+                        locationlist.add(<span class="s3">&quot;Select Locations&quot;</span>);
+                        <span class="s0">for </span>(LocationModal locationModal:locationModals){
+                            locationlist.add(locationModal.getLoc_name());
+                        }
+
+                        ArrayAdapter&lt;String&gt; adapter1 =
+                                <span class="s0">new </span>ArrayAdapter&lt;String&gt;(InspectionActivity.<span class="s0">this</span>,  R.layout.spinneritem, locationlist);
+                        adapter1.setDropDownViewResource( R.layout.spinneritem);
+                        location.setAdapter(adapter1);
+
+
+                    } <span class="s0">catch </span>(IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            <span class="s0">public void </span>onFailure(retrofit2.Call&lt;ResponseBody&gt; call, Throwable t) {
+              <span class="s2">//  Utlity.show_toast(InspectionActivity.this, &quot;Not found&quot;);</span>
+
+            }
+        });
+
+    }
+
+    <span class="s0">private void </span>concernlist() {
+        apiInterface = ApiClients.getClient1().create(RetApis.<span class="s0">class</span>);
+        retrofit2.Call&lt;ResponseBody&gt; call=apiInterface.ConcernList(<span class="s3">&quot;Bearer &quot;</span>+ Utlity.get_user(<span class="s0">this</span>).getToken());
+        call.enqueue(<span class="s0">new </span>retrofit2.Callback&lt;ResponseBody&gt;() {
+            @Override
+            <span class="s0">public void </span>onResponse(retrofit2.Call&lt;ResponseBody&gt; call, retrofit2.Response&lt;ResponseBody&gt; response) {
+                <span class="s0">if </span>(response.isSuccessful()) {
+                    String apidata = <span class="s0">null</span>;
+                    <span class="s0">try </span>{
+                        apidata = response.body().string();
+                        Log.d(<span class="s3">&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;</span>,apidata);
+                        JSONObject object = <span class="s0">new </span>JSONObject(apidata);
+                        concernModals = Utlity.gson.fromJson(object.getJSONArray(<span class="s3">&quot;success&quot;</span>).toString(), <span class="s0">new </span>TypeToken&lt;List&lt;ConcernModal&gt;&gt;() {}.getType());
+                        concernlist=<span class="s0">new </span>ArrayList&lt;&gt;();
+                        concernlist.add(<span class="s3">&quot;Select Concern area&quot;</span>);
+                        <span class="s0">for </span>(ConcernModal concernModal:concernModals){
+                            concernlist.add(concernModal.getArea_name());
+                        }
+
+
+                        ArrayAdapter&lt;String&gt; adapter1 =
+                                <span class="s0">new </span>ArrayAdapter&lt;String&gt;(InspectionActivity.<span class="s0">this</span>,  R.layout.spinneritem, concernlist);
+                        adapter1.setDropDownViewResource( R.layout.spinneritem);
+                        concern.setAdapter(adapter1);
+
+
+                    } <span class="s0">catch </span>(IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+            @Override
+            <span class="s0">public void </span>onFailure(retrofit2.Call&lt;ResponseBody&gt; call, Throwable t) {
+               <span class="s2">// Utlity.show_toast(InspectionActivity.this, &quot;Not found&quot;);</span>
+
+            }
+        });
+
+    }
+    @Override
+    <span class="s0">public void </span>onBackPressed() {
+        <span class="s0">super</span>.onBackPressed();
+        valuesall=<span class="s4">0</span>;
+    }
+
+    <span class="s0">public void </span>show_date_picker(Activity activity, <span class="s0">final </span>TextView tv) {
+        <span class="s0">final </span>Calendar calendar = Calendar.getInstance();
+        DatePickerDialog dialog = <span class="s0">new </span>DatePickerDialog(activity, <span class="s0">new </span>DatePickerDialog.OnDateSetListener() {
+            @Override
+            <span class="s0">public void </span>onDateSet(DatePicker arg0, <span class="s0">int </span>year, <span class="s0">int </span>month, <span class="s0">int </span>day_of_month) {
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, (month));
+                calendar.set(Calendar.DAY_OF_MONTH, day_of_month);
+                String myFormat = <span class="s3">&quot;yyyy-MM-dd&quot;</span>;
+                SimpleDateFormat sdf = <span class="s0">new </span>SimpleDateFormat(myFormat, Locale.getDefault());
+                tv.setText(sdf.format(calendar.getTime()));
+                onefromdate= String.valueOf(tv.getText());
+
+
+            }
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        calendar.add(Calendar.YEAR, <span class="s4">0</span>);
+        dialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());<span class="s2">// TODO: used to hide future date,month and year</span>
+        <span class="s2">//dialog.getDatePicker().setMinDate(calendar.getTimeInMillis());// TODO: used to hide past date,month and year</span>
+        dialog.show();
+    }
+    <span class="s0">public void </span>show_date_picker1(Activity activity, <span class="s0">final </span>TextView tv) {
+        <span class="s0">final </span>Calendar calendar = Calendar.getInstance();
+        DatePickerDialog dialog = <span class="s0">new </span>DatePickerDialog(activity, <span class="s0">new </span>DatePickerDialog.OnDateSetListener() {
+            @Override
+            <span class="s0">public void </span>onDateSet(DatePicker arg0, <span class="s0">int </span>year, <span class="s0">int </span>month, <span class="s0">int </span>day_of_month) {
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, (month));
+                calendar.set(Calendar.DAY_OF_MONTH, day_of_month);
+                String myFormat = <span class="s3">&quot;yyyy-MM-dd&quot;</span>;
+                SimpleDateFormat sdf = <span class="s0">new </span>SimpleDateFormat(myFormat, Locale.getDefault());
+                tv.setText(sdf.format(calendar.getTime()));
+                twofromdate= String.valueOf(tv.getText());
+
+            }
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        calendar.add(Calendar.YEAR, <span class="s4">0</span>);
+        dialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());<span class="s2">// TODO: used to hide future date,month and year</span>
+        <span class="s2">//dialog.getDatePicker().setMinDate(calendar.getTimeInMillis());// TODO: used to hide past date,month and year</span>
+        dialog.show();
+    }
+
+
+    <span class="s0">public void </span>ExcelWriter() {
+
+        String[] columns = {<span class="s3">&quot;Observation Date&quot;</span>, <span class="s3">&quot;Location&quot;</span>, <span class="s3">&quot;Responsibility&quot;</span>, <span class="s3">&quot;Concern Area&quot;</span>, <span class="s3">&quot;Created By&quot;</span>,<span class="s3">&quot;Before Comment&quot;</span>,<span class="s3">&quot;Before Image&quot;</span>,<span class="s3">&quot;After Comment&quot;</span>,<span class="s3">&quot;After Image&quot;</span>,<span class="s3">&quot;Close Date&quot;</span>,<span class="s3">&quot;Status&quot;</span>};
+
+        workbook = <span class="s0">new </span>XSSFWorkbook();
+        CreationHelper createHelper = workbook.getCreationHelper();
+        <span class="s2">// Create a Sheet</span>
+        sheet = workbook.createSheet(<span class="s3">&quot;Inspection&quot;</span>);
+        sheet.setAutobreaks(<span class="s0">false</span>);
+        sheet.setColumnBreak(<span class="s4">153</span>);
+        sheet.removeColumnBreak(<span class="s4">78</span>);
+        sheet.setColumnWidth(<span class="s4">0</span>, <span class="s4">3500</span>);
+        sheet.setColumnWidth(<span class="s4">1</span>, <span class="s4">3500</span>);
+        sheet.setColumnWidth(<span class="s4">2</span>, <span class="s4">3500</span>);
+        sheet.setColumnWidth(<span class="s4">3</span>, <span class="s4">3500</span>);
+        sheet.setColumnWidth(<span class="s4">4</span>, <span class="s4">3500</span>);
+        sheet.setColumnWidth(<span class="s4">5</span>, <span class="s4">3500</span>);
+        sheet.setColumnWidth(<span class="s4">6</span>, <span class="s4">3500</span>);
+        sheet.setColumnWidth(<span class="s4">7</span>, <span class="s4">3500</span>);
+        sheet.setColumnWidth(<span class="s4">8</span>, <span class="s4">3500</span>);
+        sheet.setColumnWidth(<span class="s4">9</span>, <span class="s4">3500</span>);
+        sheet.setColumnWidth(<span class="s4">10</span>, <span class="s4">3500</span>);
+
+        PrintSetup printSetup = sheet.getPrintSetup();
+        printSetup.setLandscape(<span class="s0">true</span>);
+        printSetup.setFitWidth((<span class="s0">short</span>)<span class="s4">2</span>);
+        printSetup.setFitHeight((<span class="s0">short</span>)<span class="s4">2</span>);
+        printSetup.setPaperSize(PrintSetup.A4_PAPERSIZE);
+
+        <span class="s2">// Create a Font for styling header cells</span>
+        Font headerFont = workbook.createFont();
+        <span class="s2">//headerFont.setBold(true);</span>
+        headerFont.setFontHeightInPoints((<span class="s0">short</span>) <span class="s4">10</span>);
+        headerFont.setColor(IndexedColors.BLACK.getIndex());
+
+        <span class="s2">// Create a CellStyle with the font</span>
+        CellStyle headerCellStyle = workbook.createCellStyle();
+        headerCellStyle.setFont(headerFont);
+        headerCellStyle.setWrapText(<span class="s0">true</span>);
+
+
+        <span class="s2">// Create a Row</span>
+        Row headerRow = sheet.createRow(<span class="s4">0</span>);
+        headerRow.setHeight((<span class="s0">short</span>) <span class="s4">500</span>);
+
+        <span class="s2">// Create cells</span>
+        <span class="s0">for </span>(<span class="s0">int </span>i = <span class="s4">0</span>; i &lt; columns.length; i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(columns[i]);
+            cell.setCellStyle(headerCellStyle);
+
+        }
+
+
+
+        <span class="s2">// Create Other rows and cells with employees data</span>
+        <span class="s0">int </span>rowNum = <span class="s4">1</span>;
+
+        CellStyle dateCellStyle = workbook.createCellStyle();
+        dateCellStyle.setDataFormat(createHelper.createDataFormat().getFormat(<span class="s3">&quot;dd-MM-yyyy&quot;</span>));
+        dateCellStyle.setAlignment(ALIGN_JUSTIFY);
+        dateCellStyle.setWrapText(<span class="s0">true</span>);
+
+        <span class="s0">for </span>(SentsModals sentsModals : sentsModals1) {
+            Row row = sheet.createRow(rowNum++);
+            row.setHeight((<span class="s0">short</span>) <span class="s4">1500</span>);
+
+            CellStyle roeCellStyle = workbook.createCellStyle();
+            roeCellStyle.setWrapText(<span class="s0">true</span>);
+            row.setRowStyle(roeCellStyle);
+
+
+
+
+            Cell dateCreatedCell = row.createCell(<span class="s4">0</span>);
+            dateCreatedCell.setCellValue(sentsModals.getCreated_at());
+            dateCreatedCell.setCellStyle(dateCellStyle);
+
+            CellStyle roLoc_name = workbook.createCellStyle();
+            roLoc_name.setWrapText(<span class="s0">true</span>);
+            Cell cellroLoc_name = row.createCell(<span class="s4">1</span>);
+            cellroLoc_name.setCellStyle(roLoc_name);
+            cellroLoc_name.setCellValue(sentsModals.getLoc_name());
+
+            CellStyle roDept_name = workbook.createCellStyle();
+            roDept_name.setWrapText(<span class="s0">true</span>);
+            Cell cellroDept_name = row.createCell(<span class="s4">2</span>);
+            cellroDept_name.setCellStyle(roDept_name);
+            cellroDept_name.setCellValue(sentsModals.getDept_name());
+
+            CellStyle roArea_name = workbook.createCellStyle();
+            roArea_name.setWrapText(<span class="s0">true</span>);
+            Cell cellroArea_name = row.createCell(<span class="s4">3</span>);
+            cellroArea_name.setCellStyle(roArea_name);
+            cellroArea_name.setCellValue(sentsModals.getArea_name());
+
+            row.createCell(<span class="s4">4</span>).setCellValue(sentsModals.getCreated_by_name());
+
+            CellStyle roecomment = workbook.createCellStyle();
+            roecomment.setWrapText(<span class="s0">true</span>);
+            Cell cell1 = row.createCell(<span class="s4">5</span>);
+            cell1.setCellStyle(roecomment);
+            cell1.setCellValue(sentsModals.getBefore_comment());
+
+            <span class="s0">if</span>(sentsModals.getBefore_img()!=<span class="s0">null</span>) {
+                InputStream befor_image = <span class="s0">null</span>;
+
+                <span class="s0">try </span>{
+                    befor_image = <span class="s0">new </span>URL(Apis.imageBase_Url + sentsModals.getBefore_img()).openStream();
+
+                } <span class="s0">catch </span>(IOException e) {
+                    e.printStackTrace();
+                }
+                <span class="s0">byte</span>[] bytes = <span class="s0">new byte</span>[<span class="s4">0</span>];
+                <span class="s0">try </span>{
+                    bytes =readAllBytes(befor_image);
+                    compress(bytes);
+
+                } <span class="s0">catch </span>(IOException e) {
+                    e.printStackTrace();
+                }
+                <span class="s0">int </span>my_picture_id = workbook.addPicture(bytes, Workbook.PICTURE_TYPE_JPEG);
+
+                <span class="s0">try </span>{
+                    befor_image.close();
+                } <span class="s0">catch </span>(IOException e) {
+                    e.printStackTrace();
+                }
+                XSSFDrawing drawing = (XSSFDrawing) sheet.createDrawingPatriarch();
+
+
+                XSSFClientAnchor my_anchor = <span class="s0">new </span>XSSFClientAnchor();
+
+                my_anchor.setDx1(<span class="s4">5 </span>* XSSFShape.EMU_PER_PIXEL);
+                my_anchor.setDy1(<span class="s4">5 </span>* XSSFShape.EMU_PER_PIXEL);
+
+                my_anchor.setCol1(<span class="s4">6</span>); <span class="s2">//Column B</span>
+                my_anchor.setRow1(rowNum - <span class="s4">1</span>); <span class="s2">//Row 3</span>
+                my_anchor.setCol2(<span class="s4">7</span>); <span class="s2">//Column C</span>
+                my_anchor.setRow2(rowNum); <span class="s2">//Row 4</span>
+
+                XSSFPicture my_picture = drawing.createPicture(my_anchor, my_picture_id);
+
+                my_picture.setLineStyle(<span class="s4">0</span>);
+                <span class="s2">// rgb color code for black line</span>
+                my_picture.setLineStyleColor(<span class="s4">1</span>, <span class="s4">1</span>, <span class="s4">1</span>);
+                <span class="s2">// double number for line width</span>
+                my_picture.setLineWidth(<span class="s4">1.5</span>);
+
+
+            }
+
+            CellStyle aftercomment = workbook.createCellStyle();
+            aftercomment.setWrapText(<span class="s0">true</span>);
+            Cell aftercell1 = row.createCell(<span class="s4">7</span>);
+            aftercell1.setCellStyle(aftercomment);
+            aftercell1.setCellValue(sentsModals.getAfter_comment());
+
+
+
+            <span class="s0">if</span>(sentsModals.getAfter_img()!=<span class="s0">null</span>) {
+                InputStream afterimg = <span class="s0">null</span>;
+                <span class="s0">try </span>{
+                    afterimg = <span class="s0">new </span>URL(Apis.imageBase_Url + sentsModals.getAfter_img()).openStream();
+                    <span class="s2">//;</span>
+                } <span class="s0">catch </span>(IOException e) {
+                    e.printStackTrace();
+                }
+                <span class="s0">byte</span>[] afterbytes = <span class="s0">new byte</span>[<span class="s4">0</span>];
+                <span class="s0">try </span>{
+                    afterbytes = readAllBytes(afterimg);
+                    compress(afterbytes);
+                } <span class="s0">catch </span>(IOException e) {
+                    e.printStackTrace();
+                }
+                <span class="s0">int </span>aftermy_picture_id = workbook.addPicture(afterbytes, Workbook.PICTURE_TYPE_JPEG);
+
+                <span class="s0">try </span>{
+                    afterimg.close();
+                } <span class="s0">catch </span>(IOException e) {
+                    e.printStackTrace();
+                }
+                XSSFDrawing afterdrawing = (XSSFDrawing) sheet.createDrawingPatriarch();
+
+
+                XSSFClientAnchor aftermy_anchor = <span class="s0">new </span>XSSFClientAnchor();
+
+                aftermy_anchor.setDx1(<span class="s4">5 </span>* XSSFShape.EMU_PER_PIXEL);
+                aftermy_anchor.setDy1(<span class="s4">5 </span>* XSSFShape.EMU_PER_PIXEL);
+
+
+
+                aftermy_anchor.setCol1(<span class="s4">8</span>); <span class="s2">//Column B</span>
+                aftermy_anchor.setRow1(rowNum - <span class="s4">1</span>); <span class="s2">//Row 3</span>
+                aftermy_anchor.setCol2(<span class="s4">9</span>); <span class="s2">//Column C</span>
+                aftermy_anchor.setRow2(rowNum); <span class="s2">//Row 4</span>
+
+                XSSFPicture aftermy_picture = afterdrawing.createPicture(aftermy_anchor, aftermy_picture_id);
+
+                aftermy_picture.setLineStyle(<span class="s4">0</span>);
+                <span class="s2">// rgb color code for black line</span>
+                aftermy_picture.setLineStyleColor(<span class="s4">1</span>, <span class="s4">1</span>, <span class="s4">1</span>);
+                <span class="s2">// double number for line width</span>
+                aftermy_picture.setLineWidth(<span class="s4">1.5</span>);
+            }
+
+            Cell datecloserCell = row.createCell(<span class="s4">9</span>);
+            datecloserCell.setCellValue(sentsModals.getClosed_at());
+            datecloserCell.setCellStyle(dateCellStyle);
+
+            row.createCell(<span class="s4">10</span>).setCellValue(sentsModals.getStatus());
+
+        }
+
+        File myDir = <span class="s0">new </span>File(Environment.getExternalStorageDirectory().getAbsolutePath()+<span class="s3">&quot;/SafeFood/&quot;</span>);
+        myDir.mkdir();
+       <span class="s2">/* if (!myDir.exists()) { 
+            myDir.mkdirs(); 
+        }*/</span>
+        String new_file= ((workbook <span class="s0">instanceof </span>HSSFWorkbook)?<span class="s3">&quot;inspection.xls&quot;</span>:<span class="s3">&quot;inspection.xlsx&quot;</span>);
+        File files = <span class="s0">new </span>File (myDir, new_file);
+        path= String.valueOf(files);
+        <span class="s0">try </span>{
+            fileOut = <span class="s0">new </span>FileOutputStream(files);
+        } <span class="s0">catch </span>(FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        <span class="s0">try </span>{
+            workbook.write(fileOut);
+        } <span class="s0">catch </span>(IOException e) {
+            e.printStackTrace();
+        }
+        <span class="s0">try </span>{
+
+            fileOut.close();
+        } <span class="s0">catch </span>(IOException e) {
+            e.printStackTrace();
+        }
+
+}
+
+
+    <span class="s0">public static byte</span>[] compress(<span class="s0">byte</span>[] bytes) <span class="s0">throws </span>IOException
+    {
+        InputStream is = <span class="s0">new </span>ByteArrayInputStream(bytes);
+        ByteArrayOutputStream bout = <span class="s0">new </span>ByteArrayOutputStream();
+        <span class="s0">try </span>(OutputStream os = <span class="s0">new </span>GZIPOutputStream(bout))
+        {
+            IOUtils.copy(is, os);
+        }
+
+        <span class="s0">return </span>bout.toByteArray();
+    }
+
+    <span class="s0">public static byte</span>[] readAllBytes(InputStream inputStream) <span class="s0">throws </span>IOException {
+        <span class="s0">final int </span>bufLen = <span class="s4">4 </span>* <span class="s4">0x400</span>; <span class="s2">// 4KB</span>
+        <span class="s0">byte</span>[] buf = <span class="s0">new byte</span>[bufLen];
+        <span class="s0">int </span>readLen;
+        IOException exception = <span class="s0">null</span>;
+
+        <span class="s0">try </span>{
+            <span class="s0">try </span>(ByteArrayOutputStream outputStream = <span class="s0">new </span>ByteArrayOutputStream()) {
+                <span class="s0">while </span>((readLen = inputStream.read(buf, <span class="s4">0</span>, bufLen)) != -<span class="s4">1</span>)
+                    outputStream.write(buf, <span class="s4">0</span>, readLen);
+
+                <span class="s0">return </span>outputStream.toByteArray();
+            }
+        } <span class="s0">catch </span>(IOException e) {
+            exception = e;
+            <span class="s0">throw </span>e;
+        } <span class="s0">finally </span>{
+            <span class="s0">if </span>(exception == <span class="s0">null</span>) inputStream.close();
+            <span class="s0">else try </span>{
+                inputStream.close();
+            } <span class="s0">catch </span>(IOException e) {
+                exception.addSuppressed(e);
+            }
+        }
+    }
+
+    <span class="s0">public class </span>ExportDatabaseCSVTask <span class="s0">extends </span>AsyncTask&lt;String ,String, String&gt; {
+
+        <span class="s0">private final </span>ProgressDialog dialog = <span class="s0">new </span>ProgressDialog(InspectionActivity.<span class="s0">this</span>);
+        @Override
+        <span class="s0">protected void </span>onPreExecute() {
+            <span class="s0">this</span>.dialog.setMessage(<span class="s3">&quot;Exporting...&quot;</span>);
+            <span class="s0">this</span>.dialog.show();
+            <span class="s0">this</span>.dialog.setCanceledOnTouchOutside(<span class="s0">true</span>);
+        }
+
+        @Override
+        <span class="s0">protected </span>String doInBackground(String... strings) {
+
+            ExcelWriter();
+
+            <span class="s0">return </span><span class="s3">&quot;&quot;</span>;
+        }
+
+        @SuppressLint(<span class="s3">&quot;NewApi&quot;</span>)
+        @Override
+        <span class="s0">protected void </span>onPostExecute(<span class="s0">final </span>String success) {
+
+            <span class="s0">if </span>(<span class="s0">this</span>.dialog.isShowing()){
+                <span class="s0">this</span>.dialog.dismiss();
+            }
+            <span class="s0">if </span>(success.isEmpty()){
+                Toast.makeText(InspectionActivity.<span class="s0">this</span>, <span class="s3">&quot;Export successful!&quot;</span>, Toast.LENGTH_SHORT).show();
+               <span class="s0">try </span>{
+                   share(path);
+               }<span class="s0">catch </span>(<span class="s0">final </span>IllegalArgumentException e){
+                   e.printStackTrace();
+               }
+
+
+            }
+            <span class="s0">else </span>{
+                Toast.makeText(InspectionActivity.<span class="s0">this</span>, <span class="s3">&quot;Export failed!&quot;</span>, Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    <span class="s0">private void </span>share(String sharePath){
+
+        Uri uri =  Uri.parse(sharePath);
+        Intent intent = <span class="s0">new </span>Intent(Intent.ACTION_SEND);
+
+        intent.setType(<span class="s3">&quot;text/html&quot;</span>);
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        startActivity(intent);
+
+
+    }
+
+}
+
+
+</pre>
+</body>
+</html>

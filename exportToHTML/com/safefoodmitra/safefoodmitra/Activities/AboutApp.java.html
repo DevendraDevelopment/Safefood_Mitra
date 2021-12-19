@@ -1,0 +1,159 @@
+<html>
+<head>
+<title>AboutApp.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #000080; font-weight: bold;}
+.s1 { color: #000000;}
+.s2 { color: #0000ff;}
+.s3 { color: #008000; font-weight: bold;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+AboutApp.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span>com.safefoodmitra.safefoodmitra.Activities;
+
+<span class="s0">import </span>androidx.appcompat.app.AppCompatActivity;
+<span class="s0">import </span>androidx.databinding.DataBindingUtil;
+<span class="s0">import </span>androidx.viewpager.widget.PagerAdapter;
+<span class="s0">import </span>androidx.viewpager.widget.ViewPager;
+
+<span class="s0">import </span>android.content.Context;
+<span class="s0">import </span>android.content.Intent;
+<span class="s0">import </span>android.os.Bundle;
+<span class="s0">import </span>android.text.Html;
+<span class="s0">import </span>android.view.LayoutInflater;
+<span class="s0">import </span>android.view.View;
+<span class="s0">import </span>android.view.ViewGroup;
+<span class="s0">import </span>android.widget.LinearLayout;
+<span class="s0">import </span>android.widget.TextView;
+
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.R;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.databinding.ActivityAboutAppBinding;
+
+<span class="s0">public class </span>AboutApp <span class="s0">extends </span>AppCompatActivity {
+    ActivityAboutAppBinding activityAboutAppBinding;
+    ViewPager viewPager;
+    <span class="s0">private </span>LinearLayout dotsLayout;
+    <span class="s0">private </span>TextView[] dots;
+    <span class="s0">private int</span>[] layouts;
+    <span class="s0">private </span>MyViewPagerAdapter myViewPagerAdapter;
+    @Override
+    <span class="s0">protected void </span>onCreate(Bundle savedInstanceState) {
+        <span class="s0">super</span>.onCreate(savedInstanceState);
+        activityAboutAppBinding= DataBindingUtil.setContentView(<span class="s0">this</span>,R.layout.activity_about_app);
+        viewPager=(ViewPager)findViewById(R.id.view_pager);
+        dotsLayout=(LinearLayout)findViewById(R.id.layoutDots);
+        layouts = <span class="s0">new int</span>[]{
+                R.layout.slider1,
+                R.layout.slider2,
+                R.layout.slider3,
+        };
+
+        addBottomDots(<span class="s2">0</span>);
+
+        myViewPagerAdapter = <span class="s0">new </span>MyViewPagerAdapter();
+        viewPager.setAdapter(myViewPagerAdapter);
+        viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
+
+        activityAboutAppBinding.getstart.setOnClickListener(<span class="s0">new </span>View.OnClickListener() {
+            @Override
+            <span class="s0">public void </span>onClick(View v) {
+                launchHomeScreen();
+            }
+        });
+    }
+    <span class="s0">private void </span>addBottomDots(<span class="s0">int </span>currentPage) {
+        dots = <span class="s0">new </span>TextView[layouts.length];
+
+        <span class="s0">int</span>[] colorsActive = getResources().getIntArray(R.array.array_dot_active);
+        <span class="s0">int</span>[] colorsInactive = getResources().getIntArray(R.array.array_dot_inactive);
+
+        dotsLayout.removeAllViews();
+        <span class="s0">for </span>(<span class="s0">int </span>i = <span class="s2">0</span>; i &lt; dots.length; i++) {
+            dots[i] = <span class="s0">new </span>TextView(<span class="s0">this</span>);
+            dots[i].setText(Html.fromHtml(<span class="s3">&quot;&amp;#8226;&quot;</span>));
+            dots[i].setTextSize(<span class="s2">40</span>);
+            dots[i].setPadding(<span class="s2">7</span>,<span class="s2">7</span>,<span class="s2">7</span>,<span class="s2">7</span>);
+            dots[i].setTextColor(colorsInactive[currentPage]);
+            dotsLayout.addView(dots[i]);
+        }
+
+        <span class="s0">if </span>(dots.length &gt; <span class="s2">0</span>)
+            dots[currentPage].setTextColor(colorsActive[currentPage]);
+    }
+
+
+    <span class="s0">private void </span>launchHomeScreen() {
+        startActivity(<span class="s0">new </span>Intent(AboutApp.<span class="s0">this</span>, LoginActivity.<span class="s0">class</span>));
+        finish();
+    }
+
+    ViewPager.OnPageChangeListener viewPagerPageChangeListener = <span class="s0">new </span>ViewPager.OnPageChangeListener() {
+
+        @Override
+        <span class="s0">public void </span>onPageSelected(<span class="s0">int </span>position) {
+            addBottomDots(position);
+
+            <span class="s0">if </span>(position == layouts.length - <span class="s2">1</span>) {
+                activityAboutAppBinding.getstart.setVisibility(View.VISIBLE);
+                dotsLayout.setVisibility(View.GONE);
+            } <span class="s0">else </span>{
+                activityAboutAppBinding.getstart.setVisibility(View.GONE);
+                dotsLayout.setVisibility(View.VISIBLE);
+            }
+        }
+
+        @Override
+        <span class="s0">public void </span>onPageScrolled(<span class="s0">int </span>arg0, <span class="s0">float </span>arg1, <span class="s0">int </span>arg2) {
+
+        }
+
+        @Override
+        <span class="s0">public void </span>onPageScrollStateChanged(<span class="s0">int </span>arg0) {
+
+        }
+    };
+
+
+
+    <span class="s0">public class </span>MyViewPagerAdapter <span class="s0">extends </span>PagerAdapter {
+        <span class="s0">private </span>LayoutInflater layoutInflater;
+
+        <span class="s0">public </span>MyViewPagerAdapter() {
+        }
+
+        @Override
+        <span class="s0">public </span>Object instantiateItem(ViewGroup container, <span class="s0">int </span>position) {
+            layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            View view = layoutInflater.inflate(layouts[position], container, <span class="s0">false</span>);
+            container.addView(view);
+
+            <span class="s0">return </span>view;
+        }
+
+        @Override
+        <span class="s0">public int </span>getCount() {
+            <span class="s0">return </span>layouts.length;
+        }
+
+        @Override
+        <span class="s0">public boolean </span>isViewFromObject(View view, Object obj) {
+            <span class="s0">return </span>view == obj;
+        }
+
+
+        @Override
+        <span class="s0">public void </span>destroyItem(ViewGroup container, <span class="s0">int </span>position, Object object) {
+            View view = (View) object;
+            container.removeView(view);
+        }
+    }
+}</pre>
+</body>
+</html>

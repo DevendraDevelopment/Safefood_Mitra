@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="1"
+    tools:context=".Activities.PdfActivity">
+
+    <LinearLayout
+        android:id="@+id/tv_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/purple_200"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/pad3"
+        android:paddingBottom="@dimen/pad3"
+        android:weightSum="1"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".10"
+            android:padding="@dimen/pad5"
+            android:src="@drawable/ic_home" />
+
+        <TextView
+            android:id="@+id/titles"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".90"
+            android:gravity="center"
+            android:padding="@dimen/pad5"
+            android:text=""
+            android:maxLines="2"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/login"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/framelayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@+id/tv_header"
+        android:layout_weight=".94">
+
+        <WebView
+            android:id="@+id/pdfView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".06"
+        android:background="@color/purple_200"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <ImageView
+            android:id="@+id/share"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".50"
+            android:padding="@dimen/pad5"
+            android:src="@drawable/ic_share" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/white" />
+
+        <ImageView
+            android:id="@+id/download"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".50"
+            android:padding="@dimen/pad5"
+            android:src="@drawable/ic_download" />
+
+    </LinearLayout>
+
+    <!-- <TextViewandroid:id="@+id/dwonload"android:layout_width="match_parent"android:layout_height="0dp"android:layout_weight=".06"android:text="@string/download"android:textColor="@color/white"android:textSize="@dimen/login"android:layout_below="@id/framelayout"android:padding="@dimen/pad3"android:layout_gravity="bottom"android:textAllCaps="true"android:textStyle="bold"android:layout_marginLeft="@dimen/pad3"android:layout_marginRight="@dimen/pad3"android:gravity="center_vertical|center"android:background="@drawable/btnback1"/>-->
+
+
+</LinearLayout>

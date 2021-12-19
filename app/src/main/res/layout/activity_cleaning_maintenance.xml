@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".Activities.CleaningMaintenanceActivity">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/purple_200"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/pad5"
+                    android:paddingBottom="@dimen/pad5"
+                    android:weightSum="1"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/back"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".10"
+                        android:padding="@dimen/pad5"
+                        android:src="@drawable/ic_home" />
+
+                    <TextView
+                        android:id="@+id/titles"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".70"
+                        android:gravity="center"
+                        android:padding="@dimen/pad5"
+                        android:text="@string/cleaningmaintenance"
+                        android:textAllCaps="true"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/login"
+                        android:textStyle="bold" />
+                    <ImageView
+                        android:id="@+id/filter"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".10"
+                        android:padding="@dimen/pad5"
+                        android:src="@drawable/ic_funnel" />
+                    <ImageView
+                        android:id="@+id/refreshimage"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".10"
+                        android:padding="@dimen/pad5"
+                        android:layout_gravity="left"
+                        android:src="@drawable/ic_refreshpageiconwhite"
+                        android:visibility="visible"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:id="@+id/linearcmf"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:gravity="center"
+                        android:padding="@dimen/pad5"
+                        android:weightSum="1"
+                        android:background="#e0e5e1"
+                        android:visibility="gone">
+                        <ImageView
+                            android:id="@+id/imgbackward"
+                            android:layout_width="0dp"
+                            android:layout_weight=".15"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_baseline_arrow_back_ios_24"/>
+                        <TextView
+                            android:id="@+id/displedate"
+                            android:layout_width="0dp"
+                            android:layout_weight=".70"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textAlignment="center"
+                            android:gravity="center"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/login"/>
+                        <ImageView
+                            android:id="@+id/imgforward"
+                            android:layout_width="0dp"
+                            android:layout_weight=".15"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_baseline_arrow_forward_ios_24"/>
+                    </LinearLayout>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/ceaninglist"
+                        />
+                    <TextView
+                        android:id="@+id/noreords"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="gone"
+                        android:text="@string/norecord"
+                        android:textAlignment="center"
+                        android:gravity="center"
+                        android:textColor="@color/colorDarkgreen"
+                        android:textSize="@dimen/login"
+                        />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addcleaning"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:backgroundTint="@color/purple_500"
+            android:layout_centerVertical="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="20dp"
+            app:backgroundTint="@color/purple_500"
+            app:borderWidth="0dp"
+            app:elevation="6dp"
+            android:src="@drawable/ic_plus1"/>
+    </RelativeLayout>
+</layout>

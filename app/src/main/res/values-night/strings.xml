@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mobilenumber">Enter your mobile number</string>
+    <string name="add">Add Your New Zone</string>
+    <string name="norecord">No Records found</string>
+    <string name="addinspe">Add Inspection</string>
+    <string name="commentbox">Comment Box</string>
+    <string name="send">Send</string>
+    <string name="label_brush">Brush</string>
+    <string name="inspedetail">Inspection Details</string>
+    <string name="closeinspection">Close Inspection</string>
+    <string name="adduser">Add User</string>
+    <string name="firstnme">Enter First name</string>
+    <string name="secondnme">Enter Last name</string>
+    <string name="joballocation">Job Allocation</string>
+    <string name="select">Select Values :</string>
+    <string name="RecordName">Recordname</string>
+    <string name="logingo">Go to login</string>
+    <string name="date">Date</string>
+    <string name="responsbility">Responsbility</string>>
+
+</resources>

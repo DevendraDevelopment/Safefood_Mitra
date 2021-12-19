@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/linearnotificaton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/pad5"
+            android:weightSum="1">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".10"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/notificationimageblack" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/pad5"
+                android:layout_weight=".90"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <TextView
+                        android:id="@+id/notificatontitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".78"
+                        android:gravity="start"
+                        android:paddingTop="@dimen/pad2"
+                        android:text=""
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/login" />
+
+                    <TextView
+                        android:id="@+id/notificationtime"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".22"
+                        android:gravity="right"
+                        android:paddingTop="@dimen/pad2"
+                        android:text=""
+                        android:textColor="@color/black1"
+                        android:textSize="@dimen/pad12" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/notificationmessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|start"
+                    android:paddingTop="@dimen/pad2"
+                    android:text=""
+                    android:textColor="@color/black1"
+                    android:textSize="@dimen/pad12" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height=".5dp"
+            android:layout_marginLeft="@dimen/pad3"
+            android:layout_marginRight="@dimen/pad3"
+            android:background="@color/black1" />
+    </LinearLayout>
+</layout>

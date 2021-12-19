@@ -1,0 +1,136 @@
+<html>
+<head>
+<title>FsmsdocumentActivity.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #000080; font-weight: bold;}
+.s1 { color: #000000;}
+.s2 { color: #008000; font-weight: bold;}
+.s3 { color: #808080; font-style: italic;}
+.s4 { color: #0000ff;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+FsmsdocumentActivity.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span>com.safefoodmitra.safefoodmitra.Activities;
+
+<span class="s0">import </span>androidx.appcompat.app.AlertDialog;
+<span class="s0">import </span>androidx.appcompat.app.AppCompatActivity;
+<span class="s0">import </span>androidx.databinding.DataBindingUtil;
+<span class="s0">import </span>androidx.recyclerview.widget.GridLayoutManager;
+<span class="s0">import </span>androidx.recyclerview.widget.LinearLayoutManager;
+<span class="s0">import </span>androidx.recyclerview.widget.RecyclerView;
+
+<span class="s0">import </span>android.content.DialogInterface;
+<span class="s0">import </span>android.content.Intent;
+<span class="s0">import </span>android.content.SharedPreferences;
+<span class="s0">import </span>android.os.Bundle;
+<span class="s0">import </span>android.util.Log;
+<span class="s0">import </span>android.view.View;
+
+<span class="s0">import </span>com.google.gson.reflect.TypeToken;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Adapter.FsmsDocumentsAdapter;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Adapter.RecordAdapter;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Apis.ApiClients;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Apis.RetApis;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Helper.Utlity;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.FsmsDocumentsModals;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.RecordModals;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.R;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.databinding.ActivityFsmsdocumentBinding;
+
+<span class="s0">import </span>org.json.JSONException;
+<span class="s0">import </span>org.json.JSONObject;
+
+<span class="s0">import </span>java.io.IOException;
+<span class="s0">import </span>java.util.ArrayList;
+<span class="s0">import </span>java.util.List;
+
+<span class="s0">import </span>okhttp3.ResponseBody;
+
+<span class="s0">public class </span>FsmsdocumentActivity <span class="s0">extends </span>AppCompatActivity <span class="s0">implements </span>View.OnClickListener {
+    ActivityFsmsdocumentBinding activityFsmsdocumentBinding;
+    <span class="s0">public </span>FsmsDocumentsAdapter fsmsDocumentsAdapter;
+    List&lt;FsmsDocumentsModals&gt; fsmsDocumentsModals;
+    RetApis apiInterface;
+    SharedPreferences pref;
+    String respoid1;
+    @Override
+    <span class="s0">protected void </span>onCreate(Bundle savedInstanceState) {
+        <span class="s0">super</span>.onCreate(savedInstanceState);
+        activityFsmsdocumentBinding = DataBindingUtil.setContentView(<span class="s0">this</span>,R.layout.activity_fsmsdocument);
+        pref = <span class="s0">this</span>.getSharedPreferences(<span class="s2">&quot;MyG9&quot;</span>, MODE_PRIVATE);
+        respoid1 = pref.getString(<span class="s2">&quot;respoid&quot;</span>,<span class="s0">null</span>);
+
+       <span class="s3">// fsmsDocumentsModals = new ArrayList&lt;&gt;();</span>
+        <span class="s0">if </span>(Utlity.is_online(<span class="s0">this</span>)){
+            recorddata();
+        }
+        <span class="s0">else </span>Utlity.show_toast(FsmsdocumentActivity.<span class="s0">this</span>,getResources().getString(R.string.nointernet));
+        click();
+    }
+    <span class="s0">private void </span>recorddata() {
+        Utlity.show_progress(<span class="s0">this</span>);
+        apiInterface = ApiClients.getClient1().create(RetApis.<span class="s0">class</span>);
+        retrofit2.Call&lt;ResponseBody&gt; call=apiInterface.FsmsCategories(<span class="s2">&quot;Bearer &quot;</span>+ Utlity.get_user(<span class="s0">this</span>).getToken());
+        call.enqueue(<span class="s0">new </span>retrofit2.Callback&lt;ResponseBody&gt;() {
+            @Override
+            <span class="s0">public void </span>onResponse(retrofit2.Call&lt;ResponseBody&gt; call, retrofit2.Response&lt;ResponseBody&gt; response) {
+                <span class="s0">if </span>(response.isSuccessful()) {
+                    String apidata = <span class="s0">null</span>;
+                    <span class="s0">try </span>{
+                        Utlity.dismiss_dilog(FsmsdocumentActivity.<span class="s0">this</span>);
+                        apidata = response.body().string();
+                        Log.d(<span class="s2">&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;</span>,apidata);
+                        JSONObject object = <span class="s0">new </span>JSONObject(apidata);
+                        fsmsDocumentsModals = Utlity.gson.fromJson(object.getJSONArray(<span class="s2">&quot;success&quot;</span>).toString(), <span class="s0">new </span>TypeToken&lt;List&lt;FsmsDocumentsModals&gt;&gt;() {}.getType());
+                        <span class="s0">if</span>(fsmsDocumentsModals.size()!=<span class="s4">0</span>) {
+                            activityFsmsdocumentBinding.dashlist.setHasFixedSize(<span class="s0">true</span>);
+                            activityFsmsdocumentBinding.dashlist.setLayoutManager(<span class="s0">new </span>GridLayoutManager(FsmsdocumentActivity.<span class="s0">this</span>,<span class="s4">3</span>));
+                            fsmsDocumentsAdapter = <span class="s0">new </span>FsmsDocumentsAdapter(FsmsdocumentActivity.<span class="s0">this</span>,fsmsDocumentsModals);
+                            activityFsmsdocumentBinding.dashlist.setAdapter(fsmsDocumentsAdapter);
+                        }
+                        <span class="s0">else</span>
+                        {
+                            activityFsmsdocumentBinding.noreords.setVisibility(View.VISIBLE);
+                        }
+
+                    } <span class="s0">catch </span>(IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+            @Override
+            <span class="s0">public void </span>onFailure(retrofit2.Call&lt;ResponseBody&gt; call, Throwable t) {
+                Utlity.dismiss_dilog(FsmsdocumentActivity.<span class="s0">this</span>);
+
+            }
+        });
+    }
+    <span class="s0">private void </span>click() {
+        activityFsmsdocumentBinding.back.setOnClickListener(<span class="s0">this</span>);
+    }
+
+    @Override
+    <span class="s0">public void </span>onClick(View v) {
+        <span class="s0">if </span>(v.getId()==R.id.back){
+            <span class="s0">if </span>(Utlity.get_user(<span class="s0">this</span>).getUserroles_id().equalsIgnoreCase(<span class="s2">&quot;2&quot;</span>)){
+                startActivity(<span class="s0">new </span>Intent(<span class="s0">this</span>,AdminMainActivity.<span class="s0">class</span>));
+                finishAffinity();
+            }
+            <span class="s0">else if </span>(Utlity.get_user(<span class="s0">this</span>).getUserroles_id().equalsIgnoreCase(<span class="s2">&quot;3&quot;</span>)){
+                startActivity(<span class="s0">new </span>Intent(<span class="s0">this</span>,UserMainActivity.<span class="s0">class</span>));
+                finishAffinity();
+            }
+        }
+    }
+
+}</pre>
+</body>
+</html>

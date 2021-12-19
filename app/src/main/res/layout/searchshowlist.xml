@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:weightSum="1">
+           <!-- <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.10"
+                android:id="@+id/tvslno"
+                android:textColor="@color/black"
+                android:textSize="@dimen/pad12"
+                android:gravity="left"
+                android:padding="@dimen/pad2"
+                android:text="fgfgd"
+                />
+            <View
+                android:layout_width="0.8dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorlightGray"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.38"
+                android:id="@+id/tvparameter"
+                android:textColor="@color/black"
+                android:textSize="@dimen/pad12"
+                android:gravity="left"
+                android:padding="@dimen/pad2"
+                />
+            <View
+                android:layout_width="0.8dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorlightGray"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.23"
+                android:id="@+id/tvpermissablelimits"
+                android:textColor="@color/black"
+                android:textSize="@dimen/pad12"
+                android:gravity="left"
+                android:padding="@dimen/pad2"
+                />
+            <View
+                android:layout_width="0.8dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorlightGray"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.29"
+                android:id="@+id/tvparametercategory"
+                android:textColor="@color/black"
+                android:textSize="@dimen/pad12"
+                android:gravity="left"
+                android:padding="@dimen/pad2"
+                />-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/pad5"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/login"
+                    android:id="@+id/parcate"
+                    android:textStyle="bold"
+
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight=".10"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:id="@+id/edidelet"
+                    >
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/pad5"
+                        android:id="@+id/test"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/dim1"
+                        android:text="+/-"
+                        />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight=".90"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_gravity="center">
+
+                    <TextView
+                        android:id="@+id/titles"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|start"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/dim1"
+                        android:padding="@dimen/pad5"
+                        android:text="WHO"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.8dp"
+            android:background="@color/colorlightGray"
+            android:layout_marginLeft="@dimen/pad40"/>
+    </LinearLayout>
+</layout>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".Activities.NotificationActivity">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/purple_200"
+                android:weightSum="1"
+                android:paddingTop="@dimen/pad5"
+                android:paddingBottom="@dimen/pad5">
+
+                <ImageView
+                    android:id="@+id/back"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".10"
+                    android:padding="@dimen/pad5"
+                    android:src="@drawable/ic_home" />
+
+                <TextView
+                    android:id="@+id/titles"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".80"
+                    android:gravity="center"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/login"
+                    android:textStyle="bold"
+                    android:text="@string/notification"
+                    android:padding="@dimen/pad5"
+                    />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".10"
+                    android:src="@drawable/ic_baseline_more_vert_24"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/pad3"
+                    android:background="@drawable/btnback1"
+                    android:id="@+id/threedots"
+                    android:visibility="gone"
+                    />
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/notificationlist"
+                    android:visibility="gone"
+                    />
+                 <LinearLayout
+                     android:id="@+id/notificationlinear"
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent"
+                     android:gravity="center"
+                     android:visibility="gone"
+                     android:orientation="vertical">
+                     <ImageView
+                         android:layout_width="200dp"
+                         android:layout_height="200dp"
+                         android:layout_gravity="center"
+                         android:src="@drawable/notificationimageblack"/>
+                     <TextView
+                         android:id="@+id/noreords"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:visibility="visible"
+                         android:text="No Notification found"
+                         android:textAlignment="center"
+                         android:gravity="center"
+                         android:textColor="@color/black"
+                         android:textSize="@dimen/login"
+                         />
+                 </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </LinearLayout>
+</layout>

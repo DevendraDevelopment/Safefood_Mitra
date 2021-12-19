@@ -1,0 +1,191 @@
+<html>
+<head>
+<title>PdfActivity.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #000080; font-weight: bold;}
+.s1 { color: #000000;}
+.s2 { color: #808080; font-style: italic;}
+.s3 { color: #0000ff;}
+.s4 { color: #008000; font-weight: bold;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+PdfActivity.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span>com.safefoodmitra.safefoodmitra.Activities;
+
+<span class="s0">import </span>androidx.appcompat.app.AppCompatActivity;
+<span class="s0">import </span>androidx.core.app.ActivityCompat;
+
+<span class="s0">import </span>android.Manifest;
+<span class="s0">import </span>android.app.AlertDialog;
+<span class="s0">import </span>android.app.DownloadManager;
+<span class="s0">import </span>android.app.ProgressDialog;
+<span class="s0">import </span>android.content.BroadcastReceiver;
+<span class="s0">import </span>android.content.Context;
+<span class="s0">import </span>android.content.DialogInterface;
+<span class="s0">import </span>android.content.Intent;
+<span class="s0">import </span>android.content.IntentFilter;
+<span class="s0">import </span>android.content.pm.PackageManager;
+<span class="s0">import </span>android.graphics.Bitmap;
+<span class="s0">import </span>android.net.Uri;
+<span class="s0">import </span>android.net.http.SslError;
+<span class="s0">import </span>android.os.Build;
+<span class="s0">import </span>android.os.Bundle;
+<span class="s0">import </span>android.os.Environment;
+<span class="s0">import </span>android.view.View;
+<span class="s0">import </span>android.webkit.CookieManager;
+<span class="s0">import </span>android.webkit.DownloadListener;
+<span class="s0">import </span>android.webkit.SslErrorHandler;
+<span class="s0">import </span>android.webkit.URLUtil;
+<span class="s0">import </span>android.webkit.WebResourceError;
+<span class="s0">import </span>android.webkit.WebResourceRequest;
+<span class="s0">import </span>android.webkit.WebResourceResponse;
+<span class="s0">import </span>android.webkit.WebSettings;
+<span class="s0">import </span>android.webkit.WebView;
+<span class="s0">import </span>android.webkit.WebViewClient;
+<span class="s0">import </span>android.widget.ImageView;
+<span class="s0">import </span>android.widget.ProgressBar;
+<span class="s0">import </span>android.widget.TextView;
+<span class="s0">import </span>android.widget.Toast;
+
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Helper.Utlity;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.SubFoodDocspdfModel;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.R;
+
+<span class="s0">import </span>java.io.File;
+
+<span class="s0">import </span>okhttp3.Request;
+
+
+<span class="s0">public class </span>PdfActivity <span class="s0">extends </span>AppCompatActivity <span class="s0">implements </span>View.OnClickListener {
+    WebView pdfView;
+    String pdfFileName,baseurl,toturl;
+    <span class="s2">//DocumentspdfModel documentspdfModel;</span>
+    SubFoodDocspdfModel subFoodDocspdfModel;
+    ProgressBar progressBar;
+    TextView tvHeader;
+    ImageView back,share,download;
+    ProgressDialog progressBar1;
+    <span class="s0">private static final int </span>MY_PERMISSION_REQUEST_CODE = <span class="s3">123</span>;
+    @Override
+    <span class="s0">protected void </span>onCreate(Bundle savedInstanceState) {
+        <span class="s0">super</span>.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_pdf);
+        progressBar1 = <span class="s0">new </span>ProgressDialog(<span class="s0">this</span>);
+        progressBar1.setCancelable(<span class="s0">true</span>);
+        progressBar1.setMessage(getResources().getString(R.string.loading));
+
+        <span class="s2">//checkPermission();</span>
+        pdfView= (WebView)findViewById(R.id.pdfView);
+        tvHeader=(TextView)findViewById(R.id.titles);
+        progressBar= (ProgressBar) findViewById(R.id.progress);
+        download = findViewById(R.id.download);
+        share = findViewById(R.id.share);
+        back=findViewById(R.id.back);
+        <span class="s0">if </span>(getIntent()!=<span class="s0">null</span>){
+            progressBar1.show();
+            subFoodDocspdfModel= Utlity.gson.fromJson(getIntent().getStringExtra(<span class="s4">&quot;detail&quot;</span>), SubFoodDocspdfModel.<span class="s0">class</span>);
+            tvHeader.setText(subFoodDocspdfModel.getDoc_title());
+            pdfFileName=subFoodDocspdfModel.getDoc_path();
+            baseurl=subFoodDocspdfModel.getBaseurl();
+            toturl=baseurl+<span class="s4">&quot;/&quot;</span>+pdfFileName;
+            pdfView.setWebViewClient(<span class="s0">new </span>MyWebViewClient());
+            pdfView.getSettings().setBuiltInZoomControls(<span class="s0">true</span>);
+            pdfView.getSettings().setJavaScriptEnabled(<span class="s0">true</span>);
+            pdfView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+            pdfView.loadUrl(<span class="s4">&quot;http://drive.google.com/viewerng/viewer?embedded=true&amp;url=&quot;</span>+toturl);
+            download.setOnClickListener(<span class="s0">new </span>View.OnClickListener() {
+                @Override
+                <span class="s0">public void </span>onClick(View v) {
+                    startActivity(<span class="s0">new </span>Intent(Intent.ACTION_VIEW,Uri.parse(toturl)));
+                    Utlity.show_toast(PdfActivity.<span class="s0">this</span>,<span class="s4">&quot;download&quot;</span>);
+
+                }
+            });
+            share.setOnClickListener(<span class="s0">new </span>View.OnClickListener() {
+                @Override
+                <span class="s0">public void </span>onClick(View v) {
+                    Intent myintent=<span class="s0">new </span>Intent(Intent.ACTION_SEND);
+                    myintent.setType(<span class="s4">&quot;text/plain&quot;</span>);
+                    String shareBody=toturl;
+                    String shareSub=<span class="s4">&quot;Your Subject here&quot;</span>;
+                    myintent.putExtra(Intent.EXTRA_SUBJECT,shareBody);
+                    myintent.putExtra(Intent.EXTRA_TEXT,shareBody);
+                    startActivity(Intent.createChooser(myintent,<span class="s4">&quot;Share using&quot;</span>));
+                }
+            });
+
+        }
+        click();
+    }
+
+    <span class="s0">private void </span>click() {
+        back.setOnClickListener(<span class="s0">this</span>);
+    }
+
+    @Override
+    <span class="s0">public void </span>onClick(View v) {
+        <span class="s0">if </span>(v.getId()==R.id.back){
+            <span class="s0">if </span>(Utlity.get_user(<span class="s0">this</span>).getUserroles_id().equalsIgnoreCase(<span class="s4">&quot;2&quot;</span>)){
+                startActivity(<span class="s0">new </span>Intent(<span class="s0">this</span>,AdminMainActivity.<span class="s0">class</span>));
+                finishAffinity();
+            }
+            <span class="s0">else if </span>(Utlity.get_user(<span class="s0">this</span>).getUserroles_id().equalsIgnoreCase(<span class="s4">&quot;3&quot;</span>)){
+                startActivity(<span class="s0">new </span>Intent(<span class="s0">this</span>,UserMainActivity.<span class="s0">class</span>));
+                finishAffinity();
+            }
+        }
+    }
+
+
+    <span class="s0">private class </span>MyWebViewClient <span class="s0">extends </span>WebViewClient {
+        <span class="s0">boolean </span>loadingFinished = <span class="s0">true</span>;
+        <span class="s0">boolean </span>redirect = <span class="s0">false</span>;
+        @Override
+        <span class="s0">public boolean </span>shouldOverrideUrlLoading(WebView view, String url) {
+            <span class="s2">// TODO Auto-generated method stub</span>
+            progressBar.setVisibility(View.VISIBLE);
+            <span class="s2">//progressBar1.show();</span>
+            <span class="s0">if </span>(!loadingFinished) {
+                redirect = <span class="s0">true</span>;
+            }
+
+            loadingFinished = <span class="s0">false</span>;
+            view.loadUrl(url);
+            <span class="s0">return true</span>;
+
+        }
+
+        <span class="s0">public void </span>onPageStarted(WebView webView, String str, Bitmap bitmap) {
+            <span class="s0">super</span>.onPageStarted(webView, str, bitmap);
+            <span class="s2">//progressBar1.show();</span>
+            loadingFinished = <span class="s0">false</span>;
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        <span class="s0">public void </span>onPageFinished(WebView webView, String str) {
+            <span class="s0">super</span>.onPageFinished(webView, str);
+
+            <span class="s0">if</span>(!redirect){
+                loadingFinished = <span class="s0">true</span>;
+            }
+            <span class="s2">//call remove_splash in 500 miSec</span>
+            <span class="s0">if</span>(loadingFinished &amp;&amp; !redirect){
+                progressBar1.cancel();
+            } <span class="s0">else</span>{
+                redirect = <span class="s0">false</span>;
+            }
+
+            progressBar.setVisibility(View.GONE);
+        }
+
+    }
+
+}</pre>
+</body>
+</html>

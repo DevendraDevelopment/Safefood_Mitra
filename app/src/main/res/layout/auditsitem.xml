@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/marz5"
+        android:elevation="@dimen/pad4">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/editback2"
+            android:paddingLeft="@dimen/pad5"
+            android:paddingRight="@dimen/pad5"
+            android:paddingTop="@dimen/pad2"
+            android:paddingBottom="@dimen/pad2"
+            android:fadingEdgeLength="@dimen/pad4"
+            android:elevation="@dimen/pad2"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/detailayout">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1"
+                    android:paddingLeft="@dimen/pad5"
+                    android:paddingRight="@dimen/pad5"
+                    android:paddingTop="@dimen/pad3"
+                    android:paddingBottom="@dimen/pad3"
+                    android:gravity="center|left"
+                    >
+                   <LinearLayout
+                       android:layout_width="0dp"
+                       android:layout_height="wrap_content"
+                       android:layout_weight=".33"
+                       android:orientation="vertical">
+                       <TextView
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:text="Internal Audit"
+                           android:textColor="@color/black"
+                           android:textSize="@dimen/pad12"
+                           android:gravity="center|left"
+                           android:elevation="@dimen/pad3"
+                           android:textAllCaps="true"
+
+                           />
+                       <TextView
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:text=""
+                           android:textColor="@color/black1"
+                           android:textSize="@dimen/pad12"
+                           android:gravity="center|left"
+                           android:elevation="@dimen/pad3"
+                           android:textAllCaps="true"
+
+                           />
+                   </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".33"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Unit Name"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/pad12"
+                            android:gravity="center|left"
+                            android:elevation="@dimen/pad3"
+                            android:textAllCaps="true"
+
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@color/black1"
+                            android:textSize="@dimen/pad12"
+                            android:gravity="center|left"
+                            android:elevation="@dimen/pad3"
+                            android:textAllCaps="true"
+
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".33"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Department Name"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/pad12"
+                            android:gravity="center|left"
+                            android:elevation="@dimen/pad3"
+                            android:textAllCaps="true"
+
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@color/black1"
+                            android:textSize="@dimen/pad12"
+                            android:gravity="center|left"
+                            android:elevation="@dimen/pad3"
+                            android:textAllCaps="true"
+
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1"
+                    android:paddingLeft="@dimen/pad5"
+                    android:paddingRight="@dimen/pad5"
+                    android:paddingTop="@dimen/pad3"
+                    android:paddingBottom="@dimen/pad3"
+                    android:gravity="center|left"
+                    >
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".40"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Audit Checklist Name"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/pad12"
+                            android:gravity="center|left"
+                            android:elevation="@dimen/pad3"
+                            android:textAllCaps="true"
+
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@color/black1"
+                            android:textSize="@dimen/pad12"
+                            android:gravity="center|left"
+                            android:elevation="@dimen/pad3"
+                            android:textAllCaps="true"
+
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".30"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Audit Name"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/pad12"
+                            android:gravity="center|left"
+                            android:elevation="@dimen/pad3"
+                            android:textAllCaps="true"
+
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@color/black1"
+                            android:textSize="@dimen/pad12"
+                            android:gravity="center|left"
+                            android:elevation="@dimen/pad3"
+                            android:textAllCaps="true"
+
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".30"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Audit Date"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/pad12"
+                            android:gravity="center|left"
+                            android:elevation="@dimen/pad3"
+                            android:textAllCaps="true"
+
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@color/black1"
+                            android:textSize="@dimen/pad12"
+                            android:gravity="center|left"
+                            android:elevation="@dimen/pad3"
+                            android:textAllCaps="true"
+
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1"
+                    android:paddingLeft="@dimen/pad5"
+                    android:paddingRight="@dimen/pad5"
+                    android:paddingTop="@dimen/pad3"
+                    android:paddingBottom="@dimen/pad3"
+                    android:gravity="center|left"
+                    >
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".33"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Score"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/pad12"
+                            android:gravity="center|left"
+                            android:elevation="@dimen/pad3"
+                            android:textAllCaps="true"
+
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@color/black1"
+                            android:textSize="@dimen/pad12"
+                            android:gravity="center|left"
+                            android:elevation="@dimen/pad3"
+                            android:textAllCaps="true"
+
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".33"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="NC/Compliance"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/pad12"
+                            android:gravity="center|left"
+                            android:elevation="@dimen/pad3"
+                            android:textAllCaps="true"
+
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@color/black1"
+                            android:textSize="@dimen/pad12"
+                            android:gravity="center|left"
+                            android:elevation="@dimen/pad3"
+                            android:textAllCaps="true"
+
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".33"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="View/Colse"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/pad12"
+                            android:gravity="center|left"
+                            android:elevation="@dimen/pad3"
+                            android:textAllCaps="true"
+
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@color/black1"
+                            android:textSize="@dimen/pad12"
+                            android:gravity="center|left"
+                            android:elevation="@dimen/pad3"
+                            android:textAllCaps="true"
+
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+
+
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+</LinearLayout>
+</layout>

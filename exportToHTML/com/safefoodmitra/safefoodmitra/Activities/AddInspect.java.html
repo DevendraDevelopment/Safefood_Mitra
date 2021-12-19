@@ -1,0 +1,737 @@
+<html>
+<head>
+<title>AddInspect.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #000080; font-weight: bold;}
+.s1 { color: #000000;}
+.s2 { color: #0000ff;}
+.s3 { color: #808080; font-style: italic;}
+.s4 { color: #008000; font-weight: bold;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+AddInspect.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span>com.safefoodmitra.safefoodmitra.Activities;
+
+<span class="s0">import </span>androidx.annotation.RequiresApi;
+<span class="s0">import </span>androidx.appcompat.app.AppCompatActivity;
+<span class="s0">import </span>androidx.core.app.ActivityCompat;
+<span class="s0">import </span>androidx.core.content.FileProvider;
+<span class="s0">import </span>androidx.databinding.DataBindingUtil;
+
+<span class="s0">import </span>android.Manifest;
+<span class="s0">import </span>android.app.Activity;
+<span class="s0">import </span>android.app.AlertDialog;
+<span class="s0">import </span>android.content.ActivityNotFoundException;
+<span class="s0">import </span>android.content.Context;
+<span class="s0">import </span>android.content.DialogInterface;
+<span class="s0">import </span>android.content.Intent;
+<span class="s0">import </span>android.content.SharedPreferences;
+<span class="s0">import </span>android.content.pm.PackageManager;
+<span class="s0">import </span>android.database.Cursor;
+<span class="s0">import </span>android.graphics.Bitmap;
+<span class="s0">import </span>android.graphics.BitmapFactory;
+<span class="s0">import </span>android.net.Uri;
+<span class="s0">import </span>android.os.Build;
+<span class="s0">import </span>android.os.Bundle;
+<span class="s0">import </span>android.os.Environment;
+<span class="s0">import </span>android.os.StrictMode;
+<span class="s0">import </span>android.provider.MediaStore;
+<span class="s0">import </span>android.transition.Explode;
+<span class="s0">import </span>android.util.Base64;
+<span class="s0">import </span>android.util.Log;
+<span class="s0">import </span>android.view.View;
+<span class="s0">import </span>android.view.Window;
+<span class="s0">import </span>android.widget.AdapterView;
+<span class="s0">import </span>android.widget.ArrayAdapter;
+<span class="s0">import </span>android.widget.Filter;
+<span class="s0">import </span>android.widget.Filterable;
+<span class="s0">import </span>android.widget.Spinner;
+<span class="s0">import </span>android.widget.Toast;
+
+<span class="s0">import </span>com.google.gson.Gson;
+<span class="s0">import </span>com.google.gson.reflect.TypeToken;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Apis.ApiClients;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Apis.Apis;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Apis.RetApis;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.CameraAll.EditImageActivity;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Helper.Utlity;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.ConcernModal;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.LocationModal;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.RespoModal;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.Validation_custome;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.Modals.ZoneModals;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.R;
+<span class="s0">import </span>com.safefoodmitra.safefoodmitra.databinding.ActivityAddInspectBinding;
+
+<span class="s0">import </span>org.json.JSONException;
+<span class="s0">import </span>org.json.JSONObject;
+
+<span class="s0">import </span>java.io.BufferedInputStream;
+<span class="s0">import </span>java.io.ByteArrayInputStream;
+<span class="s0">import </span>java.io.ByteArrayOutputStream;
+<span class="s0">import </span>java.io.File;
+<span class="s0">import </span>java.io.FileNotFoundException;
+<span class="s0">import </span>java.io.FileOutputStream;
+<span class="s0">import </span>java.io.IOException;
+<span class="s0">import </span>java.io.InputStream;
+<span class="s0">import </span>java.net.URL;
+<span class="s0">import </span>java.net.URLConnection;
+<span class="s0">import </span>java.text.SimpleDateFormat;
+<span class="s0">import </span>java.util.ArrayList;
+<span class="s0">import </span>java.util.Date;
+<span class="s0">import </span>java.util.List;
+<span class="s0">import </span>java.util.concurrent.TimeUnit;
+
+<span class="s0">import </span>okhttp3.MediaType;
+<span class="s0">import </span>okhttp3.MultipartBody;
+<span class="s0">import </span>okhttp3.OkHttpClient;
+<span class="s0">import </span>okhttp3.Request;
+<span class="s0">import </span>okhttp3.RequestBody;
+<span class="s0">import </span>okhttp3.ResponseBody;
+
+<span class="s0">import static </span>com.safefoodmitra.safefoodmitra.Activities.AdminMainActivity.respoid;
+<span class="s0">import static </span>java.security.AccessController.getContext;
+
+<span class="s0">public class </span>AddInspect <span class="s0">extends </span>AppCompatActivity <span class="s0">implements </span>View.OnClickListener {
+    ActivityAddInspectBinding addInspectBinding;
+    File CapGalImg=<span class="s0">null</span>;
+    ArrayList&lt;Validation_custome&gt; fileds;
+    String responseid,locatioid,converid,commentvalue;
+    RetApis apiInterface;
+    ArrayList&lt;String&gt; respolist;
+    ArrayList&lt;String&gt; locationlist;
+    ArrayList&lt;String&gt; concernlist;
+    List&lt;RespoModal&gt; respoModals;
+    List&lt;ConcernModal&gt; concernModals;
+    List&lt;LocationModal&gt; locationModals;
+    Spinner responsibility,location,concerarea,subconcern;
+    String bitimg,path;
+    Uri imguri;
+    Bitmap bitmaps,mImageBitmap;
+    <span class="s0">private </span>String mCurrentPhotoPath;
+    <span class="s0">static final int </span>REQUEST_IMAGE_CAPTURE = <span class="s2">1</span>;
+    <span class="s0">static final int </span>REQUEST_IMAGE_CAPTURE2 = <span class="s2">2</span>;
+    String respoiduser;
+    SharedPreferences pref;
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    <span class="s0">protected void </span>onCreate(Bundle savedInstanceState) {
+        <span class="s0">super</span>.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        <span class="s3">// set an exit transition</span>
+        <span class="s0">if </span>(Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setEnterTransition(<span class="s0">new </span>Explode());
+        }
+
+        addInspectBinding= DataBindingUtil.setContentView(<span class="s0">this</span>,R.layout.activity_add_inspect);
+        pref = <span class="s0">this</span>.getSharedPreferences(<span class="s4">&quot;MyG9&quot;</span>, MODE_PRIVATE);
+        responsibility=addInspectBinding.responsbility;
+        location=addInspectBinding.locations;
+        concerarea=addInspectBinding.concernarea;
+        subconcern = addInspectBinding.subconcernarea;
+        responsibility.setOnItemSelectedListener(<span class="s0">new </span>AdapterView.OnItemSelectedListener() {
+            @Override
+            <span class="s0">public void </span>onItemSelected(AdapterView&lt;?&gt; parent, View view, <span class="s0">int </span>position, <span class="s0">long </span>id) {
+                <span class="s0">if </span>(position!=<span class="s2">0</span>){
+                    responseid=respoModals.get(position-<span class="s2">1</span>).getId();
+                   <span class="s3">// Utlity.show_toast(AddInspect.this, responseid);</span>
+
+                }
+            }
+
+            @Override
+            <span class="s0">public void </span>onNothingSelected(AdapterView&lt;?&gt; parent) {
+
+            }
+
+        });
+        location.setOnItemSelectedListener(<span class="s0">new </span>AdapterView.OnItemSelectedListener() {
+            @Override
+            <span class="s0">public void </span>onItemSelected(AdapterView&lt;?&gt; parent, View view, <span class="s0">int </span>position, <span class="s0">long </span>id) {
+                <span class="s0">if </span>(position!=<span class="s2">0</span>){
+                    locatioid=locationModals.get(position-<span class="s2">1</span>).getId();
+
+                }
+            }
+
+            @Override
+            <span class="s0">public void </span>onNothingSelected(AdapterView&lt;?&gt; parent) {
+
+            }
+
+        });
+
+        concerarea.setOnItemSelectedListener(<span class="s0">new </span>AdapterView.OnItemSelectedListener() {
+            @Override
+            <span class="s0">public void </span>onItemSelected(AdapterView&lt;?&gt; parent, View view, <span class="s0">int </span>position, <span class="s0">long </span>id) {
+                <span class="s0">if </span>(position!=<span class="s2">0</span>){
+                    converid=concernModals.get(position-<span class="s2">1</span>).getId();
+
+                }
+            }
+
+            @Override
+            <span class="s0">public void </span>onNothingSelected(AdapterView&lt;?&gt; parent) {
+
+            }
+
+        });
+
+
+        <span class="s0">if </span>(getIntent().getExtras()!=<span class="s0">null</span>){
+            path = getIntent().getStringExtra(<span class="s4">&quot;image&quot;</span>);
+            imguri= Uri.parse(path);
+            bitmaps=loadBitmap(path);
+            CapGalImg=bitmapToFile(bitmaps);
+
+            <span class="s0">if</span>(imguri!=<span class="s0">null</span>) {
+                addInspectBinding.beforeimg.setImageURI(imguri);
+
+            }
+            <span class="s0">else </span>{
+                Utlity.show_toast(<span class="s0">this</span>,<span class="s4">&quot;null&quot;</span>);
+            }
+        }
+
+
+        click();
+
+        <span class="s0">if </span>(Utlity.is_online(<span class="s0">this</span>)){
+            respolist();
+            concernlist();
+            locationlist();
+        }
+        <span class="s0">else </span>{
+            Utlity.show_toast(AddInspect.<span class="s0">this</span>, getResources().getString(R.string.nointernet));
+        }
+
+    }
+
+
+    <span class="s0">public void </span>click(){
+        addInspectBinding.back.setOnClickListener(<span class="s0">this</span>::onClick);
+        addInspectBinding.selectedimg.setOnClickListener(<span class="s0">this</span>::onClick);
+        addInspectBinding.send.setOnClickListener(<span class="s0">this</span>::onClick);
+    }
+
+
+
+    @Override
+    <span class="s0">public void </span>onClick(View view) {
+
+        <span class="s0">if </span>(view.getId() == R.id.back) {
+            <span class="s0">if </span>(Utlity.get_user(<span class="s0">this</span>).getUserroles_id().equalsIgnoreCase(<span class="s4">&quot;2&quot;</span>)){
+                startActivity(<span class="s0">new </span>Intent(<span class="s0">this</span>,AdminMainActivity.<span class="s0">class</span>));
+                finishAffinity();
+            }
+            <span class="s0">else if </span>(Utlity.get_user(<span class="s0">this</span>).getUserroles_id().equalsIgnoreCase(<span class="s4">&quot;3&quot;</span>)){
+                startActivity(<span class="s0">new </span>Intent(<span class="s0">this</span>,UserMainActivity.<span class="s0">class</span>));
+                finishAffinity();
+            }
+        }
+        <span class="s0">else if </span>(view.getId() == R.id.selectedimg) {
+
+            selectImage(<span class="s0">this</span>);
+        }
+
+
+        <span class="s0">else if </span>(view.getId() == R.id.send) {
+
+            commentvalue = addInspectBinding.commentbox.getText().toString();
+            fileds = <span class="s0">new </span>ArrayList&lt;&gt;();
+            fileds.add(<span class="s0">new </span>Validation_custome(<span class="s4">&quot;text&quot;</span>, addInspectBinding.commentbox));
+            <span class="s0">if </span>(Utlity.validation(AddInspect.<span class="s0">this</span>, fileds)) {
+                <span class="s0">if </span>(responsibility.getSelectedItemPosition() == <span class="s2">0</span>) {
+                    Utlity.show_toast(AddInspect.<span class="s0">this</span>, <span class="s4">&quot;please Select Responsbility&quot;</span>);
+
+                } <span class="s0">else if </span>(location.getSelectedItemPosition() == <span class="s2">0</span>) {
+                    Utlity.show_toast(AddInspect.<span class="s0">this</span>, <span class="s4">&quot;please Select Locations&quot;</span>);
+
+                } <span class="s0">else if </span>(concerarea.getSelectedItemPosition() == <span class="s2">0</span>) {
+                    Utlity.show_toast(AddInspect.<span class="s0">this</span>, <span class="s4">&quot;please Select Concern Area&quot;</span>);
+                }
+
+                <span class="s0">else if </span>(Utlity.is_online(AddInspect.<span class="s0">this</span>)){
+                    <span class="s0">if </span>(Utlity.get_user(AddInspect.<span class="s0">this</span>).getUserroles_id().equalsIgnoreCase(<span class="s4">&quot;2&quot;</span>)){
+                        addalladmin();
+                        imguri=<span class="s0">null</span>;
+                    }
+                    <span class="s0">else if </span>(Utlity.get_user(AddInspect.<span class="s0">this</span>).getUserroles_id().equalsIgnoreCase(<span class="s4">&quot;3&quot;</span>)){
+                        addalluser();
+                        imguri=<span class="s0">null</span>;
+                    }
+
+
+                }
+
+                <span class="s0">else </span>{
+                    Utlity.show_toast(AddInspect.<span class="s0">this</span>, getResources().getString(R.string.nointernet));
+                }
+            }
+
+        }
+    }
+
+
+    <span class="s0">private void </span>respolist() {
+        Utlity.show_progress(<span class="s0">this</span>);
+        String respoid1 = pref.getString(<span class="s4">&quot;respoid&quot;</span>,<span class="s0">null</span>);
+        apiInterface = ApiClients.getClient1().create(RetApis.<span class="s0">class</span>);
+        retrofit2.Call&lt;ResponseBody&gt; call=apiInterface.Depatlist(respoid1,<span class="s4">&quot;Bearer &quot;</span>+ Utlity.get_user(<span class="s0">this</span>).getToken());
+        call.enqueue(<span class="s0">new </span>retrofit2.Callback&lt;ResponseBody&gt;() {
+            @Override
+            <span class="s0">public void </span>onResponse(retrofit2.Call&lt;ResponseBody&gt; call, retrofit2.Response&lt;ResponseBody&gt; response) {
+                <span class="s0">if </span>(response.isSuccessful()) {
+                    String apidata = <span class="s0">null</span>;
+                    <span class="s0">try </span>{
+                        Utlity.dismiss_dilog(AddInspect.<span class="s0">this</span>);
+                        apidata = response.body().string();
+                        Log.d(<span class="s4">&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;</span>,apidata);
+                        JSONObject object = <span class="s0">new </span>JSONObject(apidata);
+                        respoModals = Utlity.gson.fromJson(object.getJSONArray(<span class="s4">&quot;success&quot;</span>).toString(), <span class="s0">new </span>TypeToken&lt;List&lt;RespoModal&gt;&gt;() {}.getType());
+                        respolist=<span class="s0">new </span>ArrayList&lt;&gt;();
+                        respolist.add(<span class="s4">&quot;Select Responsibility&quot;</span>);
+
+                        <span class="s0">for </span>(RespoModal respoModal:respoModals){
+                              respolist.add(respoModal.getDept_name());
+                        }
+
+                        ArrayAdapter&lt;String&gt; adapter1 =
+                                <span class="s0">new </span>ArrayAdapter&lt;String&gt;(AddInspect.<span class="s0">this</span>,  R.layout.spinneritem, respolist);
+                        adapter1.setDropDownViewResource( R.layout.spinneritem);
+                        addInspectBinding.responsbility.setAdapter(adapter1);
+
+
+                    } <span class="s0">catch </span>(IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+            @Override
+            <span class="s0">public void </span>onFailure(retrofit2.Call&lt;ResponseBody&gt; call, Throwable t) {
+                Utlity.dismiss_dilog(AddInspect.<span class="s0">this</span>);
+
+            }
+        });
+
+    }
+    <span class="s0">private void </span>locationlist() {
+        String respoid1 = pref.getString(<span class="s4">&quot;respoid&quot;</span>,<span class="s0">null</span>);
+        apiInterface = ApiClients.getClient1().create(RetApis.<span class="s0">class</span>);
+        retrofit2.Call&lt;ResponseBody&gt; call=apiInterface.LocationList(respoid1,<span class="s4">&quot;Bearer &quot;</span>+ Utlity.get_user(<span class="s0">this</span>).getToken());
+        call.enqueue(<span class="s0">new </span>retrofit2.Callback&lt;ResponseBody&gt;() {
+            @Override
+            <span class="s0">public void </span>onResponse(retrofit2.Call&lt;ResponseBody&gt; call, retrofit2.Response&lt;ResponseBody&gt; response) {
+                <span class="s0">if </span>(response.isSuccessful()) {
+                    String apidata = <span class="s0">null</span>;
+                    <span class="s0">try </span>{
+                        apidata = response.body().string();
+                        Log.d(<span class="s4">&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;</span>,apidata);
+                        JSONObject object = <span class="s0">new </span>JSONObject(apidata);
+                        locationModals = Utlity.gson.fromJson(object.getJSONArray(<span class="s4">&quot;success&quot;</span>).toString(), <span class="s0">new </span>TypeToken&lt;List&lt;LocationModal&gt;&gt;() {}.getType());
+                        locationlist=<span class="s0">new </span>ArrayList&lt;&gt;();
+                        locationlist.add(<span class="s4">&quot;Select Locations&quot;</span>);
+                        <span class="s0">for </span>(LocationModal locationModal:locationModals){
+                            locationlist.add(locationModal.getLoc_name());
+                        }
+
+                        ArrayAdapter&lt;String&gt; adapter1 =
+                                <span class="s0">new </span>ArrayAdapter&lt;String&gt;(AddInspect.<span class="s0">this</span>,  R.layout.spinneritem, locationlist);
+                        adapter1.setDropDownViewResource( R.layout.spinneritem);
+                        addInspectBinding.locations.setAdapter(adapter1);
+
+
+                    } <span class="s0">catch </span>(IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+            @Override
+            <span class="s0">public void </span>onFailure(retrofit2.Call&lt;ResponseBody&gt; call, Throwable t) {
+             <span class="s3">//   Utlity.show_toast(AddInspect.this, &quot;Not found&quot;);</span>
+
+            }
+        });
+
+    }
+    <span class="s0">private void </span>concernlist() {
+        apiInterface = ApiClients.getClient1().create(RetApis.<span class="s0">class</span>);
+        retrofit2.Call&lt;ResponseBody&gt; call=apiInterface.ConcernList(<span class="s4">&quot;Bearer &quot;</span>+ Utlity.get_user(<span class="s0">this</span>).getToken());
+        call.enqueue(<span class="s0">new </span>retrofit2.Callback&lt;ResponseBody&gt;() {
+            @Override
+            <span class="s0">public void </span>onResponse(retrofit2.Call&lt;ResponseBody&gt; call, retrofit2.Response&lt;ResponseBody&gt; response) {
+                <span class="s0">if </span>(response.isSuccessful()) {
+                    String apidata = <span class="s0">null</span>;
+                    <span class="s0">try </span>{
+                        apidata = response.body().string();
+                        Log.d(<span class="s4">&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;</span>,apidata);
+                        JSONObject object = <span class="s0">new </span>JSONObject(apidata);
+                        concernModals = Utlity.gson.fromJson(object.getJSONArray(<span class="s4">&quot;success&quot;</span>).toString(), <span class="s0">new </span>TypeToken&lt;List&lt;ConcernModal&gt;&gt;() {}.getType());
+                        concernlist=<span class="s0">new </span>ArrayList&lt;&gt;();
+                        concernlist.add(<span class="s4">&quot;Select Concern area&quot;</span>);
+                        <span class="s0">for </span>(ConcernModal concernModal:concernModals){
+                            concernlist.add(concernModal.getArea_name());
+                        }
+
+
+                        ArrayAdapter&lt;String&gt; adapter1 =
+                                <span class="s0">new </span>ArrayAdapter&lt;String&gt;(AddInspect.<span class="s0">this</span>,  R.layout.spinneritem, concernlist);
+                        adapter1.setDropDownViewResource( R.layout.spinneritem);
+                        addInspectBinding.concernarea.setAdapter(adapter1);
+
+
+                    } <span class="s0">catch </span>(IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+            @Override
+            <span class="s0">public void </span>onFailure(retrofit2.Call&lt;ResponseBody&gt; call, Throwable t) {
+               <span class="s3">// Utlity.show_toast(AddInspect.this, &quot;Not found&quot;);</span>
+
+            }
+        });
+
+    }
+
+
+    <span class="s0">public </span>Bitmap loadBitmap(String url)
+    {
+        Bitmap bm = <span class="s0">null</span>;
+        InputStream is = <span class="s0">null</span>;
+        BufferedInputStream bis = <span class="s0">null</span>;
+        <span class="s0">try</span>
+        {
+            URLConnection conn = <span class="s0">new </span>URL(url).openConnection();
+            conn.connect();
+            is = conn.getInputStream();
+            bis = <span class="s0">new </span>BufferedInputStream(is, <span class="s2">8192</span>);
+            bm = BitmapFactory.decodeStream(bis);
+        }
+        <span class="s0">catch </span>(Exception e)
+        {
+            e.printStackTrace();
+        }
+        <span class="s0">finally </span>{
+            <span class="s0">if </span>(bis != <span class="s0">null</span>)
+            {
+                <span class="s0">try</span>
+                {
+                    bis.close();
+                }
+                <span class="s0">catch </span>(IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            <span class="s0">if </span>(is != <span class="s0">null</span>)
+            {
+                <span class="s0">try</span>
+                {
+                    is.close();
+                }
+                <span class="s0">catch </span>(IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+        <span class="s0">return </span>bm;
+    }
+
+    <span class="s0">public </span>File bitmapToFile(Bitmap bmp) {
+        <span class="s0">try </span>{
+            <span class="s0">int </span>size = <span class="s2">4000</span>;
+            String name = System.currentTimeMillis() + <span class="s4">&quot;.jpeg&quot;</span>;
+            ByteArrayOutputStream bos = <span class="s0">new </span>ByteArrayOutputStream(size);
+            bmp.compress(Bitmap.CompressFormat.JPEG, <span class="s2">100</span>, bos);
+            <span class="s0">byte</span>[] bArr = bos.toByteArray();
+            bos.flush();
+            bos.close();
+
+            FileOutputStream fos = openFileOutput(name, Context.MODE_APPEND);
+            fos.write(bArr);
+            fos.flush();
+            fos.close();
+
+            File mFile = <span class="s0">new </span>File(getFilesDir().getAbsolutePath(), name);
+            <span class="s0">return </span>mFile;
+        } <span class="s0">catch </span>(FileNotFoundException e) {
+            e.printStackTrace();
+            <span class="s0">return null</span>;
+        } <span class="s0">catch </span>(IOException e) {
+            e.printStackTrace();
+            <span class="s0">return null</span>;
+        }
+    }
+
+    <span class="s0">private void </span>addalladmin() {
+        Utlity.show_progress(<span class="s0">this</span>);
+        MultipartBody.Builder builder = <span class="s0">new </span>MultipartBody.Builder();
+        <span class="s0">if </span>(CapGalImg!=<span class="s0">null</span>){
+            Log.d(<span class="s4">&quot;validate_file_size&quot;</span>, String.valueOf(CapGalImg.length() / <span class="s2">1024</span>));
+            builder.addFormDataPart(<span class="s4">&quot;before_img&quot;</span>, CapGalImg.getName(), RequestBody.create(MediaType.parse(<span class="s4">&quot;multipart/form-data&quot;</span>), CapGalImg));
+
+        }
+        <span class="s0">else </span>{
+            builder.addFormDataPart(<span class="s4">&quot;before_img&quot;</span>,<span class="s4">&quot;&quot;</span>, RequestBody.create(MediaType.parse(<span class="s4">&quot;multipart/form-data&quot;</span>),<span class="s4">&quot;&quot;</span>));
+        }
+
+
+        MediaType JSON = MediaType.parse(<span class="s4">&quot;application/json; charset=utf-8&quot;</span>);
+        Gson gson = <span class="s0">new </span>Gson();
+        builder.setType(MultipartBody.FORM);
+
+        builder.addFormDataPart(<span class="s4">&quot;locations_id&quot;</span>,locatioid);
+        builder.addFormDataPart(<span class="s4">&quot;departments_id&quot;</span>, responseid);
+        builder.addFormDataPart(<span class="s4">&quot;concern_area&quot;</span>, converid);
+        builder.addFormDataPart(<span class="s4">&quot;before_comment&quot;</span>,commentvalue);
+        builder.addFormDataPart(<span class="s4">&quot;fobunits_id&quot;</span>,respoid);
+        MultipartBody body = builder.build();
+
+        <span class="s0">final </span>Request request = <span class="s0">new </span>Request.Builder()
+                .url(Apis.addinspection)
+                .header(<span class="s4">&quot;Authorization&quot;</span>, <span class="s4">&quot;Bearer &quot;</span>+Utlity.get_user(<span class="s0">this</span>).getToken())
+                .post(body)
+                .build();
+
+        OkHttpClient okHttpClient = <span class="s0">new </span>OkHttpClient.Builder()
+                .connectTimeout(<span class="s2">100</span>, TimeUnit.SECONDS)
+                .readTimeout(<span class="s2">100</span>,TimeUnit.SECONDS).build();
+
+        <span class="s3">//OkHttpClient okHttpClient = new OkHttpClient();</span>
+        okHttpClient.retryOnConnectionFailure();
+        okHttpClient.connectTimeoutMillis();
+        okHttpClient.newCall(request).enqueue(<span class="s0">new </span>okhttp3.Callback() {
+            @Override
+            <span class="s0">public void </span>onFailure(okhttp3.Call call, IOException e) {
+                Utlity.dismiss_dilog(AddInspect.<span class="s0">this</span>);
+               <span class="s3">// Utlity.show_toast(AddInspect.this,e.toString());</span>
+            }
+
+            @Override
+            <span class="s0">public void </span>onResponse(okhttp3.Call call, <span class="s0">final </span>okhttp3.Response response) <span class="s0">throws </span>IOException {
+
+                runOnUiThread(<span class="s0">new </span>Runnable() {
+                    @Override
+                    <span class="s0">public void </span>run() {
+                        <span class="s0">try </span>{
+                            Utlity.dismiss_dilog(AddInspect.<span class="s0">this</span>);
+                            StrictMode.ThreadPolicy policy =
+                                    <span class="s0">new </span>StrictMode.ThreadPolicy.Builder().permitAll().build();
+                            StrictMode.setThreadPolicy(policy);
+                            String apidata = response.body().string();
+                            Log.d(<span class="s4">&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;</span>,apidata);
+                            <span class="s0">if </span>(response.isSuccessful()){
+                              <span class="s3">//  Utlity.show_toast(AddInspect.this,apidata+&quot; Success&quot;);</span>
+                                startActivity(<span class="s0">new </span>Intent(AddInspect.<span class="s0">this</span>,InspectionActivity.<span class="s0">class</span>));
+                                finish();
+                            }
+                            <span class="s0">else </span>{
+                                Utlity.show_toast(AddInspect.<span class="s0">this</span>,<span class="s4">&quot;failed&quot;</span>);
+                            }
+                        } <span class="s0">catch </span>(IOException e){
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+            }
+        });
+
+    }
+    <span class="s0">private void </span>addalluser() {
+        Utlity.show_progress(<span class="s0">this</span>);
+        respoiduser=pref.getString(<span class="s4">&quot;respoid&quot;</span>,<span class="s0">null</span>);
+        MultipartBody.Builder builder = <span class="s0">new </span>MultipartBody.Builder();
+        <span class="s0">if </span>(CapGalImg!=<span class="s0">null</span>){
+            Log.d(<span class="s4">&quot;validate_file_size&quot;</span>, String.valueOf(CapGalImg.length() / <span class="s2">1024</span>));
+            builder.addFormDataPart(<span class="s4">&quot;before_img&quot;</span>, CapGalImg.getName(), RequestBody.create(MediaType.parse(<span class="s4">&quot;multipart/form-data&quot;</span>), CapGalImg));
+
+        }
+        <span class="s0">else </span>{
+            builder.addFormDataPart(<span class="s4">&quot;before_img&quot;</span>,<span class="s4">&quot;&quot;</span>, RequestBody.create(MediaType.parse(<span class="s4">&quot;multipart/form-data&quot;</span>),<span class="s4">&quot;&quot;</span>));
+        }
+
+
+        MediaType JSON = MediaType.parse(<span class="s4">&quot;application/json; charset=utf-8&quot;</span>);
+        Gson gson = <span class="s0">new </span>Gson();
+        builder.setType(MultipartBody.FORM);
+
+        builder.addFormDataPart(<span class="s4">&quot;locations_id&quot;</span>,locatioid);
+        builder.addFormDataPart(<span class="s4">&quot;departments_id&quot;</span>, responseid);
+        builder.addFormDataPart(<span class="s4">&quot;concern_area&quot;</span>, converid);
+        builder.addFormDataPart(<span class="s4">&quot;before_comment&quot;</span>,commentvalue);
+        builder.addFormDataPart(<span class="s4">&quot;fobunits_id&quot;</span>,respoiduser);
+        MultipartBody body = builder.build();
+
+        <span class="s0">final </span>Request request = <span class="s0">new </span>Request.Builder()
+                .url(Apis.addinspection)
+                .header(<span class="s4">&quot;Authorization&quot;</span>, <span class="s4">&quot;Bearer &quot;</span>+Utlity.get_user(<span class="s0">this</span>).getToken())
+                .post(body)
+                .build();
+
+        OkHttpClient okHttpClient = <span class="s0">new </span>OkHttpClient.Builder()
+                .connectTimeout(<span class="s2">100</span>, TimeUnit.SECONDS)
+                .readTimeout(<span class="s2">100</span>,TimeUnit.SECONDS).build();
+
+        <span class="s3">//OkHttpClient okHttpClient = new OkHttpClient();</span>
+        okHttpClient.retryOnConnectionFailure();
+        okHttpClient.connectTimeoutMillis();
+        okHttpClient.newCall(request).enqueue(<span class="s0">new </span>okhttp3.Callback() {
+            @Override
+            <span class="s0">public void </span>onFailure(okhttp3.Call call, IOException e) {
+                Utlity.dismiss_dilog(AddInspect.<span class="s0">this</span>);
+                Utlity.show_toast(AddInspect.<span class="s0">this</span>,e.toString());
+            }
+
+            @Override
+            <span class="s0">public void </span>onResponse(okhttp3.Call call, <span class="s0">final </span>okhttp3.Response response) <span class="s0">throws </span>IOException {
+
+                runOnUiThread(<span class="s0">new </span>Runnable() {
+                    @Override
+                    <span class="s0">public void </span>run() {
+                        <span class="s0">try </span>{
+                            Utlity.dismiss_dilog(AddInspect.<span class="s0">this</span>);
+                            StrictMode.ThreadPolicy policy =
+                                    <span class="s0">new </span>StrictMode.ThreadPolicy.Builder().permitAll().build();
+                            StrictMode.setThreadPolicy(policy);
+                            String apidata = response.body().string();
+                            Log.d(<span class="s4">&quot;responce&gt;&gt;&gt;&gt;&gt;&quot;</span>,apidata);
+                            <span class="s0">if </span>(response.isSuccessful()){
+                               <span class="s3">// Utlity.show_toast(AddInspect.this,apidata+&quot; Success&quot;);</span>
+                                startActivity(<span class="s0">new </span>Intent(AddInspect.<span class="s0">this</span>,InspectionActivity.<span class="s0">class</span>));
+                                finish();
+                            }
+                            <span class="s0">else </span>{
+                                Utlity.show_toast(AddInspect.<span class="s0">this</span>,<span class="s4">&quot;failed&quot;</span>);
+                            }
+                        } <span class="s0">catch </span>(IOException e){
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+            }
+        });
+
+    }
+
+    <span class="s0">private void </span>selectImage(Context context) {
+        <span class="s0">final </span>CharSequence[] options = { <span class="s4">&quot;Take Photo&quot;</span>, <span class="s4">&quot;Choose from Gallery&quot;</span>,<span class="s4">&quot;Cancel&quot; </span>};
+
+        AlertDialog.Builder builder = <span class="s0">new </span>AlertDialog.Builder(context);
+        builder.setTitle(<span class="s4">&quot;Choose your profile picture&quot;</span>);
+
+        builder.setItems(options, <span class="s0">new </span>DialogInterface.OnClickListener() {
+
+            <span class="s0">private static final </span>String TAG = <span class="s4">&quot;tag&quot;</span>;
+
+            @Override
+            <span class="s0">public void </span>onClick(DialogInterface dialog, <span class="s0">int </span>item) {
+
+                <span class="s0">if </span>(options[item].equals(<span class="s4">&quot;Take Photo&quot;</span>)) {
+                    dispatchTakePictureIntent();
+
+                } <span class="s0">else if </span>(options[item].equals(<span class="s4">&quot;Choose from Gallery&quot;</span>)) {
+                    Intent pickPhoto = <span class="s0">new </span>Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(pickPhoto , REQUEST_IMAGE_CAPTURE2);
+
+                } <span class="s0">else if </span>(options[item].equals(<span class="s4">&quot;Cancel&quot;</span>)) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+
+    <span class="s0">private </span>File createImageFile() <span class="s0">throws </span>IOException {
+        <span class="s3">// Create an image file name</span>
+        String timeStamp = <span class="s0">new </span>SimpleDateFormat(<span class="s4">&quot;yyyyMMdd_HHmmss&quot;</span>).format(<span class="s0">new </span>Date());
+        String imageFileName = <span class="s4">&quot;JPEG_&quot; </span>+ timeStamp + <span class="s4">&quot;_&quot;</span>;
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  <span class="s3">/* prefix */</span>
+                <span class="s4">&quot;.jpg&quot;</span>,         <span class="s3">/* suffix */</span>
+                storageDir      <span class="s3">/* directory */</span>
+        );
+
+        <span class="s3">// Save a file: path for use with ACTION_VIEW intents</span>
+        mCurrentPhotoPath = image.getAbsolutePath();
+        <span class="s0">return </span>image;
+    }
+
+    <span class="s0">private void </span>dispatchTakePictureIntent() {
+        Intent takePictureIntent = <span class="s0">new </span>Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        <span class="s3">// Ensure that there's a camera activity to handle the intent</span>
+        <span class="s0">if </span>(takePictureIntent.resolveActivity(getPackageManager()) != <span class="s0">null</span>) {
+            <span class="s3">// Create the File where the photo should go</span>
+            File photoFile = <span class="s0">null</span>;
+            <span class="s0">try </span>{
+                photoFile = createImageFile();
+            } <span class="s0">catch </span>(IOException ex) {
+                ex.printStackTrace();
+                <span class="s3">// Error occurred while creating the File</span>
+            }
+            <span class="s3">// Continue only if the File was successfully created</span>
+            <span class="s0">if </span>(photoFile != <span class="s0">null</span>) {
+                Uri photoURI = FileProvider.getUriForFile(<span class="s0">this</span>,
+                        <span class="s4">&quot;com.safefoodmitra.safefoodmitra&quot;</span>,
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
+
+    @Override
+    <span class="s0">protected void </span>onActivityResult(<span class="s0">int </span>requestCode, <span class="s0">int </span>resultCode, Intent data) {
+        <span class="s0">super</span>.onActivityResult(requestCode, resultCode, data);
+
+                <span class="s0">if </span>(resultCode == RESULT_OK) {
+                    <span class="s0">if </span>(requestCode== REQUEST_IMAGE_CAPTURE) {
+                        <span class="s0">try </span>{
+                            mImageBitmap = MediaStore.Images.Media.getBitmap(<span class="s0">this</span>.getContentResolver(), Uri.parse(mCurrentPhotoPath));
+                        } <span class="s0">catch </span>(IOException exception) {
+                            exception.printStackTrace();
+                        }
+                        startActivityForResult(<span class="s0">new </span>Intent(<span class="s0">this</span>, EditImageActivity.<span class="s0">class</span>).putExtra(<span class="s4">&quot;image&quot;</span>,mCurrentPhotoPath),REQUEST_IMAGE_CAPTURE);
+
+                    }
+                    <span class="s0">else if </span>(requestCode== REQUEST_IMAGE_CAPTURE2) {
+                        Uri selectedImage = data.getData();
+                        String[] filePath = { MediaStore.Images.Media.DATA };
+
+                        Cursor c = getContentResolver().query(selectedImage,filePath, <span class="s0">null</span>, <span class="s0">null</span>, <span class="s0">null</span>);
+
+                        c.moveToFirst();
+
+                        <span class="s0">int </span>columnIndex = c.getColumnIndex(filePath[<span class="s2">0</span>]);
+
+                        String picturePath = c.getString(columnIndex);
+                        startActivityForResult(<span class="s0">new </span>Intent(<span class="s0">this</span>, EditImageActivity.<span class="s0">class</span>).putExtra(<span class="s4">&quot;image&quot;</span>,picturePath),REQUEST_IMAGE_CAPTURE2);
+                        c.close();
+
+
+                    }
+
+        }
+    }
+
+
+}</pre>
+</body>
+</html>

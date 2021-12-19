@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#056314</color>
+    <color name="purple_500">#056314</color>
+    <color name="purple_700">#056314</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="black1">#aaaaaa</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="lightwhite">#F2FDFCFC</color>
+    <color name="colorDarkgreen">#056314</color>
+    <color name="colorligthgreen">#E8ECE8</color>
+    <color name="colorligthsmootgreen">#F4F6F4</color>
+    <color name="coloryellow">#f8e514</color>
+    <color name="colorgray">#D8D8D4</color>
+
+    <color name="colordarkgray">#9C9C99</color>
+    <color name="blue_color_picker">#0066FF</color>
+    <color name="brown_color_picker">#AF593E</color>
+    <color name="green_color_picker">#01A368</color>
+    <color name="orange_color_picker">#FF861F</color>
+    <color name="red_color_picker">#ED0A3F</color>
+    <color name="red_orange_color_picker">#FF3F34</color>
+    <color name="sky_blue_color_picker">#76D7EA</color>
+    <color name="violet_color_picker">#8359A3</color>
+    <color name="yellow_color_picker">#FBE870</color>
+    <color name="yellow_green_color_picker">#C5E17A</color>
+    <color name="tool_bg">#99000000</color>
+    <color name="semi_black_transparent">#99000000</color>
+    <color name="colorLightGray">#CCC8C8</color>
+    <color name="colorlightGray">#D3D0D0</color>
+    <color name="colorsmoothGray">#E4E1E1</color>
+    <color name="colorlightorange">#FFFFE8D5</color>
+    <color name="colorlightgreen">#F4FFD6</color>
+    <color name="colorlightred">#FFDFDD</color>
+    <color name="darkgreen">#0B390D</color>
+    <!-- dots inactive colors -->
+    <color name="dot_dark_screen1">#4CAF50</color>
+    <color name="dot_dark_screen2">#4CAF50</color>
+    <color name="dot_dark_screen3">#4CAF50</color>
+    <color name="dot_dark_screen4">#4CAF50</color>
+
+    <array name="array_dot_active">
+        <item>@color/darkgreen</item>
+        <item>@color/darkgreen</item>
+        <item>@color/darkgreen</item>
+        <item>@color/darkgreen</item>
+    </array>
+
+    <array name="array_dot_inactive">
+        <item>@color/dot_dark_screen1</item>
+        <item>@color/dot_dark_screen2</item>
+        <item>@color/dot_dark_screen3</item>
+        <item>@color/dot_dark_screen4</item>
+    </array>
+</resources>
