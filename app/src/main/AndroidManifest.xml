@@ -16,9 +16,11 @@
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="30" />
-   <!-- <uses-permission
+    <!--
+ <uses-permission
         android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />-->
+        tools:ignore="ScopedStorage" />
+    -->
     <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
 
     <uses-feature
@@ -43,15 +45,17 @@
         android:theme="@style/Theme.SafefoodMitra"
         android:usesCleartextTraffic="true"
         tools:targetApi="r">
-        <activity android:name=".Activities.CMFFiltterActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize">
-
-        </activity>
-        <activity android:name=".Activities.NotificationActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize">
-
-        </activity>
-
+        <activity
+            android:name=".Activities.Main2Activity"
+            android:exported="false"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/Theme.SafefoodMitra.NoActionBar" />
+        <activity
+            android:name=".Activities.CMFFiltterActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"></activity>
+        <activity
+            android:name=".Activities.NotificationActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"></activity>
         <activity android:name=".Activities.Summary" />
         <activity
             android:name=".Activities.InternalExternal"
@@ -59,10 +63,9 @@
         <activity
             android:name=".Activities.InternalExternalDetail"
             android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name=".Activities.AuditActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize">
-
-        </activity>
+        <activity
+            android:name=".Activities.AuditActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"></activity>
         <activity android:name=".Activities.AboutApp" />
         <activity
             android:name=".Activities.CMFDetailsActivity"
@@ -150,7 +153,8 @@
         <activity
             android:name=".Activities.NewAudit"
             android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name=".Activities.SplashActivity">
+        <activity android:name=".Activities.SplashActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -161,7 +165,8 @@
             android:name=".Activities.AdminMainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
 
-        <service android:name=".MessagingService.MyFirebaseMessagingService">
+        <service android:name=".MessagingService.MyFirebaseMessagingService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

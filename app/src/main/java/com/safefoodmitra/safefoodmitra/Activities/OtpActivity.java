@@ -17,7 +17,7 @@ import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.safefoodmitra.safefoodmitra.Helper.Utlity;
 import com.safefoodmitra.safefoodmitra.Modals.Validation_custome;
 import com.safefoodmitra.safefoodmitra.R;
@@ -51,9 +51,21 @@ public class OtpActivity extends AppCompatActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_otp);
         otpBinding= DataBindingUtil.setContentView(this,R.layout.activity_otp);
-        fbtoken= FirebaseInstanceId.getInstance().getToken();
+//        fbtoken= FirebaseInstanceId.getInstance().getToken();
         Log.d("fbtoken",fbtoken);
-
+        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(token -> {
+            if (!TextUtils.isEmpty(token)) {
+                fbtoken= token;
+//                Log.d(TAG, "retrieve token successful : " + token);
+            } else{
+//                Log.w(TAG, "token should not be null...");
+            }
+        }).addOnFailureListener(e -> {
+            //handle e
+        }).addOnCanceledListener(() -> {
+            //handle cancel
+        }).addOnCompleteListener(task ->
+                Log.v("TAG", "This is the token : " + task.getResult()));
 
         otpdb= Utlity.get_user(this).getOtp();
         if (getIntent()!=null){

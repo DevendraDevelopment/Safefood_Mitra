@@ -24,7 +24,9 @@ public class SplashActivity extends AppCompatActivity {
         animationDrawable.setEnterFadeDuration(500);
         animationDrawable.setExitFadeDuration(500);
         animationDrawable.start();*/
-        thread();
+//        thread();
+        startActivity(new Intent(SplashActivity.this, Main2Activity.class));
+        finishAffinity();
     }
 
     public void thread() {

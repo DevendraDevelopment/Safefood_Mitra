@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Gradle: com.fxn769:bubbletabbar:1.0.1@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/1222e9050751c7e97b50418a6c3584ad/transformed/jetified-bubbletabbar-1.0.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/1222e9050751c7e97b50418a6c3584ad/transformed/jetified-bubbletabbar-1.0.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/1222e9050751c7e97b50418a6c3584ad/transformed/jetified-bubbletabbar-1.0.1/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fxn769/bubbletabbar/1.0.1/db1d80586c599f4b1aff1f2f53a6f06bb40a9982/bubbletabbar-1.0.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fxn769/bubbletabbar/1.0.1/8ef56e1cc12160c2c9406e0b43c6cc3a5716b936/bubbletabbar-1.0.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
