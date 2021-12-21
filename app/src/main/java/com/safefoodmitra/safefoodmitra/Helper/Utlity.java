@@ -274,7 +274,10 @@ public class Utlity {
         if (!TextUtils.isEmpty(url));
         Picasso.get().load(Apis.imageBase_Url+url).error(R.drawable.safelogo).placeholder(R.drawable.safelogo).into(img);
     }
-
+    public static void Set_image2(String url, ImageView img) {
+        if (!TextUtils.isEmpty(url));
+        Picasso.get().load(Apis.imageNewsBase_Url+url).error(R.drawable.safelogo).placeholder(R.drawable.safelogo).into(img);
+    }
 
     public static String generateColor() {
         Random r=new Random();

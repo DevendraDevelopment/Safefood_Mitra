@@ -56,11 +56,14 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerFullScreenListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
+import com.safefoodmitra.safefoodmitra.Adapter.AdapterViewPager;
 import com.safefoodmitra.safefoodmitra.Adapter.NotificationAdapter;
 import com.safefoodmitra.safefoodmitra.Apis.ApiClients;
 import com.safefoodmitra.safefoodmitra.Apis.RetApis;
 import com.safefoodmitra.safefoodmitra.Fragments.Home;
+import com.safefoodmitra.safefoodmitra.Fragments.NewsFragment;
 import com.safefoodmitra.safefoodmitra.Helper.Utlity;
+import com.safefoodmitra.safefoodmitra.Helper.ZoomOutPageTransformer;
 import com.safefoodmitra.safefoodmitra.Modals.Notification;
 import com.safefoodmitra.safefoodmitra.Modals.UnitModals;
 import com.safefoodmitra.safefoodmitra.R;
@@ -120,6 +123,7 @@ public class AdminMainActivity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         mainBinding= DataBindingUtil.setContentView(this,R.layout.activity_main);
         //notificationDB = new NotificationDB(this);
+
         Uerrolid = Utlity.get_user(AdminMainActivity.this).getUserroles_id();
         try {
             VersionChecker versionChecker = new VersionChecker();
@@ -173,7 +177,34 @@ public class AdminMainActivity extends AppCompatActivity implements View.OnClick
 
         }
 
-        loadFragment1(new Home());
+      //  loadFragment1(new Home());
+        AdapterViewPager adapterViewPager = new AdapterViewPager(getSupportFragmentManager());
+        adapterViewPager.addFragment(new Home());
+        adapterViewPager.addFragment(new Home());
+        adapterViewPager.addFragment(new NewsFragment());
+        mainBinding.viewPager.setAdapter(adapterViewPager);
+        mainBinding.viewPager.setCurrentItem(1);
+        mainBinding.bubbleTabBar.setupBubbleTabBar(mainBinding.viewPager);
+        mainBinding.bubbleTabBar.getChildAt(0).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainBinding.viewPager.setCurrentItem(0); //TODO Profile
+            }
+        });
+        mainBinding.bubbleTabBar.getChildAt(1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainBinding.viewPager.setCurrentItem(1); //TODO Home
+            }
+        });
+        mainBinding.bubbleTabBar.getChildAt(2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainBinding.viewPager.setCurrentItem(2); //TODO Study Material
+            }
+        });
+
+        mainBinding.viewPager.setPageTransformer(true, new ZoomOutPageTransformer());
         click();
 
         requestPermission();
@@ -247,7 +278,7 @@ public class AdminMainActivity extends AppCompatActivity implements View.OnClick
         howtouselayout.setOnClickListener(this);
     }
 
-    public void loadFragment1(Fragment fragment) {
+   /* public void loadFragment1(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction()
                 .replace(R.id.dashframe, fragment);
 
@@ -257,7 +288,7 @@ public class AdminMainActivity extends AppCompatActivity implements View.OnClick
         } catch (IllegalStateException e) {
             transaction.commitAllowingStateLoss();
         }
-    }
+    }*/
 
 
 
@@ -459,6 +490,7 @@ public class AdminMainActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case PERMISSION_REQUEST_CODE:
                 if (grantResults.length > 0) {

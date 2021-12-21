@@ -121,4 +121,7 @@ public interface RetApis {
 
     @GET("slidedata")
     Call<ResponseBody> BannarLiset(@Header("Authorization") String Authorization);
+
+    @GET("get_news")
+    Call<ResponseBody> NewsList(@Header("Authorization") String Authorization);
 }

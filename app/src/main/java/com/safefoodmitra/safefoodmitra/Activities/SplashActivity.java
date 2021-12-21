@@ -2,6 +2,7 @@ package com.safefoodmitra.safefoodmitra.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 
@@ -20,20 +21,20 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         splashBinding = DataBindingUtil.setContentView(this, R.layout.activity_splash);
-       /* AnimationDrawable animationDrawable=(AnimationDrawable)splashBinding.layout.getBackground();
-        animationDrawable.setEnterFadeDuration(500);
-        animationDrawable.setExitFadeDuration(500);
-        animationDrawable.start();*/
-//        thread();
-        startActivity(new Intent(SplashActivity.this, Main2Activity.class));
-        finishAffinity();
+        AnimationDrawable animationDrawable=(AnimationDrawable)splashBinding.layout.getBackground();
+        animationDrawable.setEnterFadeDuration(200);
+        animationDrawable.setExitFadeDuration(200);
+        animationDrawable.start();
+       thread();
+       // startActivity(new Intent(SplashActivity.this, UserMainActivity.class));
+       // finishAffinity();
     }
 
     public void thread() {
         Thread thread = new Thread() {
             public void run() {
                 try {
-                    sleep(3000);
+                    sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } finally {

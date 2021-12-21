@@ -18,6 +18,7 @@ public interface Apis {
 
     String imageBase_Url = "http://safefoodmitra.com/admin/public/inspections/";
     String imageBaseicon_Url = "http://safefoodmitra.com/admin/public/icon_path/";
+    String imageNewsBase_Url="http://safefoodmitra.com/admin/public/news/";
     String imagecmfdetils = "http://safefoodmitra.com/admin/public/cmimage/";
     String imageslides = "http://safefoodmitra.com/admin/public/slides/";
     String advancefilter = Base_Url + "searchfss";

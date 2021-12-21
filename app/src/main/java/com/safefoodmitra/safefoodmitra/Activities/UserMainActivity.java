@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -39,12 +40,17 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.fxn.OnBubbleClickListener;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.reflect.TypeToken;
+import com.safefoodmitra.safefoodmitra.Adapter.AdapterViewPager;
 import com.safefoodmitra.safefoodmitra.Apis.ApiClients;
 import com.safefoodmitra.safefoodmitra.Apis.RetApis;
 import com.safefoodmitra.safefoodmitra.Fragments.Home;
+import com.safefoodmitra.safefoodmitra.Fragments.NewsFragment;
 import com.safefoodmitra.safefoodmitra.Helper.Utlity;
+import com.safefoodmitra.safefoodmitra.Helper.ZoomOutPageTransformer;
 import com.safefoodmitra.safefoodmitra.Modals.UnitModals;
 import com.safefoodmitra.safefoodmitra.R;
 import com.safefoodmitra.safefoodmitra.databinding.ActivityUserMainBinding;
@@ -81,9 +87,9 @@ public class UserMainActivity extends AppCompatActivity implements View.OnClickL
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
-    private LinearLayout logoutlayout,editlayout,notificatonLinear;
+    private LinearLayout logoutlayout, editlayout, notificatonLinear;
     boolean doubleBackToExitPressedOnce = false;
-    TextView username,usernumbers,useremail,notificationnum;
+    TextView username, usernumbers, useremail, notificationnum;
     Spinner userlist;
     RetApis apiInterface;
     ArrayList<String> unittpart;
@@ -91,16 +97,17 @@ public class UserMainActivity extends AppCompatActivity implements View.OnClickL
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     String oldVersion;
-    String posname,responame;
+    String posname, responame;
     ImageView notificationimage;
     public String notikey;
-   // NotificationDB notificationDB;
+
+    // NotificationDB notificationDB;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        userMainBinding= DataBindingUtil.setContentView(this,R.layout.activity_user_main);
+        userMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_user_main);
         //isStoragePermissionGranted();
-       // notificationDB = new NotificationDB(this);
+        // notificationDB = new NotificationDB(this);
         Uerrolid = Utlity.get_user(UserMainActivity.this).getUserroles_id();
         try {
             VersionChecker versionChecker = new VersionChecker();
@@ -110,6 +117,7 @@ public class UserMainActivity extends AppCompatActivity implements View.OnClickL
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
 
         pref = this.getSharedPreferences("MyG9", MODE_PRIVATE);
         editor = pref.edit();
@@ -123,40 +131,75 @@ public class UserMainActivity extends AppCompatActivity implements View.OnClickL
         notificationnum = toolbar.findViewById(R.id.notificationnum);
         notificatonLinear = toolbar.findViewById(R.id.notificationLinear);
         setSupportActionBar(toolbar);
-        View hView =  userMainBinding.navigate.getHeaderView(0);
-        logoutlayout=hView.findViewById(R.id.logouts);
-        username=hView.findViewById(R.id.username);
-        usernumbers=hView.findViewById(R.id.usernumbers);
-        useremail=hView.findViewById(R.id.useremail);
-        userlist=hView.findViewById(R.id.userlists);
-        editlayout=hView.findViewById(R.id.editprofile);
+        View hView = userMainBinding.navigate.getHeaderView(0);
+        logoutlayout = hView.findViewById(R.id.logouts);
+        username = hView.findViewById(R.id.username);
+        usernumbers = hView.findViewById(R.id.usernumbers);
+        useremail = hView.findViewById(R.id.useremail);
+        userlist = hView.findViewById(R.id.userlists);
+        editlayout = hView.findViewById(R.id.editprofile);
         username.setText(Utlity.get_user(this).getFirst_name());
-        usernumbers.setText("+ "+Utlity.get_user(this).getMobile_no());
+        usernumbers.setText("+ " + Utlity.get_user(this).getMobile_no());
         useremail.setText(Utlity.get_user(this).getEmail());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
-        if (Utlity.is_online(this)){
+        if (Utlity.is_online(this)) {
             unitdata();
-        }
-        else {
-            Utlity.show_toast(UserMainActivity.this,getResources().getString(R.string.nointernet));
+        } else {
+            Utlity.show_toast(UserMainActivity.this, getResources().getString(R.string.nointernet));
 
         }
-        loadFragment1(new Home());
+        // loadFragment1(new Home());
+        AdapterViewPager adapterViewPager = new AdapterViewPager(getSupportFragmentManager());
+        adapterViewPager.addFragment(new Home());
+        adapterViewPager.addFragment(new Home());
+        adapterViewPager.addFragment(new NewsFragment());
+        userMainBinding.viewPager.setAdapter(adapterViewPager);
+        userMainBinding.viewPager.setCurrentItem(0);
+
+//        userMainBinding.bubbleTabBar.setSelected(true);
+//        userMainBinding.bubbleTabBar.setBottom(0);
+        userMainBinding.bubbleTabBar.setupBubbleTabBar(userMainBinding.viewPager);
+
+        userMainBinding.bubbleTabBar.getChildAt(0).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                userMainBinding.appBarLayout.setVisibility(View.VISIBLE);
+                userMainBinding.viewPager.setCurrentItem(0); //TODO Profile
+            }
+        });
+        userMainBinding.bubbleTabBar.getChildAt(1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                userMainBinding.appBarLayout.setVisibility(View.VISIBLE);
+                userMainBinding.viewPager.setCurrentItem(1); //TODO Home
+            }
+        });
+
+        userMainBinding.bubbleTabBar.getChildAt(2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                userMainBinding.appBarLayout.setVisibility(View.GONE);
+                userMainBinding.viewPager.setCurrentItem(2); //TODO Study Material
+            }
+        });
+
+        userMainBinding.viewPager.setPageTransformer(true, new ZoomOutPageTransformer());
+
         click();
         requestPermission();
 
         userlist.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                respoid=unitModals.get(position).getId();
-                posname=unitModals.get(position).getUnit_name();
-                if (respoid!=null){
-                    editor.putString("respoid",respoid);
+                respoid = unitModals.get(position).getId();
+                posname = unitModals.get(position).getUnit_name();
+                if (respoid != null) {
+                    editor.putString("respoid", respoid);
                     editor.apply();
                     editor.commit();
-                }else {
-                    editor.putString("respoid","0");
+                } else {
+                    editor.putString("respoid", "0");
                     editor.apply();
                     editor.commit();
                 }
@@ -174,11 +217,11 @@ public class UserMainActivity extends AppCompatActivity implements View.OnClickL
         try {
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(this.getPackageName(), 0);
             String newversion = pInfo.versionName;
-            if (oldVersion!=null){
-                if (!newversion.equals(oldVersion)){
+            if (oldVersion != null) {
+                if (!newversion.equals(oldVersion)) {
                     playDilogBox();
                 }
-            }else {
+            } else {
                 Utlity.show_toast(UserMainActivity.this, getResources().getString(R.string.nointernet));
             }
 
@@ -208,11 +251,13 @@ public class UserMainActivity extends AppCompatActivity implements View.OnClickL
         notikey = FirebaseDatabase.getInstance().getReference().child("Notification").child(Utlity.getDeviceID(this)).getKey();
 
     }
+
     @Override
     protected void onStart() {
-        Utlity.appTime=true;
+        Utlity.appTime = true;
         super.onStart();
     }
+
     private void playDilogBox() {
         AlertDialog.Builder builder = new AlertDialog.Builder(UserMainActivity.this);
         builder.setTitle(R.string.safefoodmitraaupdate).
@@ -237,7 +282,7 @@ public class UserMainActivity extends AppCompatActivity implements View.OnClickL
 
 
 
-    public Fragment loadFragment1(Fragment fragment) {
+    /*public Fragment loadFragment1(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction()
                 .replace(R.id.dashframe, fragment);
 
@@ -248,8 +293,7 @@ public class UserMainActivity extends AppCompatActivity implements View.OnClickL
             transaction.commitAllowingStateLoss();
         }
         return fragment;
-    }
-
+    }*/
 
 
     @Override
@@ -259,7 +303,7 @@ public class UserMainActivity extends AppCompatActivity implements View.OnClickL
         return super.onOptionsItemSelected(item);
     }
 
-    public void click(){
+    public void click() {
         logoutlayout.setOnClickListener(this);
         editlayout.setOnClickListener(this);
         notificationimage.setOnClickListener(this);
@@ -267,20 +311,20 @@ public class UserMainActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View view) {
-        if (view.getId()==R.id.logouts){
+        if (view.getId() == R.id.logouts) {
             Logout(this);
             drawerLayout.closeDrawers();
         }
-        if (view.getId()==R.id.editprofile){
-            startActivity(new Intent(this,EditProfile.class));
+        if (view.getId() == R.id.editprofile) {
+            startActivity(new Intent(this, EditProfile.class));
             drawerLayout.closeDrawers();
-        }else if (view.getId()==R.id.notification){
+        } else if (view.getId() == R.id.notification) {
             startActivity(new Intent(this, NotificationActivity.class));
         }
 
     }
 
-    public  void Logout(final Context context) {
+    public void Logout(final Context context) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(UserMainActivity.this);
         builder.setTitle(R.string.confirmationpopup).
@@ -291,7 +335,7 @@ public class UserMainActivity extends AppCompatActivity implements View.OnClickL
                         Utlity.clear_db(UserMainActivity.this);
                         editor.clear();
                         editor.apply();
-                        respoid= null;
+                        respoid = null;
                         //notificationDB.remove(notikey);
                         startActivity(new Intent(UserMainActivity.this, LoginActivity.class));
                         finishAffinity();
@@ -311,9 +355,9 @@ public class UserMainActivity extends AppCompatActivity implements View.OnClickL
     @SuppressLint("WrongConstant")
     @Override
     public void onBackPressed() {
-        if(drawerLayout.isDrawerOpen(Gravity.START)) {
+        if (drawerLayout.isDrawerOpen(Gravity.START)) {
             drawerLayout.closeDrawers();
-        }else {
+        } else {
             if (doubleBackToExitPressedOnce) {
                 super.onBackPressed();
                 return;
@@ -337,13 +381,13 @@ public class UserMainActivity extends AppCompatActivity implements View.OnClickL
         if (SDK_INT >= Build.VERSION_CODES.R) {
 
             if ((checkSelfPermission(CAMERA)
-                    == PackageManager.PERMISSION_GRANTED)&&(checkSelfPermission(READ_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED)&&(checkSelfPermission(WRITE_EXTERNAL_STORAGE)
-                 //   == PackageManager.PERMISSION_GRANTED)&&(checkSelfPermission(MANAGE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) && (checkSelfPermission(READ_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) && (checkSelfPermission(WRITE_EXTERNAL_STORAGE)
+                    //   == PackageManager.PERMISSION_GRANTED)&&(checkSelfPermission(MANAGE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED)) {
 
             } else {
-                ActivityCompat.requestPermissions(this, new String[]{CAMERA, READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+                ActivityCompat.requestPermissions(this, new String[]{CAMERA, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
             }
             if (Environment.isExternalStorageManager()) {
                 //todo when permission is granted
@@ -366,7 +410,7 @@ public class UserMainActivity extends AppCompatActivity implements View.OnClickL
             }
         } else {
             //below android 11
-            ActivityCompat.requestPermissions(UserMainActivity.this, new String[]{CAMERA,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+            ActivityCompat.requestPermissions(UserMainActivity.this, new String[]{CAMERA, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
         }
     }
 
@@ -387,6 +431,7 @@ public class UserMainActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case PERMISSION_REQUEST_CODE:
                 if (grantResults.length > 0) {
@@ -406,10 +451,10 @@ public class UserMainActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    public void unitdata(){
+    public void unitdata() {
         Utlity.show_progress(this);
         apiInterface = ApiClients.getClient().create(RetApis.class);
-        Call<ResponseBody> call=apiInterface.Units("Bearer "+ Utlity.get_user(this).getToken());
+        Call<ResponseBody> call = apiInterface.Units("Bearer " + Utlity.get_user(this).getToken());
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -417,40 +462,40 @@ public class UserMainActivity extends AppCompatActivity implements View.OnClickL
                     String apidata = null;
                     try {
                         apidata = response.body().string();
-                        Log.d("responce>>>>>",apidata);
+                        Log.d("responce>>>>>", apidata);
                         JSONObject object = new JSONObject(apidata);
-                        unitModals = Utlity.gson.fromJson(object.getJSONArray("success").toString(), new TypeToken<List<UnitModals>>() {}.getType());
-                        unittpart=new ArrayList<>();
-                        if (unitModals.size()!=0){
+                        unitModals = Utlity.gson.fromJson(object.getJSONArray("success").toString(), new TypeToken<List<UnitModals>>() {
+                        }.getType());
+                        unittpart = new ArrayList<>();
+                        if (unitModals.size() != 0) {
                             String newsid;
-                            for (UnitModals categoryModel:unitModals){
+                            for (UnitModals categoryModel : unitModals) {
                                 unittpart.add(categoryModel.getUnit_name());
-                                newsid=categoryModel.getId();
+                                newsid = categoryModel.getId();
                                 try {
-                                    if (respoid != null){
-                                        if (respoid.equals(newsid)){
-                                            responame=categoryModel.getUnit_name();
+                                    if (respoid != null) {
+                                        if (respoid.equals(newsid)) {
+                                            responame = categoryModel.getUnit_name();
                                         }
                                     }
 
-                                }catch (NullPointerException e){
+                                } catch (NullPointerException e) {
                                     e.printStackTrace();
                                 }
 
                             }
 
-                        }else {
-                            editor.putString("respoid","0");
+                        } else {
+                            editor.putString("respoid", "0");
                             editor.apply();
                             editor.commit();
                         }
 
 
-
                         Utlity.dismiss_dilog(UserMainActivity.this);
                         ArrayAdapter<String> adapter1 =
-                                new ArrayAdapter<String>(UserMainActivity.this,  R.layout.spinner_item, unittpart);
-                        adapter1.setDropDownViewResource( R.layout.spinneritem);
+                                new ArrayAdapter<String>(UserMainActivity.this, R.layout.spinner_item, unittpart);
+                        adapter1.setDropDownViewResource(R.layout.spinneritem);
                         userlist.setAdapter(adapter1);
                         if (responame != null) {
                             int spinnerPosition = adapter1.getPosition(responame);
@@ -469,6 +514,7 @@ public class UserMainActivity extends AppCompatActivity implements View.OnClickL
             }
         });
     }
+
     public class VersionChecker extends AsyncTask<String, String, String> {
 
         String newVersion;
